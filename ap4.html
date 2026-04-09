@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>COMPARATIVO SEFAZ X SISTEMA - N2 FILTROS</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .linha-sucesso { background-color: #f0fdf4 !important; color: #166534; border-left: 8px solid #22c55e; }
+        .linha-erro { background-color: #fef2f2 !important; color: #991b1b; border-left: 8px solid #ef4444; }
+        .btn-filtro { transition: all 0.2s; border: 2px solid transparent; }
+        .btn-filtro:hover { transform: translateY(-2px); }
+        .btn-filtro.ativo { border-color: #000; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); scale: 1.05; }
+        .status-badge { padding: 2px 8px; border-radius: 99px; font-size: 9px; font-weight: 900; border: 1px solid currentColor; }
+    </style>
+</head>
+<body class="bg-gray-200 font-sans text-black">
+
+    <nav class="bg-blue-950 text-white p-5 shadow-2xl border-b-4 border-yellow-500">
+        <div class="container mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-xl font-black uppercase italic tracking-tighter">Conciliação N2: Filtros de Auditoria</h1>
+                <p class="text-[10px] font-bold text-yellow-500 uppercase italic">Checklist Tributário - Thomas</p>
+            </div>
+            <div class="text-right">
+                <span class="text-[10px] block opacity-50 font-bold uppercase">Status do Sistema</span>
+                <span class="text-xs font-black text-green-400 uppercase">Motor de Busca Ativo</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-6">
+        <!-- Uploads -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+            <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-blue-900">
+                <label class="block font-black uppercase text-[10px] mb-3 text-blue-900">📂 Base SEFAZ (Número + Série)</label>
+                <input type="file" id="fileSefaz" accept=".xlsx, .xls, .csv" class="w-full text-xs file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-900 file:text-white file:font-black cursor-pointer">
+                <div id="detalheSefaz" class="mt-4 p-2 bg-gray-50 rounded text-[9px] font-bold text-gray-400 uppercase italic">Aguardando arquivo...</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-green-700">
+                <label class="block font-black uppercase text-[10px] mb-3 text-green-800">📂 Base SISTEMA (Nota + Série)</label>
+                <input type="file" id="fileSistema" accept=".xlsx, .xls, .csv" class="w-full text-xs file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-green-700 file:text-white file:font-black cursor-pointer">
+                <div id="detalheSistema" class="mt-4 p-2 bg-gray-50 rounded text-[9px] font-bold text-gray-400 uppercase italic">Aguardando arquivo...</div>
+            </div>
+        </div>
+
+        <div class="flex justify-center mb-10">
+            <button onclick="executarComparativo()" class="bg-black text-white px-24 py-5 rounded-2xl font-black text-xl uppercase shadow-2xl hover:bg-blue-900 transition-all active:scale-95">
+                Executar Conciliação
+            </button>
+        </div>
+
+        <!-- Filtros Dinâmicos -->
+        <div id="areaFiltros" class="hidden mb-6 flex flex-wrap justify-center gap-3">
+            <button onclick="filtrar('TODOS')" class="btn-filtro ativo bg-gray-800 text-white px-6 py-2 rounded-lg font-black text-[10px] uppercase" id="btn-TODOS">Todos (<span id="c-todos">0</span>)</button>
+            <button onclick="filtrar('CONCILIADO OK')" class="btn-filtro bg-green-600 text-white px-6 py-2 rounded-lg font-black text-[10px] uppercase" id="btn-OK">Conciliado OK (<span id="c-ok">0</span>)</button>
+            <button onclick="filtrar('DIVERGÊNCIA DE VALOR')" class="btn-filtro bg-yellow-500 text-black px-6 py-2 rounded-lg font-black text-[10px] uppercase" id="btn-DIF">Divergência R$ (<span id="c-dif">0</span>)</button>
+            <button onclick="filtrar('FALTA NO SISTEMA')" class="btn-filtro bg-red-600 text-white px-6 py-2 rounded-lg font-black text-[10px] uppercase" id="btn-FSIST">Falta no Sistema (<span id="c-fsist">0</span>)</button>
+            <button onclick="filtrar('FALTA NA SEFAZ')" class="btn-filtro bg-orange-600 text-white px-6 py-2 rounded-lg font-black text-[10px] uppercase" id="btn-FSEFAZ">Falta na SEFAZ (<span id="c-fsefaz">0</span>)</button>
+        </div>
+
+        <!-- Tabela -->
+        <div id="containerTabela" class="hidden bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-300">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-gray-900 text-white text-[10px] font-black uppercase tracking-widest">
+                    <tr>
+                        <th class="p-5">Identificação (Nota / Série)</th>
+                        <th class="p-5">Vlr. SEFAZ</th>
+                        <th class="p-5">Vlr. Sistema</th>
+                        <th class="p-5">Diferença</th>
+                        <th class="p-5">Status Final</th>
+                    </tr>
+                </thead>
+                <tbody id="corpoTabela" class="text-[11px] font-bold"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let baseSefaz = [];
+        let baseSistema = [];
+        let resultadosCompletos = [];
+
+        document.getElementById('fileSefaz').addEventListener('change', (e) => lerBase(e, 'Sefaz'));
+        document.getElementById('fileSistema').addEventListener('change', (e) => lerBase(e, 'Sistema'));
+
+        function lerBase(event, tipo) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                const colunas = Object.keys(json[0] || {});
+
+                const colNota = colunas.find(c => ["NUMERO NOTA FISCAL", "NOTA", "NÚMERO"].includes(c.toUpperCase())) || colunas.find(c => c.toUpperCase().includes("NOTA"));
+                const colSerie = colunas.find(c => ["SERIE", "SÉRIE"].includes(c.toUpperCase()));
+                const colVlr = colunas.find(c => c.toUpperCase().includes("VALOR")) || colunas.find(c => c.toUpperCase().includes("TOTAL"));
+
+                const normalizados = json.map(item => {
+                    const n = item[colNota]?.toString().trim() || "0";
+                    const s = item[colSerie]?.toString().trim() || "0";
+                    return {
+                        chaveComposta: `N:${n}|S:${s}`,
+                        nota: n,
+                        serie: s,
+                        v: parseFloat(item[colVlr] || 0)
+                    };
+                });
+
+                if (tipo === 'Sefaz') {
+                    baseSefaz = normalizados;
+                    document.getElementById('detalheSefaz').innerText = `Capturado: ${colNota} + ${colSerie || 'S/Série'}`;
+                } else {
+                    baseSistema = normalizados;
+                    document.getElementById('detalheSistema').innerText = `Capturado: ${colNota} + ${colSerie || 'S/Série'}`;
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function executarComparativo() {
+            if (!baseSefaz.length || !baseSistema.length) return alert("Importe as duas bases primeiro.");
+
+            const mapaSist = new Map(baseSistema.map(i => [i.chaveComposta, i.v]));
+            const idsProcessados = new Set();
+            resultadosCompletos = [];
+
+            // Cruzamento SEFAZ x Sistema
+            baseSefaz.forEach(item => {
+                const vSist = mapaSist.get(item.chaveComposta);
+                idsProcessados.add(item.chaveComposta);
+                const dif = (vSist || 0) - item.v;
+                let status = '', classe = '';
+
+                if (vSist === undefined) {
+                    status = 'FALTA NO SISTEMA';
+                    classe = 'linha-erro';
+                } else if (Math.abs(dif) > 0.01) {
+                    status = 'DIVERGÊNCIA DE VALOR';
+                    classe = 'linha-erro';
+                } else {
+                    status = 'CONCILIADO OK';
+                    classe = 'linha-sucesso';
+                }
+                resultadosCompletos.push({ ...item, vSist: vSist || 0, dif, status, classe });
+            });
+
+            // Notas exclusivas do Sistema
+            baseSistema.forEach(item => {
+                if (!idsProcessados.has(item.chaveComposta)) {
+                    resultadosCompletos.push({ ...item, vSist: item.v, v: 0, dif: item.v, status: 'FALTA NA SEFAZ', classe: 'linha-erro' });
+                }
+            });
+
+            atualizarContadores();
+            document.getElementById('areaFiltros').classList.remove('hidden');
+            document.getElementById('containerTabela').classList.remove('hidden');
+            renderizar(resultadosCompletos);
+        }
+
+        function atualizarContadores() {
+            document.getElementById('c-todos').innerText = resultadosCompletos.length;
+            document.getElementById('c-ok').innerText = resultadosCompletos.filter(i => i.status === 'CONCILIADO OK').length;
+            document.getElementById('c-dif').innerText = resultadosCompletos.filter(i => i.status === 'DIVERGÊNCIA DE VALOR').length;
+            document.getElementById('c-fsist').innerText = resultadosCompletos.filter(i => i.status === 'FALTA NO SISTEMA').length;
+            document.getElementById('c-fsefaz').innerText = resultadosCompletos.filter(i => i.status === 'FALTA NA SEFAZ').length;
+        }
+
+        function filtrar(status) {
+            // Estilo dos botões
+            document.querySelectorAll('.btn-filtro').forEach(btn => btn.classList.remove('ativo'));
+            if(status === 'TODOS') document.getElementById('btn-TODOS').classList.add('ativo');
+            if(status === 'CONCILIADO OK') document.getElementById('btn-OK').classList.add('ativo');
+            if(status === 'DIVERGÊNCIA DE VALOR') document.getElementById('btn-DIF').classList.add('ativo');
+            if(status === 'FALTA NO SISTEMA') document.getElementById('btn-FSIST').classList.add('ativo');
+            if(status === 'FALTA NA SEFAZ') document.getElementById('btn-FSEFAZ').classList.add('ativo');
+
+            const filtrados = status === 'TODOS' ? resultadosCompletos : resultadosCompletos.filter(i => i.status === status);
+            renderizar(filtrados);
+        }
+
+        function renderizar(lista) {
+            const tbody = document.getElementById('corpoTabela');
+            tbody.innerHTML = lista.map(item => `
+                <tr class="${item.classe} border-b border-gray-200">
+                    <td class="p-5">
+                        <div class="text-black font-black">NFCe: ${item.nota}</div>
+                        <div class="text-[9px] text-gray-500 uppercase font-bold tracking-tighter">Série: ${item.serie}</div>
+                    </td>
+                    <td class="p-5">R$ ${item.v.toLocaleString('pt-BR', {minimumFractionDigits:2})}</td>
+                    <td class="p-5">R$ ${item.vSist.toLocaleString('pt-BR', {minimumFractionDigits:2})}</td>
+                    <td class="p-5 font-bold ${Math.abs(item.dif) > 0.01 ? 'text-red-600' : 'text-gray-400'}">
+                        R$ ${item.dif.toLocaleString('pt-BR', {minimumFractionDigits:2})}
+                    </td>
+                    <td class="p-5 uppercase italic tracking-tighter">
+                        <span class="status-badge">${item.status}</span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+    </script>
+</body>
+</html>

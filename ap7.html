@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerador QR Code - StorGarcom</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Ícones -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        #qrcode img, #qrcode canvas {
+            margin: 0 auto;
+            border-radius: 0; /* Bordas retas */
+        }
+        /* Animação suave para o toast de notificação */
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .toast {
+            animation: fade-in-up 0.3s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen flex flex-col items-center justify-center p-4 font-sans text-slate-800">
+
+    <!-- Card Principal -->
+    <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-sm text-center border border-slate-200">
+        
+        <!-- Cabeçalho -->
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-slate-900">Gerador QR</h1>
+            <div class="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold mt-2">
+                StorSistemas
+            </div>
+        </div>
+        
+        <!-- Container do QR Code -->
+        <div class="bg-white p-2 rounded-xl border border-slate-100 shadow-inner inline-block mb-6 relative group">
+            <!-- Área onde o QR Code aparece -->
+            <div id="qrcode" class="flex justify-center min-h-[200px] items-center"></div>
+        </div>
+
+        <!-- Botões de Ação (Download/Copiar) -->
+        <div class="grid grid-cols-2 gap-3 mb-6">
+            <!-- Botão Baixar -->
+            <button onclick="downloadQR()" class="flex flex-col items-center justify-center p-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white transition duration-200 group shadow-md active:scale-95">
+                <i data-lucide="download" class="w-6 h-6 mb-1 group-hover:scale-110 transition-transform"></i>
+                <span class="text-xs font-semibold">Baixar PNG</span>
+            </button>
+
+            <!-- Botão Copiar -->
+            <button onclick="copyQR()" class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition duration-200 group shadow-sm active:scale-95">
+                <i data-lucide="copy" class="w-6 h-6 mb-1 group-hover:scale-110 transition-transform"></i>
+                <span class="text-xs font-semibold">Copiar Imagem</span>
+            </button>
+        </div>
+
+        <!-- Área de Edição do Link -->
+        <div class="text-left bg-slate-50 p-3 rounded-lg border border-slate-200">
+            <label for="url-input" class="text-[10px] text-slate-400 font-bold uppercase mb-2 block flex justify-between items-center">
+                <span>Conteúdo do QR Code:</span>
+                <span class="text-[9px] text-slate-300 font-normal">(Edite e clique em Gerar)</span>
+            </label>
+            
+            <div class="flex gap-2">
+                <input type="text" id="url-input" 
+                    class="w-full text-xs text-blue-600 font-mono bg-white border border-slate-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition shadow-sm" 
+                    placeholder="Cole seu link aqui..."
+                    onkeypress="handleEnter(event)">
+                
+                <button onclick="generateNewQR()" class="bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded hover:bg-slate-700 transition shadow-sm flex items-center gap-1 active:bg-black">
+                    <i data-lucide="refresh-cw" class="w-3 h-3"></i>
+                    Gerar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast de Notificação -->
+    <div id="toast" class="fixed bottom-5 bg-slate-800 text-white px-6 py-3 rounded-lg shadow-lg hidden items-center gap-2 text-sm z-50">
+        <i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i>
+        <span id="toast-msg">Mensagem aqui</span>
+    </div>
+
+    <script>
+        // Inicializa ícones
+        lucide.createIcons();
+
+        // Configuração Inicial
+        const defaultUrl = "https://storsistemas.com.br/aplicativos/storpedidos/StorGarcom(4.8.0.0)-release.apk";
+        const urlInput = document.getElementById('url-input');
+        const qrcodeContainer = document.getElementById("qrcode");
+        
+        // Define o valor inicial no input
+        urlInput.value = defaultUrl;
+
+        // Função Principal de Geração
+        function generateNewQR() {
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                showToast("Por favor, insira um link ou texto.", true);
+                return;
+            }
+
+            // Limpa o QR Code anterior
+            qrcodeContainer.innerHTML = "";
+
+            // Gera o novo
+            new QRCode(qrcodeContainer, {
+                text: url,
+                width: 200,
+                height: 200,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.M
+            });
+
+            showToast("Novo QR Code gerado!");
+        }
+
+        // Gera o primeiro QR Code ao carregar a página
+        generateNewQR();
+
+        // Permite gerar apertando Enter
+        function handleEnter(e) {
+            if (e.key === 'Enter') {
+                generateNewQR();
+            }
+        }
+
+        // Função para mostrar notificação (Toast)
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            const msg = document.getElementById('toast-msg');
+            const icon = toast.querySelector('svg'); // Pega o ícone dentro do toast
+            
+            msg.innerText = message;
+            
+            // Reset classes
+            toast.className = "fixed bottom-5 px-6 py-3 rounded-lg shadow-lg hidden items-center gap-2 text-sm z-50 toast";
+            
+            if (isError) {
+                toast.classList.add('bg-red-600', 'text-white');
+                toast.classList.remove('hidden', 'flex');
+                toast.style.display = 'flex';
+            } else {
+                toast.classList.add('bg-slate-800', 'text-white');
+                toast.classList.remove('hidden');
+                toast.style.display = 'flex';
+            }
+
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Função de Baixar
+        function downloadQR() {
+            try {
+                const canvas = qrcodeContainer.querySelector('canvas');
+                if (!canvas) {
+                    showToast("Gere um QR Code primeiro.", true);
+                    return;
+                }
+
+                const image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+                const link = document.createElement('a');
+                link.href = image;
+                link.download = 'qrcode-storsistemas.png';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                showToast("Imagem salva!");
+            } catch (err) {
+                showToast("Erro ao baixar.", true);
+                console.error(err);
+            }
+        }
+
+        // Função de Copiar
+        function copyQR() {
+            try {
+                const canvas = qrcodeContainer.querySelector('canvas');
+                if (!canvas) {
+                    showToast("Gere um QR Code primeiro.", true);
+                    return;
+                }
+
+                canvas.toBlob(async (blob) => {
+                    try {
+                        const item = new ClipboardItem({ 'image/png': blob });
+                        await navigator.clipboard.write([item]);
+                        showToast("Copiado para a área de transferência!");
+                    } catch (err) {
+                        showToast("Erro ao copiar. Tente baixar.", true);
+                    }
+                });
+            } catch (err) {
+                showToast("Erro ao copiar.", true);
+            }
+        }
+    </script>
+</body>
+</html>

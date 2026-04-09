@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Suporte Stor - Painel Fiscal Pro</title>
+    <style>
+        :root {
+            --primary: #0056b3;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --dark: #343a40;
+            --light: #f8f9fa;
+            --border: #dee2e6;
+            --whatsapp: #25D366;
+            --api1: #6f42c1; /* CNPJ.ws */
+            --api2: #17a2b8; /* BrasilAPI */
+            --api3: #20c997; /* ViaCEP */
+        }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: #e9ecef; margin: 0; padding: 20px;
+            display: flex; justify-content: center;
+        }
+        .container { 
+            background: white; padding: 30px; border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 900px; 
+        }
+        h2 { margin-top: 0; color: var(--dark); border-bottom: 2px solid var(--border); padding-bottom: 10px; text-align: center; }
+        
+        .busca-container { display: flex; gap: 10px; margin-bottom: 20px; }
+        input { 
+            flex: 1; padding: 15px; border: 2px solid #ced4da; border-radius: 6px; 
+            font-size: 20px; font-weight: bold; color: var(--primary); text-align: center; 
+        }
+        input:focus { outline: none; border-color: var(--primary); }
+        button { 
+            padding: 15px 30px; background: var(--primary); color: white; border: none; 
+            border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 1.1rem; transition: 0.2s; 
+        }
+        button:hover { background: #004494; }
+
+        .btn-zap {
+            background: var(--whatsapp); width: 100%; margin-top: 20px; padding: 15px;
+            display: none; font-size: 1.1rem; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-zap:hover { background: #1ebe57; }
+        .btn-zap.active { display: flex; }
+
+        .status-msg { text-align: center; font-weight: bold; margin-bottom: 20px; min-height: 24px; }
+
+        .api-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; display: none; }
+        .api-grid.active { display: grid; }
+
+        .api-card {
+            background: var(--light); border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+        .api-header {
+            padding: 10px 15px; color: white; font-weight: bold; font-size: 1rem;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .api-body { padding: 15px; flex: 1; font-size: 0.9rem; }
+        
+        .dado-linha { margin-bottom: 8px; border-bottom: 1px dashed #ccc; padding-bottom: 5px; }
+        .dado-linha:last-child { border-bottom: none; }
+        .label { font-weight: 600; color: #555; }
+        .valor { font-weight: bold; color: var(--dark); float: right; text-align: right; max-width: 65%; word-wrap: break-word;}
+        
+        .badge { padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; color: white; }
+        .bg-success { background: var(--success); }
+        .bg-danger { background: var(--danger); }
+        .loading { font-style: italic; color: #666; text-align: center; padding: 10px; }
+        .erro-api { color: var(--danger); font-weight: bold; text-align: center; padding: 10px; }
+
+        @media (max-width: 768px) { .api-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Dossiê Fiscal Inteligente</h2>
+    
+    <div class="busca-container">
+        <input type="text" id="cnpj" placeholder="00.000.000/0000-00" maxlength="18" oninput="formatarEntrada(this)" onkeypress="buscarComEnter(event)">
+        <button onclick="iniciarBuscas()">Consultar CNPJ</button>
+    </div>
+
+    <div class="status-msg" id="status-msg"></div>
+
+    <div class="api-grid" id="api-grid">
+        <div class="api-card">
+            <div class="api-header" style="background: var(--api1);"><span>🏢 Dados Tributários (CNPJ.ws)</span><span id="status-api1">⏳</span></div>
+            <div class="api-body" id="body-api1"></div>
+        </div>
+        <div class="api-card">
+            <div class="api-header" style="background: var(--api2);"><span>🇧🇷 Situação e QSA (BrasilAPI)</span><span id="status-api2">⏳</span></div>
+            <div class="api-body" id="body-api2"></div>
+        </div>
+        <div class="api-card">
+            <div class="api-header" style="background: var(--api3);"><span>📍 Endereço Oficial (ViaCEP)</span><span id="status-api3">⏳</span></div>
+            <div class="api-body" id="body-api3">Aguardando CEP...</div>
+        </div>
+    </div>
+
+    <button class="btn-zap" id="btn-zap" onclick="copiarResumoZap()">📱 Copiar Resumo para WhatsApp</button>
+</div>
+
+<script>
+    // Variável global para guardar os dados e montar a mensagem do WhatsApp depois
+    let dadosResumo = {};
+
+    function formatarEntrada(campo) {
+        campo.value = campo.value.replace(/\D/g, '');
+        document.getElementById('api-grid').classList.remove('active');
+        document.getElementById('btn-zap').classList.remove('active');
+        document.getElementById('status-msg').innerText = "";
+    }
+
+    function buscarComEnter(event) { if (event.key === "Enter") iniciarBuscas(); }
+
+    function isCnpjValido(cnpj) {
+        if (cnpj.length !== 14 || /^(\d)\1{13}$/.test(cnpj)) return false;
+        let tamanho = cnpj.length - 2, numeros = cnpj.substring(0, tamanho), digitos = cnpj.substring(tamanho), soma = 0, pos = tamanho - 7;
+        for (let i = tamanho; i >= 1; i--) { soma += numeros.charAt(tamanho - i) * pos--; if (pos < 2) pos = 9; }
+        let resultado = soma % 11 < 2 ? 0 : 11 - soma % 11; if (resultado != digitos.charAt(0)) return false;
+        tamanho = tamanho + 1; numeros = cnpj.substring(0, tamanho); soma = 0; pos = tamanho - 7;
+        for (let i = tamanho; i >= 1; i--) { soma += numeros.charAt(tamanho - i) * pos--; if (pos < 2) pos = 9; }
+        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11; return resultado == digitos.charAt(1);
+    }
+
+    function setCardLoading(idCard) {
+        document.getElementById(`status-${idCard}`).innerText = "⏳";
+        document.getElementById(`body-${idCard}`).innerHTML = "<div class='loading'>Buscando dados...</div>";
+    }
+
+    async function iniciarBuscas() {
+        const cnpj = document.getElementById('cnpj').value;
+        if (!isCnpjValido(cnpj)) {
+            document.getElementById('status-msg').innerHTML = "<span style='color:var(--danger)'>❌ CNPJ Inválido.</span>";
+            return;
+        }
+
+        // Reseta os dados
+        dadosResumo = { cnpj: cnpj };
+        document.getElementById('status-msg').innerHTML = "<span style='color:var(--primary)'>🚀 Consultando bases...</span>";
+        document.getElementById('api-grid').classList.add('active');
+        document.getElementById('btn-zap').classList.remove('active');
+
+        setCardLoading('api1'); setCardLoading('api2'); setCardLoading('api3');
+
+        let cepEncontrado = null;
+
+        Promise.allSettled([
+            fetchCNPJws(cnpj).then(cep => { if(cep) cepEncontrado = cep; }),
+            fetchBrasilAPI(cnpj).then(cep => { if(cep && !cepEncontrado) cepEncontrado = cep; })
+        ]).then(() => {
+            if (cepEncontrado) {
+                fetchViaCEP(cepEncontrado.replace(/\D/g, ''));
+            } else {
+                document.getElementById('status-api3').innerText = "❌";
+                document.getElementById('body-api3').innerHTML = "<div class='erro-api'>CEP não localizado.</div>";
+            }
+            document.getElementById('status-msg').innerHTML = "<span style='color:var(--success)'>✅ Consultas finalizadas!</span>";
+            document.getElementById('btn-zap').classList.add('active'); // Libera o botão do WhatsApp
+        });
+    }
+
+    async function fetchCNPJws(cnpj) {
+        try {
+            const res = await fetch(`https://publica.cnpj.ws/cnpj/${cnpj}`);
+            if (!res.ok) throw new Error("Erro");
+            const dados = await res.json();
+            
+            dadosResumo.simples = dados.simples ? (dados.simples.optante_simples === 'S' ? 'SIM' : 'NÃO') : 'Desconhecido';
+            dadosResumo.mei = dados.simples ? (dados.simples.optante_mei === 'S' ? 'SIM' : 'NÃO') : 'Desconhecido';
+            const ie = dados.estabelecimento.inscricoes_estaduais.length > 0 ? dados.estabelecimento.inscricoes_estaduais[0].inscricao_estadual : 'Isento';
+
+            let html = `
+                <div class="dado-linha"><span class="label">Simples Nacional:</span> <span class="valor">${dadosResumo.simples === 'SIM' ? '<span class="badge bg-success">SIM</span>' : '<span class="badge bg-danger">NÃO</span>'}</span></div>
+                <div class="dado-linha"><span class="label">É MEI?:</span> <span class="valor">${dadosResumo.mei === 'SIM' ? '<span class="badge bg-success">SIM</span>' : '<span class="badge bg-danger">NÃO</span>'}</span></div>
+                <div class="dado-linha"><span class="label">Cod. IBGE:</span> <span class="valor">${dados.estabelecimento.cidade ? dados.estabelecimento.cidade.ibge_id : '-'}</span></div>
+                <div class="dado-linha"><span class="label">Insc. Estadual:</span> <span class="valor">${ie}</span></div>
+                <div class="dado-linha"><span class="label">Capital Social:</span> <span class="valor">${parseFloat(dados.capital_social).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</span></div>
+            `;
+            document.getElementById('body-api1').innerHTML = html;
+            document.getElementById('status-api1').innerText = "✅";
+            return dados.estabelecimento.cep;
+        } catch (e) {
+            document.getElementById('status-api1').innerText = "❌";
+            document.getElementById('body-api1').innerHTML = "<div class='erro-api'>Falha na consulta.</div>";
+            return null;
+        }
+    }
+
+    async function fetchBrasilAPI(cnpj) {
+        try {
+            const res = await fetch(`https://brasilapi.com.br/api/cnpj/v1/${cnpj}`);
+            if (!res.ok) throw new Error("Erro");
+            const dados = await res.json();
+
+            dadosResumo.razao = dados.razao_social;
+            dadosResumo.status = dados.descricao_situacao_cadastral;
+            dadosResumo.motivo = dados.descricao_motivo_situacao_cadastral;
+            
+            let corStatus = dados.descricao_situacao_cadastral === 'ATIVA' ? 'bg-success' : 'bg-danger';
+            let socios = dados.qsa && dados.qsa.length > 0 ? dados.qsa.map(s => s.nome_socio).join('<br>') : 'Não informado';
+
+            let html = `
+                <div class="dado-linha"><span class="label">Razão Social:</span> <span class="valor">${dados.razao_social}</span></div>
+                <div class="dado-linha"><span class="label">Status Receita:</span> <span class="valor"><span class="badge ${corStatus}">${dados.descricao_situacao_cadastral}</span></span></div>
+                <div class="dado-linha"><span class="label">Motivo Baixa:</span> <span class="valor" style="color:var(--danger)">${dados.descricao_motivo_situacao_cadastral !== 'SEM MOTIVO' ? dados.descricao_motivo_situacao_cadastral : '-'}</span></div>
+                <div class="dado-linha"><span class="label">Sócios (QSA):</span> <span class="valor" style="font-size: 0.8rem">${socios}</span></div>
+            `;
+            document.getElementById('body-api2').innerHTML = html;
+            document.getElementById('status-api2').innerText = "✅";
+            return dados.cep;
+        } catch (e) {
+            document.getElementById('status-api2').innerText = "❌";
+            document.getElementById('body-api2').innerHTML = "<div class='erro-api'>Falha na consulta.</div>";
+            return null;
+        }
+    }
+
+    async function fetchViaCEP(cep) {
+        try {
+            const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+            if (!res.ok) throw new Error("Erro");
+            const dados = await res.json();
+
+            dadosResumo.endereco = `${dados.logradouro}, ${dados.bairro} - ${dados.localidade}/${dados.uf} (CEP: ${dados.cep})`;
+
+            let html = `
+                <div class="dado-linha"><span class="label">CEP Base:</span> <span class="valor">${dados.cep}</span></div>
+                <div class="dado-linha"><span class="label">Logradouro:</span> <span class="valor">${dados.logradouro}</span></div>
+                <div class="dado-linha"><span class="label">Bairro:</span> <span class="valor">${dados.bairro}</span></div>
+                <div class="dado-linha"><span class="label">Cidade/UF:</span> <span class="valor">${dados.localidade} / ${dados.uf}</span></div>
+                <div class="dado-linha"><span class="label">IBGE (Correios):</span> <span class="valor">${dados.ibge}</span></div>
+            `;
+            document.getElementById('body-api3').innerHTML = html;
+            document.getElementById('status-api3').innerText = "✅";
+        } catch (e) {
+            document.getElementById('status-api3').innerText = "❌";
+            document.getElementById('body-api3').innerHTML = "<div class='erro-api'>Endereço não localizado.</div>";
+        }
+    }
+
+    function copiarResumoZap() {
+        // Formata o texto usando negrito do WhatsApp (*)
+        let textoZap = `*📋 RESUMO DE CADASTRO - STOR*\n`;
+        textoZap += `*CNPJ:* ${dadosResumo.cnpj}\n`;
+        textoZap += `*Razão Social:* ${dadosResumo.razao || 'Não encontrada'}\n`;
+        
+        let iconeStatus = dadosResumo.status === 'ATIVA' ? '🟢' : '🔴';
+        textoZap += `*Status Receita:* ${iconeStatus} ${dadosResumo.status || 'Desconhecido'}\n`;
+        
+        if (dadosResumo.motivo && dadosResumo.motivo !== 'SEM MOTIVO') {
+            textoZap += `*Motivo (Se baixada):* ${dadosResumo.motivo}\n`;
+        }
+
+        textoZap += `*Simples Nacional:* ${dadosResumo.simples || 'Desconhecido'}\n`;
+        textoZap += `*Endereço:* ${dadosResumo.endereco || 'Não localizado'}\n`;
+        textoZap += `\n_Por favor, verifique se os dados batem com a operação antes de emitir a nota._`;
+
+        navigator.clipboard.writeText(textoZap).then(() => {
+            const btn = document.getElementById('btn-zap');
+            btn.innerText = "✅ Copiado! Cole no WhatsApp (Ctrl+V)";
+            setTimeout(() => { btn.innerText = "📱 Copiar Resumo para WhatsApp"; }, 3000);
+        });
+    }
+</script>
+
+</body>
+</html>

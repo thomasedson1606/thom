@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora Tributária N2 - Stor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .valor-positivo { color: #16a34a !important; font-weight: 900; }
+        .valor-negativo { color: #dc2626 !important; font-weight: 900; }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .campo-resultado { background-color: #f0f4f8; border: 2px solid #000000; min-height: 100px; position: relative; }
+        .label-bold { font-weight: 900; color: #000000; text-transform: uppercase; font-size: 0.75rem; }
+        .btn-copiar { background-color: #1e3a8a; color: white; font-size: 10px; padding: 4px 8px; border-radius: 4px; font-weight: 900; text-transform: uppercase; margin-top: 8px; transition: all 0.2s; }
+        .btn-copiar:active { background-color: #facc15; color: #000; }
+    </style>
+</head>
+<body class="bg-gray-200 p-4 md:p-10 font-sans text-black">
+
+    <div class="max-w-3xl mx-auto bg-white shadow-2xl rounded-xl border-t-8 border-blue-900 p-6 md:p-10">
+        <h1 class="text-2xl font-black text-blue-900 mb-8 uppercase border-b-4 border-yellow-500 pb-2 italic text-center md:text-left">
+            Ajuste erro de calculo de Sped PIS e COFINS
+        </h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Entradas -->
+            <div class="space-y-6">
+                <div>
+                    <label class="label-bold">Valor Esperado</label>
+                    <input type="number" id="val_esp" oninput="calcular()" placeholder="0,00" step="0.01"
+                        class="w-full p-4 mt-1 border-2 border-black rounded-lg font-black text-xl focus:bg-yellow-50 outline-none">
+                </div>
+
+                <div>
+                    <label class="label-bold">Receita Bruta</label>
+                    <input type="number" id="rec_bru" oninput="calcular()" placeholder="0,00" step="0.01"
+                        class="w-full p-4 mt-1 border-2 border-black rounded-lg font-black text-xl focus:bg-yellow-50 outline-none">
+                </div>
+
+                <div>
+                    <label class="label-bold">Natureza de Receita (MAIOR)</label>
+                    <input type="number" id="nat_mai" oninput="calcular()" placeholder="0,00" step="0.01"
+                        class="w-full p-4 mt-1 border-2 border-black rounded-lg font-black text-xl focus:bg-yellow-50 outline-none">
+                </div>
+            </div>
+
+            <!-- Apoio -->
+            <div class="flex flex-col justify-start space-y-6">
+                <div class="p-6 rounded-lg border-4 border-double border-gray-400 bg-gray-50 text-center">
+                    <span class="label-bold block mb-2">Diferença Encontrada</span>
+                    <span id="res_dif" class="text-3xl font-black text-black">R$ 0,00</span>
+                </div>
+                
+                <div class="text-[11px] font-black text-gray-600 border-l-4 border-blue-900 pl-4 bg-blue-50 py-2">
+                    DICA THOMAS: Ao clicar em copiar, o valor vai <br>
+                    apenas com números e ponto (ex: 1250.50).
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+            <!-- Novo Valor Esperado -->
+            <div class="campo-resultado p-5 rounded-lg flex flex-col justify-center items-center shadow-lg">
+                <span class="label-bold text-blue-800 mb-1">Novo Valor Esperado</span>
+                <span id="fin_esp" class="text-2xl font-black text-black">R$ 0,00</span>
+                <button onclick="copiarValor('val_puro_esp')" class="btn-copiar">📋 Copiar Valor</button>
+            </div>
+
+            <!-- Novo Natureza de Receita -->
+            <div class="campo-resultado p-5 rounded-lg flex flex-col justify-center items-center shadow-lg">
+                <span class="label-bold text-blue-800 mb-1">Novo Natureza de Receita</span>
+                <span id="fin_nat" class="text-2xl font-black text-black">R$ 0,00</span>
+                <button onclick="copiarValor('val_puro_nat')" class="btn-copiar">📋 Copiar Valor</button>
+            </div>
+        </div>
+
+        <!-- Inputs ocultos para armazenar o valor puro -->
+        <input type="hidden" id="val_puro_esp" value="0">
+        <input type="hidden" id="val_puro_nat" value="0">
+
+        <div class="mt-10 flex justify-center">
+            <button onclick="limpar()" class="bg-red-600 text-white px-10 py-3 rounded-full font-black hover:bg-red-800 transition uppercase tracking-widest shadow-md">
+                Zerar Campos
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function formatarMoeda(valor) {
+            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        function calcular() {
+            const vEsp = parseFloat(document.getElementById('val_esp').value) || 0;
+            const rBru = parseFloat(document.getElementById('rec_bru').value) || 0;
+            const nMai = parseFloat(document.getElementById('nat_mai').value) || 0;
+
+            // 1. Diferença
+            const diferenca = vEsp - rBru;
+            const displayDif = document.getElementById('res_dif');
+            displayDif.innerText = formatarMoeda(diferenca);
+
+            displayDif.classList.remove('valor-positivo', 'valor-negativo');
+            if (diferenca > 0) displayDif.classList.add('valor-positivo');
+            else if (diferenca < 0) displayDif.classList.add('valor-negativo');
+
+            // 2. Novo Valor Esperado
+            document.getElementById('fin_esp').innerText = formatarMoeda(vEsp);
+            document.getElementById('val_puro_esp').value = vEsp.toFixed(2);
+
+            // 3. Novo Natureza de Receita
+            const novoNat = nMai + diferenca;
+            document.getElementById('fin_nat').innerText = formatarMoeda(novoNat);
+            document.getElementById('val_puro_nat').value = novoNat.toFixed(2);
+        }
+
+        function copiarValor(idCampoPuro) {
+            const valorParaCopiar = document.getElementById(idCampoPuro).value;
+            
+            navigator.clipboard.writeText(valorParaCopiar).then(() => {
+                // Feedback visual rápido no botão
+                const originalText = event.target.innerText;
+                event.target.innerText = "✅ COPIADO!";
+                event.target.style.backgroundColor = "#16a34a";
+                
+                setTimeout(() => {
+                    event.target.innerText = originalText;
+                    event.target.style.backgroundColor = "#1e3a8a";
+                }, 1000);
+            });
+        }
+
+        function limpar() {
+            document.getElementById('val_esp').value = '';
+            document.getElementById('rec_bru').value = '';
+            document.getElementById('nat_mai').value = '';
+            calcular();
+            document.getElementById('val_esp').focus();
+        }
+    </script>
+</body>
+</html>

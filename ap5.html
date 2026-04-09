@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Checklist Tributário N2 - Thomas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .step-done { text-decoration: line-through; color: #9ca3af; }
+        .card-done { border-left: 10px solid #10b981 !important; }
+        .pending { border-left: 10px solid #f59e0b; }
+        .checkbox-custom { width: 1.2rem; height: 1.2rem; cursor: pointer; }
+    </style>
+</head>
+<body class="bg-gray-100 p-4 md:p-8 font-sans">
+
+    <div class="max-w-5xl mx-auto">
+        <!-- Header com Opções de Portabilidade -->
+        <header class="mb-8 bg-white p-6 rounded-xl shadow-sm border-b-4 border-blue-900">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div>
+                    <h1 class="text-2xl font-black text-blue-900 uppercase tracking-tighter">Checklist de Transição Tributária</h1>
+                    <p class="text-gray-500 text-sm font-bold">Thomas | Especialista N2 - Stor Sistemas</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="exportarDados()" class="bg-gray-800 text-white px-3 py-2 rounded text-[10px] font-bold uppercase hover:bg-black transition">💾 Exportar Backup</button>
+                    <label class="bg-blue-600 text-white px-3 py-2 rounded text-[10px] font-bold uppercase hover:bg-blue-700 transition cursor-pointer">
+                        📂 Importar Dados
+                        <input type="file" id="inputImport" class="hidden" onchange="importarDados(event)">
+                    </label>
+                    <span id="contador-ativos" class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-2 rounded uppercase italic">0 Processos</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Formulário de Entrada Detalhado -->
+        <div class="bg-white p-6 rounded-xl shadow-lg mb-10 border border-gray-200">
+            <h2 class="text-sm font-black text-gray-400 uppercase mb-4">📝 Iniciar Nova Troca de Regime</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-600 uppercase text-blue-800">Número da O.S.</label>
+                    <input type="text" id="reg-os" placeholder="Ex: 123456" class="w-full border-2 border-gray-100 p-2 rounded focus:border-blue-500 outline-none transition font-bold">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-[10px] font-bold text-gray-600 uppercase text-blue-800">Licença / Nome da Empresa</label>
+                    <input type="text" id="reg-cliente" placeholder="Razão Social ou Nome Fantasia" class="w-full border-2 border-gray-100 p-2 rounded focus:border-blue-500 outline-none transition font-bold">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-600 uppercase text-blue-800">Data de Início</label>
+                    <input type="date" id="reg-data" class="w-full border-2 border-gray-100 p-2 rounded outline-none font-bold">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-600 uppercase text-orange-600">Regime ANTERIOR</label>
+                    <select id="reg-ant" class="w-full border-2 border-orange-100 p-2 rounded font-bold text-gray-700 outline-none">
+                        <option value="Simples Nacional">Simples Nacional</option>
+                        <option value="Lucro Presumido">Lucro Presumido</option>
+                        <option value="Lucro Real">Lucro Real</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-600 uppercase text-green-600">NOVO Regime</label>
+                    <select id="reg-novo" class="w-full border-2 border-green-100 p-2 rounded font-bold text-gray-700 outline-none">
+                        <option value="Lucro Presumido">Lucro Presumido</option>
+                        <option value="Lucro Real">Lucro Real</option>
+                        <option value="Simples Nacional">Simples Nacional</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button onclick="iniciarChecklist()" class="w-full bg-blue-900 hover:bg-blue-800 text-white p-3 rounded font-black uppercase tracking-widest transition shadow-md">
+                        Gerar Checklist
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Listagem de Processos -->
+        <div id="lista-processos" class="grid grid-cols-1 gap-8"></div>
+    </div>
+
+    <script>
+        let processos = JSON.parse(localStorage.getItem('thomas_checklist_regime')) || [];
+
+        const etapasMestra = [
+            { id: 1, txt: "Enviado planilha com dados para a contabilidade" },
+            { id: 2, txt: "Resposta recebida: Planilha de dados preenchida pela contabilidade" },
+            { id: 3, txt: "Enviado planilha de produtos do sistema (para depara tributário)" },
+            { id: 4, txt: "Resposta recebida: Lista de produtos com tributação definida" },
+            { id: 5, txt: "Análise técnica dos produtos (NCMs, Exceções e Regras)" },
+            { id: 6, txt: "SISTEMA: Alterar configuração de regime nos Dados da Empresa" },
+            { id: 7, txt: "SISTEMA: Cadastrar/Revisar novas alíquotas de impostos" },
+            { id: 8, txt: "SISTEMA: Alterar Produtos (Alíquotas, CFOP, CST ICMS, PIS, COFINS, IPI)" },
+            { id: 9, txt: "SISTEMA: Configurar Natureza da Receita (se houver/exigido)" },
+            { id: 10, txt: "Envio de planilha final com produtos já atualizados para conferência" },
+            { id: 11, txt: "Validação final e OK formal da Contabilidade" }
+        ];
+
+        window.onload = () => {
+            document.getElementById('reg-data').value = new Date().toISOString().split('T')[0];
+            render();
+        };
+
+        function iniciarChecklist() {
+            const os = document.getElementById('reg-os').value;
+            const cliente = document.getElementById('reg-cliente').value;
+            const data = document.getElementById('reg-data').value;
+            const ant = document.getElementById('reg-ant').value;
+            const novo = document.getElementById('reg-novo').value;
+
+            if(!os || !cliente) return alert("Por favor, preencha a O.S. e a Empresa.");
+
+            const processo = {
+                id: Date.now(),
+                os: os,
+                cliente: cliente,
+                data: data.split('-').reverse().join('/'),
+                ant: ant,
+                novo: novo,
+                concluido: false,
+                etapas: etapasMestra.map(e => ({ ...e, status: false }))
+            };
+
+            processos.unshift(processo);
+            salvar();
+            document.getElementById('reg-os').value = "";
+            document.getElementById('reg-cliente').value = "";
+        }
+
+        function toggleEtapa(procId, etapaId) {
+            const proc = processos.find(p => p.id === procId);
+            const etapa = proc.etapas.find(e => e.id === etapaId);
+            etapa.status = !etapa.status;
+            proc.concluido = proc.etapas.every(e => e.status);
+            salvar();
+        }
+
+        function excluir(id) {
+            if(confirm("Deseja remover este processo?")) {
+                processos = processos.filter(p => p.id !== id);
+                salvar();
+            }
+        }
+
+        function salvar() {
+            localStorage.setItem('thomas_checklist_regime', JSON.stringify(processos));
+            render();
+        }
+
+        // --- FUNÇÕES DE PORTABILIDADE ---
+        function exportarDados() {
+            if (processos.length === 0) return alert("Não há dados para exportar.");
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(processos));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "backup_tributario_thomas.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        function importarDados(event) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importados = JSON.parse(e.target.result);
+                    if (confirm("Isso irá substituir os dados atuais pelos do arquivo. Continuar?")) {
+                        processos = importados;
+                        salvar();
+                        alert("Dados importados com sucesso!");
+                    }
+                } catch (err) {
+                    alert("Erro ao ler o arquivo de backup.");
+                }
+            };
+            reader.readAsText(event.target.files[0]);
+        }
+
+        function render() {
+            const container = document.getElementById('lista-processos');
+            document.getElementById('contador-ativos').innerText = `${processos.length} Processos`;
+
+            if(processos.length === 0) {
+                container.innerHTML = `<div class="text-center p-10 text-gray-400 font-bold border-4 border-dashed rounded-xl italic text-xl">Nenhum acompanhamento em aberto.</div>`;
+                return;
+            }
+
+            container.innerHTML = processos.map(p => `
+                <div class="bg-white rounded-xl shadow-xl border ${p.concluido ? 'card-done' : 'pending'} transition-all overflow-hidden">
+                    <div class="bg-gray-50 p-5 border-b flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="bg-blue-900 text-white text-[10px] px-2 py-0.5 rounded font-bold">O.S. ${p.os}</span>
+                                <span class="text-gray-400 text-xs font-bold">${p.data}</span>
+                            </div>
+                            <h3 class="text-xl font-black text-gray-800 uppercase">${p.cliente}</h3>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-right">
+                                <p class="text-[9px] font-black text-gray-400 uppercase">Fluxo</p>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[10px] font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded border border-orange-200">${p.ant}</span>
+                                    <span class="text-gray-400">➔</span>
+                                    <span class="text-[10px] font-bold text-green-700 bg-green-50 px-2 py-1 rounded border border-green-200">${p.novo}</span>
+                                </div>
+                            </div>
+                            <button onclick="excluir(${p.id})" class="text-gray-300 hover:text-red-500 transition ml-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor font-bold">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1">
+                        ${p.etapas.map(e => `
+                            <label class="flex items-center space-x-3 p-2 rounded hover:bg-blue-50 transition cursor-pointer group">
+                                <input type="checkbox" ${e.status ? 'checked' : ''} 
+                                       onchange="toggleEtapa(${p.id}, ${e.id})"
+                                       class="checkbox-custom rounded text-blue-900 focus:ring-blue-900 border-gray-300">
+                                <span class="text-sm ${e.status ? 'step-done font-normal' : 'text-gray-700 font-bold group-hover:text-blue-900'}">
+                                    ${e.txt}
+                                </span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div class="bg-gray-100 p-2 text-center">
+                        <div class="w-full bg-gray-300 h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-blue-600 h-full transition-all" style="width: ${(p.etapas.filter(e => e.status).length / p.etapas.length * 100)}%"></div>
+                        </div>
+                        <p class="text-[9px] font-bold text-gray-500 mt-1 uppercase">Progresso: ${Math.round(p.etapas.filter(e => e.status).length / p.etapas.length * 100)}%</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
