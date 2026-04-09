@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajuste de Valor de Inventário - N2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .valor-positivo { color: #16a34a !important; font-weight: 900; }
+        .valor-negativo { color: #dc2626 !important; font-weight: 900; }
+        .label-bold { font-weight: 900; color: #000000; text-transform: uppercase; font-size: 0.75rem; }
+        .campo-resultado { background-color: #ffffff; border: 3px solid #000; min-height: 140px; transition: all 0.2s; }
+        input { outline: none; transition: background-color 0.2s; }
+    </style>
+</head>
+<body class="bg-gray-200 p-4 md:p-10 font-sans text-black">
+
+    <div class="max-w-4xl mx-auto bg-white shadow-2xl rounded-xl border-t-8 border-green-700 p-6 md:p-10 border-x border-b border-gray-300">
+        <h1 class="text-2xl font-black text-green-800 mb-8 uppercase border-b-4 border-yellow-500 pb-2 italic text-center md:text-left">
+            Ajuste de Valor de Inventário (Alta Precisão)
+        </h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Entradas de Dados -->
+            <div class="space-y-6">
+                <div>
+                    <label class="label-bold italic text-blue-900">Valor Contabilidade (B12)</label>
+                    <input type="text" id="val_cont" oninput="formatarEntrada(this); calcular()" placeholder="R$ 0,00" 
+                        class="w-full p-4 mt-1 border-2 border-black rounded-lg font-black text-2xl focus:bg-yellow-50">
+                </div>
+
+                <div>
+                    <label class="label-bold italic text-blue-900">Valor Sistema (D12)</label>
+                    <input type="text" id="val_sist" oninput="formatarEntrada(this); calcular()" placeholder="R$ 0,00" 
+                        class="w-full p-4 mt-1 border-2 border-black rounded-lg font-black text-2xl focus:bg-yellow-50">
+                </div>
+            </div>
+
+            <!-- Painel de Conferência -->
+            <div class="flex flex-col justify-center">
+                <div class="p-6 rounded-lg border-2 border-dashed border-gray-400 bg-gray-50 shadow-inner text-center">
+                    <p class="text-xs font-black uppercase text-gray-500 mb-2 underline">Status da Variação</p>
+                    <div id="status_box" class="text-sm font-black uppercase py-2 px-4 rounded border-2 border-black inline-block bg-white">
+                        AGUARDANDO DADOS
+                    </div>
+                    <div class="mt-4 text-[10px] font-black text-gray-500">
+                        Cálculo baseado em 10 casas decimais para <br> precisão absoluta no ajuste de custo.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resultado Final Percentual -->
+        <div class="mt-10">
+            <div class="campo-resultado p-6 rounded-xl flex flex-col justify-center items-center shadow-xl">
+                <span class="label-bold text-green-800 mb-2 text-base">Diferença Percentual (Ajuste)</span>
+                <!-- Oculto para cópia limpa -->
+                <input type="hidden" id="raw_result" value="0">
+                
+                <span id="res_perc" class="text-4xl md:text-5xl font-black tracking-tighter text-black">0,0000000000%</span>
+                
+                <button onclick="copiarPercentual()" id="btn_copy" class="mt-6 bg-blue-900 text-white px-8 py-3 rounded-lg font-black text-sm uppercase hover:bg-black transition-all flex items-center gap-3 shadow-lg active:scale-95">
+                    📋 Copiar Valor (10 Casas)
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-10 flex flex-col items-center gap-4">
+            <button onclick="limpar()" class="bg-red-600 text-white px-12 py-3 rounded-full font-black hover:bg-red-800 transition uppercase tracking-widest shadow-md">
+                Zerar Inventário
+            </button>
+            <p class="text-[10px] font-bold text-gray-400">THOMAS | ESPECIALISTA N2 - STOR SISTEMAS</p>
+        </div>
+    </div>
+
+    <script>
+        // Máscara R$ em tempo real
+        function formatarEntrada(input) {
+            let valor = input.value.replace(/\D/g, "");
+            valor = (valor / 100).toFixed(2) + "";
+            valor = valor.replace(".", ",");
+            valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+            input.value = valor ? "R$ " + valor : "";
+        }
+
+        // Converte string R$ para número calculável
+        function converterParaFloat(valorStr) {
+            if (!valorStr) return 0;
+            return parseFloat(valorStr.replace("R$ ", "").replace(/\./g, "").replace(",", "."));
+        }
+
+        function calcular() {
+            const cont = converterParaFloat(document.getElementById('val_cont').value);
+            const sist = converterParaFloat(document.getElementById('val_sist').value);
+            const displayPerc = document.getElementById('res_perc');
+            const statusBox = document.getElementById('status_box');
+            const rawInput = document.getElementById('raw_result');
+
+            if (sist === 0) {
+                displayPerc.innerText = "0,0000000000%";
+                displayPerc.className = "text-4xl md:text-5xl font-black text-black";
+                statusBox.innerText = "AGUARDANDO DADOS";
+                statusBox.style.color = "black";
+                return;
+            }
+
+            // Fórmula: =(B12/D12-1)*100
+            const resultado = ((cont / sist) - 1) * 100;
+
+            // Exibição com 10 casas decimais
+            // Usamos fixed(10) e depois trocamos o ponto por vírgula para visualização
+            const formatado = resultado.toFixed(10).replace(".", ",");
+            displayPerc.innerText = formatado + "%";
+            
+            // Valor "Cru" para o botão copiar (com ponto decimal)
+            rawInput.value = resultado.toFixed(10);
+
+            // Estilização Dinâmica
+            displayPerc.classList.remove('valor-positivo', 'valor-negativo');
+            if (resultado > 0) {
+                displayPerc.classList.add('valor-positivo');
+                statusBox.innerText = "SOBRA (AUMENTAR)";
+                statusBox.style.color = "#16a34a";
+            } else if (resultado < 0) {
+                displayPerc.classList.add('valor-negativo');
+                statusBox.innerText = "FALTA (REDUZIR)";
+                statusBox.style.color = "#dc2626";
+            } else {
+                statusBox.innerText = "VALORES IGUAIS";
+                statusBox.style.color = "black";
+            }
+        }
+
+        function copiarPercentual() {
+            const valorLimpo = document.getElementById('raw_result').value;
+            
+            navigator.clipboard.writeText(valorLimpo).then(() => {
+                const btn = document.getElementById('btn_copy');
+                const textoOriginal = btn.innerHTML;
+                btn.innerHTML = "✅ VALOR COPIADO!";
+                btn.style.backgroundColor = "#16a34a";
+                
+                setTimeout(() => {
+                    btn.innerHTML = textoOriginal;
+                    btn.style.backgroundColor = "#1e3a8a";
+                }, 1200);
+            });
+        }
+
+        function limpar() {
+            document.getElementById('val_cont').value = '';
+            document.getElementById('val_sist').value = '';
+            calcular();
+            document.getElementById('val_cont').focus();
+        }
+    </script>
+</body>
+</html>
