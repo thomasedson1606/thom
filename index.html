@@ -1,31 +1,90 @@
-16:05 09/04/2026<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minhas Aplicações Web</title>
+    <title>Thomas Tech - Portal de Aplicações</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; background-color: #f4f4f9; }
-        .container { max-width: 600px; margin: auto; }
-        .btn { display: block; padding: 15px; margin: 10px 0; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; font-size: 18px; }
-        .btn:hover { background-color: #0056b3; }
+        body {
+            /* Fundo atualizado conforme solicitado */
+            background-image: url('https://lost-blush-8tlloxkisq.edgeone.app/Gemini_Generated_Image_wvm2o4wvm2o4wvm2%20(1).png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            /* Sombra N2 agora usando a sua cor principal */
+            border-bottom-width: 8px;
+            border-bottom-color: #02727e; 
+        }
     </style>
 </head>
-<body>
+<body class="flex items-center justify-center p-4">
 
-    <div class="container">
-        <h1>Aplicações Thômas Edson</h1>
-        <p>Escolha uma das ferramentas abaixo:</p>
+    <div class="container max-w-2xl mx-auto glass-card rounded-2xl shadow-2xl p-8 text-center transition-all">
+        
+        <!-- Logo aumentada (alterado de h-32 para h-48) -->
+        <img src="https://courageous-green-g8vlo77wkf.edgeone.app/WhatsApp%20Image%202026-04-09%20at%2017.43.17.jpeg" 
+             alt="Thomas Tech Logo" 
+             class="h-48 mx-auto mb-6 drop-shadow-lg object-contain">
 
-        <!-- Links para os seus 5 arquivos HTML -->
-        <a href="ap1.html" class="btn">Aplicação 1 - Calculadora de Salário Líquido 2026</a>
-        <a href="ap2.html" class="btn">Aplicação 2 - Ajuste erro de calculo de Sped PIS e COFINS</a>
-        <a href="ap3.html" class="btn">Aplicação 3 - Gerenciador de Ordens N2</a>
-        <a href="ap4.html" class="btn">Aplicação 4 - Conciliação Sefaz x Sistema</a>
-        <a href="ap5.html" class="btn">Aplicação 5 - Checklist de Transição Tributária</a>
-        <a href="ap6.html" class="btn">Aplicação 6 - Consulta CNPJ/IE</a>
-        <a href="ap7.html" class="btn">Aplicação 7 - Gerar QR Stor Pedidos</a>
-        <a href="ap8.html" class="btn">Aplicação 8 - Ajuste de Valor de Inventário (Alta Precisão)</a>
+        <!-- Título com detalhe na cor principal -->
+        <h1 class="text-3xl font-black text-gray-800 uppercase tracking-tighter border-l-8 pl-4 inline-block mb-2" style="border-color: #02727e;">
+            Aplicações Thômas Edson
+        </h1>
+        <p class="text-gray-700 font-bold mb-8">Especialista N2 | Escolha uma ferramenta abaixo:</p>
+
+        <div class="grid grid-cols-1 gap-3">
+            <!-- Botões: Fundo #02727e e Texto Branco para legibilidade perfeita -->
+            <a href="ap1.html" class="flex items-center justify-between p-4 rounded-lg transition-all hover:scale-[1.02] shadow-md group text-white bg-[#02727e] hover:bg-[#015862]">
+                <span class="font-bold">Aplicação 1 - Calculadora de Salário Líquido 2026</span>
+                <span class="opacity-0 group-hover:opacity-100 transition-opacity">➔</span>
+            </a>
+            
+            <a href="ap2.html" class="flex items-center justify-between p-4 rounded-lg transition-all hover:scale-[1.02] shadow-md group text-white bg-[#02727e] hover:bg-[#015862]">
+                <span class="font-bold">Aplicação 2 - Ajuste erro de calculo de Sped PIS e COFINS</span>
+                <span class="opacity-0 group-hover:opacity-100 transition-opacity">➔</span>
+            </a>
+
+            <a href="ap3.html" class="flex items-center justify-between p-4 rounded-lg transition-all hover:scale-[1.02] shadow-md group text-white bg-[#02727e] hover:bg-[#015862]">
+                <span class="font-bold">Aplicação 3 - Gerenciador de Ordens N2</span>
+                <span class="opacity-0 group-hover:opacity-100 transition-opacity">➔</span>
+            </a>
+
+            <a href="ap4.html" class="flex items-center justify-between p-4 rounded-lg transition-all hover:scale-[1.02] shadow-md group text-white bg-[#02727e] hover:bg-[#015862]">
+                <span class="font-bold">Aplicação 4 - Conciliação Sefaz x Sistema</span>
+                <span class="opacity-0 group-hover:opacity-100 transition-opacity">➔</span>
+            </a>
+
+            <a href="ap5.html" class="flex items-center justify-between p-4 rounded-lg transition-all hover:scale-[1.02] shadow-md group text-white bg-[#02727e] hover:bg-[#015862]">
+                <span class="font-bold">Aplicação 5 - Checklist de Transição Tributária</span>
+                <span class="opacity-0 group-hover:opacity-100 transition-opacity">➔</span>
+            </a>
+
+            <a href="ap6.html" class="flex items-center justify-between p-4 rounded-lg transition-all hover:scale-[1.02] shadow-md group text-white bg-[#02727e] hover:bg-[#015862]">
+                <span class="font-bold">Aplicação 6 - Consulta CNPJ/IE</span>
+                <span class="opacity-0 group-hover:opacity-100 transition-opacity">➔</span>
+            </a>
+
+            <a href="ap7.html" class="flex items-center justify-between p-4 rounded-lg transition-all hover:scale-[1.02] shadow-md group text-white bg-[#02727e] hover:bg-[#015862]">
+                <span class="font-bold">Aplicação 7 - Gerar QR Stor Pedidos</span>
+                <span class="opacity-0 group-hover:opacity-100 transition-opacity">➔</span>
+            </a>
+
+            <a href="ap8.html" class="flex items-center justify-between p-4 rounded-lg transition-all hover:scale-[1.02] shadow-md group text-white bg-[#02727e] hover:bg-[#015862]">
+                <span class="font-bold">Aplicação 8 - Ajuste de Valor de Inventário (Alta Precisão)</span>
+                <span class="opacity-0 group-hover:opacity-100 transition-opacity">➔</span>
+            </a>
+        </div>
+
+        <footer class="mt-8 pt-4 border-t border-gray-200 text-xs font-black uppercase" style="color: #02727e;">
+            Thomas Tech &copy; 2026 | Suporte N2 Especializado
+        </footer>
     </div>
 
 </body>
