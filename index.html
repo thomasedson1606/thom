@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
-            /* Fundo atualizado conforme solicitado */
             background-image: url('https://i.postimg.cc/c17WDrpL/Fundo-Thomas-tech.png');
             background-size: cover;
             background-position: center;
@@ -18,72 +17,64 @@
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.3);
-            /* Sombra N2 agora usando a sua cor principal */
             border-bottom-width: 8px;
-            border-bottom-color: #02727e; 
+            border-bottom-color: #02727e;
         }
     </style>
 </head>
 <body class="flex items-center justify-center p-4">
 
-    <div class="container max-w-2xl mx-auto glass-card rounded-2xl shadow-2xl p-8 text-center transition-all">
+    <div class="container max-w-5xl mx-auto glass-card rounded-2xl shadow-2xl p-8 text-center">
         
-        <!-- Logo aumentada (alterado de h-32 para h-48) -->
         <img src="https://i.postimg.cc/FKFkKM00/Logo_Thomas_Tech.jpg" 
              alt="Thomas Tech Logo" 
              class="h-48 mx-auto mb-6 drop-shadow-lg object-contain">
 
-        <!-- Título com detalhe na cor principal -->
         <h1 class="text-3xl font-black text-gray-800 uppercase tracking-tighter border-l-8 pl-4 inline-block mb-2" style="border-color: #02727e;">
             Aplicações Thômas Edson
         </h1>
-        <p class="text-gray-700 font-bold mb-8"> Escolha uma ferramenta abaixo:</p>
+        <p class="text-gray-700 font-bold mb-2">Escolha uma ferramenta abaixo:</p>
 
-        <div class="grid grid-cols-1 gap-3">
-            <!-- Botões: Fundo #02727e e Texto Branco para legibilidade perfeita -->
-            <a href="ap1.html" class="flex items-center justify-between p-4 rounded-lg transition-all hover:scale-[1.02] shadow-md group text-white bg-[#02727e] hover:bg-[#015862]">
-                <span class="font-bold">1 - Calculadora de Salário Líquido 2026</span>
-                <span class="opacity-0 group-hover:opacity-100 transition-opacity">➔</span>
+        <!-- CONTADOR GERAL -->
+        <p class="text-sm text-gray-600 mb-6">📊 Acessos ao portal: <span id="totalAcessos" class="font-bold">0</span></p>
+
+        <!-- GRID COM 3 COLUNAS -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+            <a href="ap1.html" onclick="contarClique('ap1')" class="p-4 rounded-lg shadow-md text-white bg-[#02727e] hover:bg-[#015862] font-bold text-left">
+                1 - Calculadora de Salário Líquido 2026<br><span class="text-xs">Acessos: <span id="ap1">0</span></span>
             </a>
             
-            <a href="ap2.html" class="flex items-center justify-between p-4 rounded-lg transition-all hover:scale-[1.02] shadow-md group text-white bg-[#02727e] hover:bg-[#015862]">
-                <span class="font-bold">2 - Ajuste erro de calculo de Sped PIS e COFINS</span>
-                <span class="opacity-0 group-hover:opacity-100 transition-opacity">➔</span>
+            <a href="ap2.html" onclick="contarClique('ap2')" class="p-4 rounded-lg shadow-md text-white bg-[#02727e] hover:bg-[#015862] font-bold text-left">
+                2 - Ajuste erro de cálculo de SPED PIS e COFINS<br><span class="text-xs">Acessos: <span id="ap2">0</span></span>
             </a>
 
-            <a href="ap3.html" class="flex items-center justify-between p-4 rounded-lg transition-all hover:scale-[1.02] shadow-md group text-white bg-[#02727e] hover:bg-[#015862]">
-                <span class="font-bold">3 - Gerenciador de Ordens N2</span>
-                <span class="opacity-0 group-hover:opacity-100 transition-opacity">➔</span>
+            <a href="ap3.html" onclick="contarClique('ap3')" class="p-4 rounded-lg shadow-md text-white bg-[#02727e] hover:bg-[#015862] font-bold text-left">
+                3 - Gerenciador de Ordens N2<br><span class="text-xs">Acessos: <span id="ap3">0</span></span>
             </a>
 
-            <a href="ap4.html" class="flex items-center justify-between p-4 rounded-lg transition-all hover:scale-[1.02] shadow-md group text-white bg-[#02727e] hover:bg-[#015862]">
-                <span class="font-bold">4 - Conciliação Sefaz x Sistema</span>
-                <span class="opacity-0 group-hover:opacity-100 transition-opacity">➔</span>
+            <a href="ap4.html" onclick="contarClique('ap4')" class="p-4 rounded-lg shadow-md text-white bg-[#02727e] hover:bg-[#015862] font-bold text-left">
+                4 - Conciliação Sefaz x Sistema<br><span class="text-xs">Acessos: <span id="ap4">0</span></span>
             </a>
 
-            <a href="ap5.html" class="flex items-center justify-between p-4 rounded-lg transition-all hover:scale-[1.02] shadow-md group text-white bg-[#02727e] hover:bg-[#015862]">
-                <span class="font-bold">5 - Checklist de Transição Tributária</span>
-                <span class="opacity-0 group-hover:opacity-100 transition-opacity">➔</span>
+            <a href="ap5.html" onclick="contarClique('ap5')" class="p-4 rounded-lg shadow-md text-white bg-[#02727e] hover:bg-[#015862] font-bold text-left">
+                5 - Checklist de Transição Tributária<br><span class="text-xs">Acessos: <span id="ap5">0</span></span>
             </a>
 
-            <a href="ap6.html" class="flex items-center justify-between p-4 rounded-lg transition-all hover:scale-[1.02] shadow-md group text-white bg-[#02727e] hover:bg-[#015862]">
-                <span class="font-bold">6 - Consulta CNPJ/IE</span>
-                <span class="opacity-0 group-hover:opacity-100 transition-opacity">➔</span>
+            <a href="ap6.html" onclick="contarClique('ap6')" class="p-4 rounded-lg shadow-md text-white bg-[#02727e] hover:bg-[#015862] font-bold text-left">
+                6 - Consulta CNPJ/IE<br><span class="text-xs">Acessos: <span id="ap6">0</span></span>
             </a>
 
-            <a href="ap7.html" class="flex items-center justify-between p-4 rounded-lg transition-all hover:scale-[1.02] shadow-md group text-white bg-[#02727e] hover:bg-[#015862]">
-                <span class="font-bold">7 - Gerar QR Stor Pedidos</span>
-                <span class="opacity-0 group-hover:opacity-100 transition-opacity">➔</span>
+            <a href="ap7.html" onclick="contarClique('ap7')" class="p-4 rounded-lg shadow-md text-white bg-[#02727e] hover:bg-[#015862] font-bold text-left">
+                7 - Gerar QR Stor Pedidos<br><span class="text-xs">Acessos: <span id="ap7">0</span></span>
             </a>
 
-            <a href="ap8.html" class="flex items-center justify-between p-4 rounded-lg transition-all hover:scale-[1.02] shadow-md group text-white bg-[#02727e] hover:bg-[#015862]">
-                <span class="font-bold">8 - Ajuste de Valor de Inventário (Alta Precisão)</span>
-                <span class="opacity-0 group-hover:opacity-100 transition-opacity">➔</span>
+            <a href="ap8.html" onclick="contarClique('ap8')" class="p-4 rounded-lg shadow-md text-white bg-[#02727e] hover:bg-[#015862] font-bold text-left">
+                8 - Ajuste de Valor de Inventário<br><span class="text-xs">Acessos: <span id="ap8">0</span></span>
             </a>
             
-            <a href="ap9.html" class="flex items-center justify-between p-4 rounded-lg transition-all hover:scale-[1.02] shadow-md group text-white bg-[#02727e] hover:bg-[#015862]">
-                <span class="font-bold">9 - Procedimento Instalação Syspdv PDV</span>
-                <span class="opacity-0 group-hover:opacity-100 transition-opacity">➔</span>
+            <a href="ap9.html" onclick="contarClique('ap9')" class="p-4 rounded-lg shadow-md text-white bg-[#02727e] hover:bg-[#015862] font-bold text-left">
+                9 - Procedimento Instalação Syspdv PDV<br><span class="text-xs">Acessos: <span id="ap9">0</span></span>
             </a>
         </div>
 
@@ -91,6 +82,26 @@
             Thomas Tech &copy; 2026 | Suporte N2 Especializado
         </footer>
     </div>
+
+<script>
+// Contador geral
+let total = localStorage.getItem('totalAcessos') || 0;
+total++;
+localStorage.setItem('totalAcessos', total);
+document.getElementById('totalAcessos').innerText = total;
+
+// Contador por botão
+function contarClique(id) {
+    let valor = localStorage.getItem(id) || 0;
+    valor++;
+    localStorage.setItem(id, valor);
+}
+
+// Carregar contadores
+['ap1','ap2','ap3','ap4','ap5','ap6','ap7','ap8','ap9'].forEach(id => {
+    document.getElementById(id).innerText = localStorage.getItem(id) || 0;
+});
+</script>
 
 </body>
 </html>
