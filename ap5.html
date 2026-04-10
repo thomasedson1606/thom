@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Checklist Tributário N2 - Thomas</title>
+    <title>Checklist Tributário N2 - Thomas (Firebase)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .step-done { text-decoration: line-through; color: #9ca3af; }
@@ -11,7 +11,21 @@
         .checkbox-custom { width: 1.2rem; height: 1.2rem; cursor: pointer; }
     </style>
 </head>
-<body class="bg-gray-100 p-4 md:p-8 font-sans">
+<body class="bg-gray-100 p-4 md:p-8 font-sans relative">
+
+    <!-- Notificações Customizadas -->
+    <div id="notificacao" class="fixed top-4 right-4 p-4 rounded shadow-xl font-bold z-50 text-white transition-opacity" style="display: none;"></div>
+
+    <!-- Modal de Confirmação Customizado -->
+    <div id="modal-confirm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style="display: none;">
+        <div class="bg-white p-6 rounded-lg shadow-2xl max-w-sm w-full text-center border-4 border-blue-900">
+            <h3 class="font-black text-lg mb-4 text-black" id="modal-confirm-msg">Tem certeza?</h3>
+            <div class="flex justify-center gap-4">
+                <button id="btn-confirm-yes" class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded font-black cursor-pointer uppercase text-sm">Sim, continuar</button>
+                <button id="btn-confirm-no" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded font-black cursor-pointer uppercase text-sm">Cancelar</button>
+            </div>
+        </div>
+    </div>
 
     <div class="max-w-5xl mx-auto">
         <!-- Header com Opções de Portabilidade -->
@@ -19,13 +33,13 @@
             <div class="flex flex-col md:flex-row justify-between items-center gap-4">
                 <div>
                     <h1 class="text-2xl font-black text-blue-900 uppercase tracking-tighter">Checklist de Transição Tributária</h1>
-                    <p class="text-gray-500 text-sm font-bold">Thomas | Especialista N2 - Stor Sistemas</p>
+                    <p class="text-gray-500 text-sm font-bold">Thomas | Especialista N2 - Stor Sistemas <span class="text-[10px] bg-green-500 text-white px-2 py-1 rounded ml-2 shadow font-bold">ONLINE (FIREBASE)</span></p>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                    <button onclick="exportarDados()" class="bg-gray-800 text-white px-3 py-2 rounded text-[10px] font-bold uppercase hover:bg-black transition">💾 Exportar Backup</button>
-                    <label class="bg-blue-600 text-white px-3 py-2 rounded text-[10px] font-bold uppercase hover:bg-blue-700 transition cursor-pointer">
-                        📂 Importar Dados
-                        <input type="file" id="inputImport" class="hidden" onchange="importarDados(event)">
+                    <button onclick="window.exportarDados()" class="bg-gray-800 text-white px-3 py-2 rounded text-[10px] font-bold uppercase hover:bg-black transition cursor-pointer">💾 Exportar Backup</button>
+                    <label class="bg-green-600 text-white px-3 py-2 rounded text-[10px] font-bold uppercase hover:bg-green-700 transition cursor-pointer">
+                        📂 Migrar JSON p/ Nuvem
+                        <input type="file" id="inputImport" accept=".json" class="hidden" onchange="window.importarDados(event)">
                     </label>
                     <span id="contador-ativos" class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-2 rounded uppercase italic">0 Processos</span>
                 </div>
@@ -38,15 +52,15 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                 <div>
                     <label class="block text-[10px] font-bold text-gray-600 uppercase text-blue-800">Número da O.S.</label>
-                    <input type="text" id="reg-os" placeholder="Ex: 123456" class="w-full border-2 border-gray-100 p-2 rounded focus:border-blue-500 outline-none transition font-bold">
+                    <input type="text" id="reg-os" placeholder="Ex: 123456" class="w-full border-2 border-gray-100 p-2 rounded focus:border-blue-500 outline-none transition font-bold text-gray-900">
                 </div>
                 <div class="md:col-span-2">
                     <label class="block text-[10px] font-bold text-gray-600 uppercase text-blue-800">Licença / Nome da Empresa</label>
-                    <input type="text" id="reg-cliente" placeholder="Razão Social ou Nome Fantasia" class="w-full border-2 border-gray-100 p-2 rounded focus:border-blue-500 outline-none transition font-bold">
+                    <input type="text" id="reg-cliente" placeholder="Razão Social ou Nome Fantasia" class="w-full border-2 border-gray-100 p-2 rounded focus:border-blue-500 outline-none transition font-bold text-gray-900">
                 </div>
                 <div>
                     <label class="block text-[10px] font-bold text-gray-600 uppercase text-blue-800">Data de Início</label>
-                    <input type="date" id="reg-data" class="w-full border-2 border-gray-100 p-2 rounded outline-none font-bold">
+                    <input type="date" id="reg-data" class="w-full border-2 border-gray-100 p-2 rounded outline-none font-bold text-gray-900">
                 </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -67,7 +81,7 @@
                     </select>
                 </div>
                 <div class="flex items-end">
-                    <button onclick="iniciarChecklist()" class="w-full bg-blue-900 hover:bg-blue-800 text-white p-3 rounded font-black uppercase tracking-widest transition shadow-md">
+                    <button onclick="window.iniciarChecklist()" class="w-full bg-blue-900 hover:bg-blue-800 text-white p-3 rounded font-black uppercase tracking-widest transition shadow-md cursor-pointer">
                         Gerar Checklist
                     </button>
                 </div>
@@ -78,8 +92,25 @@
         <div id="lista-processos" class="grid grid-cols-1 gap-8"></div>
     </div>
 
-    <script>
-        let processos = JSON.parse(localStorage.getItem('thomas_checklist_regime')) || [];
+    <!-- SCRIPT TIPO MODULE PARA O FIREBASE -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // Usando o mesmo banco de dados!
+        const firebaseConfig = {
+            apiKey: "AIzaSyA_po9hvJqFPri_AI4uw73AiYb5BbspNjs",
+            authDomain: "thomas-teste-d7a3d.firebaseapp.com",
+            projectId: "thomas-teste-d7a3d",
+            storageBucket: "thomas-teste-d7a3d.firebasestorage.app",
+            messagingSenderId: "280109049625",
+            appId: "1:280109049625:web:487874357d0173797d0788"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.processos = [];
 
         const etapasMestra = [
             { id: 1, txt: "Enviado planilha com dados para a contabilidade" },
@@ -95,19 +126,58 @@
             { id: 11, txt: "Validação final e OK formal da Contabilidade" }
         ];
 
-        window.onload = () => {
-            document.getElementById('reg-data').value = new Date().toISOString().split('T')[0];
-            render();
+        // --- SISTEMA DE UI ---
+        window.showNotificacao = function(msg, isError = false) {
+            const div = document.getElementById('notificacao');
+            div.innerText = msg;
+            div.className = `fixed top-4 right-4 p-4 rounded shadow-xl font-bold z-50 text-white transition-opacity ${isError ? 'bg-red-600' : 'bg-green-600'}`;
+            div.style.display = 'block';
+            setTimeout(() => { div.style.display = 'none'; }, 4000);
         };
 
-        function iniciarChecklist() {
+        window.customConfirm = function(msg, callbackYes) {
+            document.getElementById('modal-confirm-msg').innerText = msg;
+            const modal = document.getElementById('modal-confirm');
+            modal.style.display = 'flex';
+            
+            document.getElementById('btn-confirm-yes').onclick = function() {
+                modal.style.display = 'none';
+                callbackYes();
+            };
+            
+            document.getElementById('btn-confirm-no').onclick = function() {
+                modal.style.display = 'none';
+                document.getElementById('inputImport').value = ''; 
+            };
+        };
+
+        // --- LISTENER DO FIREBASE ---
+        // Criamos uma nova coleção chamada 'checklist_tributario' no mesmo banco
+        onSnapshot(collection(db, "checklist_tributario"), (snapshot) => {
+            window.processos = [];
+            snapshot.forEach(doc => {
+                let item = doc.data();
+                item.firebaseId = doc.id; // Guarda a ID única do Firebase
+                window.processos.push(item);
+            });
+            // Ordena para que os processos mais novos (maior id) fiquem no topo
+            window.processos.sort((a, b) => b.id - a.id);
+            window.renderAll();
+        });
+
+        window.onload = () => {
+            document.getElementById('reg-data').value = new Date().toISOString().split('T')[0];
+        };
+
+        // --- CRUD FIREBASE ---
+        window.iniciarChecklist = async function() {
             const os = document.getElementById('reg-os').value;
             const cliente = document.getElementById('reg-cliente').value;
             const data = document.getElementById('reg-data').value;
             const ant = document.getElementById('reg-ant').value;
             const novo = document.getElementById('reg-novo').value;
 
-            if(!os || !cliente) return alert("Por favor, preencha a O.S. e a Empresa.");
+            if(!os || !cliente) return window.showNotificacao("Por favor, preencha a O.S. e a Empresa.", true);
 
             const processo = {
                 id: Date.now(),
@@ -117,119 +187,169 @@
                 ant: ant,
                 novo: novo,
                 concluido: false,
-                etapas: etapasMestra.map(e => ({ ...e, status: false }))
+                etapas: etapasMestra.map(e => ({ id: e.id, txt: e.txt, status: false }))
             };
 
-            processos.unshift(processo);
-            salvar();
-            document.getElementById('reg-os').value = "";
-            document.getElementById('reg-cliente').value = "";
+            try {
+                await addDoc(collection(db, "checklist_tributario"), processo);
+                document.getElementById('reg-os').value = "";
+                document.getElementById('reg-cliente').value = "";
+                window.showNotificacao("Processo de Checklist criado com sucesso!");
+            } catch(e) { window.showNotificacao("Erro ao criar: " + e, true); }
         }
 
-        function toggleEtapa(procId, etapaId) {
-            const proc = processos.find(p => p.id === procId);
-            const etapa = proc.etapas.find(e => e.id === etapaId);
-            etapa.status = !etapa.status;
-            proc.concluido = proc.etapas.every(e => e.status);
-            salvar();
+        window.toggleEtapa = async function(firebaseId, etapaId) {
+            // Busca o processo atual
+            const proc = window.processos.find(p => p.firebaseId === firebaseId);
+            if (!proc) return;
+
+            // Inverte o status da etapa clicada
+            const novasEtapas = proc.etapas.map(e => {
+                if (e.id === etapaId) {
+                    return { id: e.id, txt: e.txt, status: !e.status };
+                }
+                return e;
+            });
+
+            // Verifica se todas as etapas estão concluídas agora
+            const isConcluido = novasEtapas.every(e => e.status === true);
+
+            try {
+                // Atualiza APENAS este documento específico lá no Firebase
+                await updateDoc(doc(db, "checklist_tributario", firebaseId), {
+                    etapas: novasEtapas,
+                    concluido: isConcluido
+                });
+            } catch(e) { window.showNotificacao("Erro ao atualizar: " + e, true); }
         }
 
-        function excluir(id) {
-            if(confirm("Deseja remover este processo?")) {
-                processos = processos.filter(p => p.id !== id);
-                salvar();
-            }
+        window.excluir = function(firebaseId) {
+            window.customConfirm("Deseja remover este processo permanentemente do Firebase?", async () => {
+                try {
+                    await deleteDoc(doc(db, "checklist_tributario", firebaseId));
+                    window.showNotificacao("Processo removido com sucesso!");
+                } catch(e) { window.showNotificacao("Erro ao remover: " + e, true); }
+            });
         }
 
-        function salvar() {
-            localStorage.setItem('thomas_checklist_regime', JSON.stringify(processos));
-            render();
+        // --- IMPORTAÇÃO / EXPORTAÇÃO ---
+        window.importarDados = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    const importados = JSON.parse(e.target.result);
+                    window.customConfirm("Isto vai pegar os dados de Tributação do seu arquivo JSON antigo e GRAVAR no Firebase. Deseja continuar?", async () => {
+                        window.showNotificacao("Iniciando migração... Por favor, aguarde.");
+                        
+                        for(let i=0; i<importados.length; i++) {
+                            // Remove IDs do firebase caso existam no backup antigo para evitar conflitos,
+                            // o firebase vai gerar um novo ID único automaticamente.
+                            let item = importados[i];
+                            if(item.firebaseId) delete item.firebaseId;
+                            
+                            await addDoc(collection(db, "checklist_tributario"), item);
+                        }
+                        
+                        window.showNotificacao("Migração do Checklist concluída com SUCESSO!");
+                        document.getElementById('inputImport').value = ''; 
+                    });
+                } catch (err) { 
+                    window.showNotificacao("Erro ao ler o arquivo JSON.", true); 
+                    document.getElementById('inputImport').value = '';
+                }
+            };
+            reader.readAsText(file);
         }
 
-        // --- FUNÇÕES DE PORTABILIDADE ---
-        function exportarDados() {
-            if (processos.length === 0) return alert("Não há dados para exportar.");
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(processos));
+        window.exportarDados = function() {
+            if (window.processos.length === 0) return window.showNotificacao("Não há dados para exportar.", true);
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(window.processos));
             const downloadAnchorNode = document.createElement('a');
             downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", "backup_tributario_thomas.json");
+            downloadAnchorNode.setAttribute("download", "backup_tributario_firebase_" + new Date().toISOString().split('T')[0] + ".json");
             document.body.appendChild(downloadAnchorNode);
             downloadAnchorNode.click();
             downloadAnchorNode.remove();
         }
 
-        function importarDados(event) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const importados = JSON.parse(e.target.result);
-                    if (confirm("Isso irá substituir os dados atuais pelos do arquivo. Continuar?")) {
-                        processos = importados;
-                        salvar();
-                        alert("Dados importados com sucesso!");
-                    }
-                } catch (err) {
-                    alert("Erro ao ler o arquivo de backup.");
-                }
-            };
-            reader.readAsText(event.target.files[0]);
-        }
-
-        function render() {
+        // --- RENDERIZAÇÃO ---
+        window.renderAll = function() {
             const container = document.getElementById('lista-processos');
-            document.getElementById('contador-ativos').innerText = `${processos.length} Processos`;
+            document.getElementById('contador-ativos').innerText = `${window.processos.length} Processos`;
 
-            if(processos.length === 0) {
-                container.innerHTML = `<div class="text-center p-10 text-gray-400 font-bold border-4 border-dashed rounded-xl italic text-xl">Nenhum acompanhamento em aberto.</div>`;
+            if(window.processos.length === 0) {
+                container.innerHTML = `<div class="text-center p-10 text-gray-400 font-bold border-4 border-dashed border-gray-300 bg-white rounded-xl italic text-xl">Nenhum acompanhamento em aberto no Firebase.</div>`;
                 return;
             }
 
-            container.innerHTML = processos.map(p => `
-                <div class="bg-white rounded-xl shadow-xl border ${p.concluido ? 'card-done' : 'pending'} transition-all overflow-hidden">
-                    <div class="bg-gray-50 p-5 border-b flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                        <div>
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="bg-blue-900 text-white text-[10px] px-2 py-0.5 rounded font-bold">O.S. ${p.os}</span>
-                                <span class="text-gray-400 text-xs font-bold">${p.data}</span>
-                            </div>
-                            <h3 class="text-xl font-black text-gray-800 uppercase">${p.cliente}</h3>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div class="text-right">
-                                <p class="text-[9px] font-black text-gray-400 uppercase">Fluxo</p>
-                                <div class="flex items-center gap-2">
-                                    <span class="text-[10px] font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded border border-orange-200">${p.ant}</span>
-                                    <span class="text-gray-400">➔</span>
-                                    <span class="text-[10px] font-bold text-green-700 bg-green-50 px-2 py-1 rounded border border-green-200">${p.novo}</span>
+            let htmlCompleto = "";
+            window.processos.forEach(p => {
+                let htmlEtapas = "";
+                let concluidasCount = 0;
+                
+                p.etapas.forEach(e => {
+                    if(e.status) concluidasCount++;
+                    let styleChecked = e.status ? 'checked' : '';
+                    let styleText = e.status ? 'step-done font-normal' : 'text-gray-700 font-bold group-hover:text-blue-900';
+                    
+                    htmlEtapas += `
+                        <label class="flex items-center space-x-3 p-2 rounded hover:bg-blue-50 transition cursor-pointer group">
+                            <input type="checkbox" ${styleChecked} 
+                                   onchange="window.toggleEtapa('${p.firebaseId}', ${e.id})"
+                                   class="checkbox-custom rounded text-blue-900 focus:ring-blue-900 border-gray-300">
+                            <span class="text-sm ${styleText}">
+                                ${e.txt}
+                            </span>
+                        </label>
+                    `;
+                });
+
+                let borderClass = p.concluido ? 'card-done' : 'pending';
+                let porcentagem = Math.round((concluidasCount / p.etapas.length) * 100);
+
+                htmlCompleto += `
+                    <div class="bg-white rounded-xl shadow-xl border ${borderClass} transition-all overflow-hidden">
+                        <div class="bg-gray-50 p-5 border-b flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                            <div>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="bg-blue-900 text-white text-[10px] px-2 py-0.5 rounded font-bold">O.S. ${p.os}</span>
+                                    <span class="text-gray-400 text-xs font-bold">${p.data}</span>
                                 </div>
+                                <h3 class="text-xl font-black text-gray-800 uppercase">${p.cliente}</h3>
                             </div>
-                            <button onclick="excluir(${p.id})" class="text-gray-300 hover:text-red-500 transition ml-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor font-bold">
-                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
+                            <div class="flex items-center gap-4">
+                                <div class="text-right">
+                                    <p class="text-[9px] font-black text-gray-400 uppercase">Fluxo</p>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-[10px] font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded border border-orange-200">${p.ant}</span>
+                                        <span class="text-gray-400">➔</span>
+                                        <span class="text-[10px] font-bold text-green-700 bg-green-50 px-2 py-1 rounded border border-green-200">${p.novo}</span>
+                                    </div>
+                                </div>
+                                <button onclick="window.excluir('${p.firebaseId}')" class="text-gray-300 hover:text-red-500 transition ml-4 cursor-pointer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1">
+                            ${htmlEtapas}
+                        </div>
+                        <div class="bg-gray-100 p-2 text-center">
+                            <div class="w-full bg-gray-300 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-blue-600 h-full transition-all" style="width: ${porcentagem}%"></div>
+                            </div>
+                            <p class="text-[9px] font-bold text-gray-500 mt-1 uppercase">Progresso: ${porcentagem}%</p>
                         </div>
                     </div>
-                    <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1">
-                        ${p.etapas.map(e => `
-                            <label class="flex items-center space-x-3 p-2 rounded hover:bg-blue-50 transition cursor-pointer group">
-                                <input type="checkbox" ${e.status ? 'checked' : ''} 
-                                       onchange="toggleEtapa(${p.id}, ${e.id})"
-                                       class="checkbox-custom rounded text-blue-900 focus:ring-blue-900 border-gray-300">
-                                <span class="text-sm ${e.status ? 'step-done font-normal' : 'text-gray-700 font-bold group-hover:text-blue-900'}">
-                                    ${e.txt}
-                                </span>
-                            </label>
-                        `).join('')}
-                    </div>
-                    <div class="bg-gray-100 p-2 text-center">
-                        <div class="w-full bg-gray-300 h-1.5 rounded-full overflow-hidden">
-                            <div class="bg-blue-600 h-full transition-all" style="width: ${(p.etapas.filter(e => e.status).length / p.etapas.length * 100)}%"></div>
-                        </div>
-                        <p class="text-[9px] font-bold text-gray-500 mt-1 uppercase">Progresso: ${Math.round(p.etapas.filter(e => e.status).length / p.etapas.length * 100)}%</p>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            });
+
+            container.innerHTML = htmlCompleto;
         }
     </script>
 </body>
