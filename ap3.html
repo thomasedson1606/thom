@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Gerenciador N2 - Stor Sistemas (V13)</title>
+    <title>Gerenciador N2 - Stor Sistemas (Firebase)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .tab-content { display: none; }
@@ -15,30 +15,44 @@
         .badge-data { background-color: #e5e7eb; border: 1.5px solid #000000; color: #000000; font-weight: 900; padding: 2px 6px; border-radius: 4px; display: inline-block; }
         .badge-sistema { background-color: #000000; color: #ffffff; font-weight: 900; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; border: 1px solid #ffffff; }
         .input-filtro { border: 2px solid #000000; padding: 8px; border-radius: 6px; width: 100%; font-size: 14px; font-weight: 800; color: #000000; }
-        .btn-portabilidade { font-size: 10px; font-weight: 900; padding: 4px 8px; border-radius: 4px; border: 1px solid #ffffff; transition: all 0.2s; }
+        .btn-portabilidade { font-size: 10px; font-weight: 900; padding: 4px 8px; border-radius: 4px; border: 1px solid #ffffff; transition: all 0.2s; cursor: pointer; }
         .btn-portabilidade:hover { background-color: #ffffff; color: #1e3a8a; }
     </style>
 </head>
-<body class="bg-gray-100 font-sans text-gray-800">
+<body class="bg-gray-100 font-sans text-gray-800 relative">
+
+    <!-- Notificações Customizadas (Substitui o alert nativo) -->
+    <div id="notificacao" class="fixed top-4 right-4 p-4 rounded shadow-xl font-bold z-50 text-white transition-opacity" style="display: none;"></div>
+
+    <!-- Modal de Confirmação Customizado (Substitui o confirm nativo) -->
+    <div id="modal-confirm" class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50" style="display: none;">
+        <div class="bg-white p-6 rounded-lg shadow-2xl max-w-sm w-full text-center border-4 border-blue-900">
+            <h3 class="font-black text-lg mb-4 text-black" id="modal-confirm-msg">Tem certeza?</h3>
+            <div class="flex justify-center gap-4">
+                <button id="btn-confirm-yes" class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded font-black cursor-pointer uppercase text-sm">Sim, continuar</button>
+                <button id="btn-confirm-no" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded font-black cursor-pointer uppercase text-sm">Cancelar</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Header -->
     <nav class="bg-blue-900 text-white p-4 shadow-xl">
         <div class="container mx-auto flex flex-wrap justify-between items-center">
             <div class="flex items-center gap-4">
-                <h1 class="text-xl font-bold border-l-4 border-yellow-500 pl-3 uppercase tracking-tighter">Thomas | Especialista N2 <span class="text-[10px] bg-yellow-500 text-blue-900 px-1 rounded ml-2">V13</span></h1>
+                <h1 class="text-xl font-bold border-l-4 border-yellow-500 pl-3 uppercase tracking-tighter">Thomas | Especialista N2 <span class="text-[10px] bg-green-500 text-white px-2 py-1 rounded ml-2 shadow font-bold">ONLINE (FIREBASE)</span></h1>
                 <div class="flex gap-2 border-l border-blue-400 pl-4">
-                    <button onclick="exportarJSON()" class="btn-portabilidade bg-blue-800">💾 GERAR BACKUP (.JSON)</button>
+                    <button onclick="window.exportarJSON()" class="btn-portabilidade bg-blue-800">💾 GERAR BACKUP</button>
                     <label class="btn-portabilidade bg-green-700 cursor-pointer">
-                        📂 IMPORTAR BACKUP
-                        <input type="file" id="inputJson" accept=".json" class="hidden" onchange="importarJSON(event)">
+                        📂 MIGRAR JSON P/ NUVEM
+                        <input type="file" id="inputJson" accept=".json" class="hidden" onchange="window.importarJSON(event)">
                     </label>
                 </div>
             </div>
             <div id="nav-buttons" class="space-x-2 mt-2 md:mt-0">
-                <button onclick="showTab(event, 'duvidas')" class="tab-button active px-3 py-1 hover:bg-blue-700 rounded transition text-sm font-bold">Dúvidas N1</button>
-                <button onclick="showTab(event, 'ordens')" class="tab-button px-3 py-1 hover:bg-blue-700 rounded transition text-sm font-bold">N3 & Versões</button>
-                <button onclick="showTab(event, 'outras')" class="tab-button px-3 py-1 hover:bg-blue-700 rounded transition text-sm font-bold">Outras O.S.</button>
-                <button onclick="showTab(event, 'dash')" class="tab-button px-3 py-1 bg-yellow-600 hover:bg-yellow-500 rounded font-bold transition text-sm">Dashboard</button>
+                <button onclick="window.showTab(event, 'duvidas')" class="tab-button active px-3 py-1 hover:bg-blue-700 rounded transition text-sm font-bold">Dúvidas N1</button>
+                <button onclick="window.showTab(event, 'ordens')" class="tab-button px-3 py-1 hover:bg-blue-700 rounded transition text-sm font-bold">N3 & Versões</button>
+                <button onclick="window.showTab(event, 'outras')" class="tab-button px-3 py-1 hover:bg-blue-700 rounded transition text-sm font-bold">Outras O.S.</button>
+                <button onclick="window.showTab(event, 'dash')" class="tab-button px-3 py-1 bg-yellow-600 hover:bg-yellow-500 rounded font-bold transition text-sm">Dashboard</button>
             </div>
         </div>
     </nav>
@@ -54,12 +68,12 @@
                     <input type="date" id="d-data" class="border p-2 rounded font-bold text-black border-black">
                     <input type="text" id="d-suporte" placeholder="Nome do Suporte" class="border p-2 rounded font-bold text-black border-black">
                     <input type="text" id="d-duvida" placeholder="Dúvida/Solução" class="border p-2 rounded font-bold text-black border-black">
-                    <button id="btn-d-save" onclick="addDuvida()" class="bg-blue-700 text-white p-2 rounded hover:bg-blue-800 font-bold uppercase">Salvar</button>
+                    <button id="btn-d-save" onclick="window.addDuvida()" class="bg-blue-700 text-white p-2 rounded hover:bg-blue-800 font-bold uppercase cursor-pointer">Salvar</button>
                 </div>
             </div>
 
             <div class="mb-4">
-                <input type="text" id="f-duvidas" onkeyup="renderAll()" placeholder="🔍 Filtrar dúvidas (Suporte ou Texto)..." class="input-filtro bg-white">
+                <input type="text" id="f-duvidas" onkeyup="window.renderAll()" placeholder="🔍 Filtrar dúvidas (Suporte ou Texto)..." class="input-filtro bg-white">
             </div>
 
             <div class="bg-white rounded-lg shadow-md overflow-x-auto border border-gray-300">
@@ -98,12 +112,12 @@
                     <input type="text" id="o-solicitante" placeholder="Solicitante (Suporte)" class="border p-2 rounded font-bold text-black border-black">
                     <input type="text" id="o-versao" placeholder="Versão Correção" class="border p-2 rounded text-red-700 font-black border-red-600">
                     <textarea id="o-log" placeholder="Change Log / Detalhes" class="border p-2 rounded col-span-full h-20 font-medium text-black border-black"></textarea>
-                    <button id="btn-o-save" onclick="addOrdem()" class="bg-red-600 text-white p-2 rounded hover:bg-red-700 col-span-full font-bold uppercase">Registrar em Versão</button>
+                    <button id="btn-o-save" onclick="window.addOrdem()" class="bg-red-600 text-white p-2 rounded hover:bg-red-700 col-span-full font-bold uppercase cursor-pointer">Registrar em Versão</button>
                 </div>
 
                 <div class="bg-gray-50 p-4 rounded border-2 border-red-200">
-                    <input type="text" id="filtro-versao" onkeyup="renderAll()" placeholder="🔍 Filtrar N3 por O.S., Versão ou Empresa..." class="input-filtro mb-2">
-                    <button onclick="exportarN3Filtrado()" class="bg-green-700 text-white px-4 py-2 rounded text-xs font-bold uppercase hover:bg-green-800">Exportar Filtro Atual (Excel)</button>
+                    <input type="text" id="filtro-versao" onkeyup="window.renderAll()" placeholder="🔍 Filtrar N3 por O.S., Versão ou Empresa..." class="input-filtro mb-2">
+                    <button onclick="window.exportarN3Filtrado()" class="bg-green-700 text-white px-4 py-2 rounded text-xs font-bold uppercase hover:bg-green-800 cursor-pointer">Exportar Filtro Atual (Excel)</button>
                 </div>
             </div>
             <div id="lista-ordens" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
@@ -130,12 +144,12 @@
                     <input type="text" id="out-etapa" placeholder="Etapa" class="border p-2 rounded font-bold text-black border-black">
                     <input type="text" id="out-tipo" placeholder="Tipo" class="border p-2 rounded col-span-1 md:col-span-2 font-bold text-black border-black">
                     <textarea id="out-obs" placeholder="Observação" class="border p-2 rounded col-span-full h-16 font-medium text-black border-black"></textarea>
-                    <button id="btn-out-save" onclick="addOutra()" class="bg-green-700 text-white p-2 rounded hover:bg-green-800 col-span-full font-bold uppercase">Salvar</button>
+                    <button id="btn-out-save" onclick="window.addOutra()" class="bg-green-700 text-white p-2 rounded hover:bg-green-800 col-span-full font-bold uppercase cursor-pointer">Salvar</button>
                 </div>
             </div>
 
             <div class="mb-4">
-                <input type="text" id="f-outras" onkeyup="renderAll()" placeholder="🔍 Filtrar O.S. de acompanhamento..." class="input-filtro bg-white">
+                <input type="text" id="f-outras" onkeyup="window.renderAll()" placeholder="🔍 Filtrar O.S. de acompanhamento..." class="input-filtro bg-white">
             </div>
 
             <div id="lista-outras" class="grid grid-cols-1 gap-3 text-sm"></div>
@@ -159,61 +173,106 @@
             </div>
             <div class="bg-white p-6 rounded-lg shadow text-center">
                 <h3 class="font-black text-gray-900 mb-4 uppercase">Opções de Exportação</h3>
-                <button onclick="exportarCSVCompleto()" class="bg-black text-white px-8 py-3 rounded hover:bg-gray-800 transition font-black uppercase shadow-lg">Exportar Tudo para Excel (.CSV)</button>
+                <button onclick="window.exportarCSVCompleto()" class="bg-black text-white px-8 py-3 rounded hover:bg-gray-800 transition font-black uppercase shadow-lg cursor-pointer">Exportar Tudo para Excel (.CSV)</button>
             </div>
         </div>
     </div>
 
-    <script>
-        let duvidas = JSON.parse(localStorage.getItem('thomas_duvidas_v13')) || [];
-        let ordens = JSON.parse(localStorage.getItem('thomas_ordens_v13')) || [];
-        let outras = JSON.parse(localStorage.getItem('thomas_outras_v13')) || [];
+    <!-- SCRIPT TIPO MODULE: Importante para ler as bibliotecas do Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // --- SISTEMA DE PORTABILIDADE ---
-        function exportarJSON() {
-            const dataFull = { duvidas, ordens, outras, versao: "13.0", backup_data: new Date().toLocaleDateString() };
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataFull));
-            const dlAnchor = document.createElement('a');
-            dlAnchor.setAttribute("href", dataStr);
-            dlAnchor.setAttribute("download", "backup_thomas_v13_" + new Date().toISOString().split('T')[0] + ".json");
-            dlAnchor.click();
-        }
+        const firebaseConfig = {
+            apiKey: "AIzaSyA_po9hvJqFPri_AI4uw73AiYb5BbspNjs",
+            authDomain: "thomas-teste-d7a3d.firebaseapp.com",
+            projectId: "thomas-teste-d7a3d",
+            storageBucket: "thomas-teste-d7a3d.firebasestorage.app",
+            messagingSenderId: "280109049625",
+            appId: "1:280109049625:web:487874357d0173797d0788"
+        };
 
-        function importarJSON(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const imported = JSON.parse(e.target.result);
-                    if (confirm("Substituir dados atuais pelo backup?")) {
-                        duvidas = imported.duvidas || [];
-                        ordens = imported.ordens || [];
-                        outras = imported.outras || [];
-                        save();
-                    }
-                } catch (err) { alert("Erro no JSON."); }
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Arrays globais
+        window.duvidas = [];
+        window.ordens = [];
+        window.outras = [];
+
+        // --- SISTEMA DE UI (MODALS & NOTIFICAÇÕES) ---
+        window.showNotificacao = function(msg, isError = false) {
+            const div = document.getElementById('notificacao');
+            div.innerText = msg;
+            div.className = `fixed top-4 right-4 p-4 rounded shadow-xl font-bold z-50 text-white transition-opacity ${isError ? 'bg-red-600' : 'bg-green-600'}`;
+            div.style.display = 'block';
+            setTimeout(() => { div.style.display = 'none'; }, 4000);
+        };
+
+        window.customConfirm = function(msg, callbackYes) {
+            document.getElementById('modal-confirm-msg').innerText = msg;
+            const modal = document.getElementById('modal-confirm');
+            modal.style.display = 'flex';
+            
+            document.getElementById('btn-confirm-yes').onclick = function() {
+                modal.style.display = 'none';
+                callbackYes();
             };
-            reader.readAsText(file);
-        }
+            
+            document.getElementById('btn-confirm-no').onclick = function() {
+                modal.style.display = 'none';
+                document.getElementById('inputJson').value = ''; // Limpa input se cancelar a importação
+            };
+        };
 
-        // --- AUXILIARES ---
-        function formatData(dataISO) {
+
+        // --- SISTEMA DE ESCUTA EM TEMPO REAL ---
+        onSnapshot(collection(db, "duvidas"), (snapshot) => {
+            window.duvidas = [];
+            snapshot.forEach(doc => {
+                let item = doc.data();
+                item.id = doc.id;
+                window.duvidas.push(item);
+            });
+            window.renderAll();
+        });
+
+        onSnapshot(collection(db, "ordens"), (snapshot) => {
+            window.ordens = [];
+            snapshot.forEach(doc => {
+                let item = doc.data();
+                item.id = doc.id;
+                window.ordens.push(item);
+            });
+            window.renderAll();
+        });
+
+        onSnapshot(collection(db, "outras"), (snapshot) => {
+            window.outras = [];
+            snapshot.forEach(doc => {
+                let item = doc.data();
+                item.id = doc.id;
+                window.outras.push(item);
+            });
+            window.renderAll();
+        });
+
+        // --- FUNÇÕES DE NAVEGAÇÃO E DATAS ---
+        window.formatData = function(dataISO) {
             if(!dataISO || dataISO.includes('/')) return dataISO;
             const p = dataISO.split('-');
-            return `${p[2]}/${p[1]}/${p[0]}`;
+            return p[2] + '/' + p[1] + '/' + p[0];
         }
 
-        function converterParaISO(dataBR) {
+        window.converterParaISO = function(dataBR) {
             if(!dataBR || dataBR.includes('-')) return dataBR;
             const p = dataBR.split('/');
-            return `${p[2]}-${p[1]}-${p[0]}`;
+            return p[2] + '-' + p[1] + '-' + p[0];
         }
 
-        // Função crucial para ordenação (Recente primeiro)
-        function compararDatas(a, b) {
-            const dateA = new Date(converterParaISO(a.data));
-            const dateB = new Date(converterParaISO(b.data));
+        window.compararDatas = function(a, b) {
+            const dateA = new Date(window.converterParaISO(a.data));
+            const dateB = new Date(window.converterParaISO(b.data));
             return dateB - dateA; 
         }
 
@@ -222,195 +281,345 @@
             document.getElementById('d-data').value = hoje;
             document.getElementById('o-data').value = hoje;
             document.getElementById('out-data').value = hoje;
-            renderAll();
         };
 
-        function showTab(event, tabId) {
+        window.showTab = function(event, tabId) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
             event.currentTarget.classList.add('active');
-            renderAll();
+            window.renderAll();
         }
 
-        function save() {
-            localStorage.setItem('thomas_duvidas_v13', JSON.stringify(duvidas));
-            localStorage.setItem('thomas_ordens_v13', JSON.stringify(ordens));
-            localStorage.setItem('thomas_outras_v13', JSON.stringify(outras));
-            renderAll();
-        }
-
-        // --- OPERAÇÕES ---
-        function addDuvida() {
+        // --- MODO CRUD: DÚVIDAS ---
+        window.addDuvida = async function() {
             const id = document.getElementById('d-id').value;
-            const obj = { data: formatData(document.getElementById('d-data').value), suporte: document.getElementById('d-suporte').value, texto: document.getElementById('d-duvida').value };
-            if(!obj.suporte || !obj.texto) return alert("Preencha os campos!");
-            if(id !== "") { duvidas[id] = obj; document.getElementById('d-id').value = ""; }
-            else { duvidas.push(obj); }
-            save();
-            document.getElementById('d-duvida').value = "";
-            document.getElementById('btn-d-save').innerText = "Salvar";
+            const obj = { 
+                data: window.formatData(document.getElementById('d-data').value), 
+                suporte: document.getElementById('d-suporte').value, 
+                texto: document.getElementById('d-duvida').value 
+            };
+            if(!obj.suporte || !obj.texto) return window.showNotificacao("Preencha todos os campos obrigatórios!", true);
+            
+            try {
+                if(id !== "") { 
+                    await updateDoc(doc(db, "duvidas", id), obj);
+                    document.getElementById('d-id').value = ""; 
+                } else { 
+                    await addDoc(collection(db, "duvidas"), obj);
+                }
+                document.getElementById('d-duvida').value = "";
+                document.getElementById('btn-d-save').innerText = "Salvar";
+                window.showNotificacao("Dúvida salva com sucesso!");
+            } catch(e) { window.showNotificacao("Erro ao salvar: " + e, true); }
         }
 
-        function addOrdem() {
+        window.editarDuvida = function(id) { 
+            let d = null;
+            for(let i=0; i<window.duvidas.length; i++) { if(window.duvidas[i].id === id) d = window.duvidas[i]; }
+            if(!d) return;
+            document.getElementById('d-id').value = id; 
+            document.getElementById('d-data').value = window.converterParaISO(d.data);
+            document.getElementById('d-suporte').value = d.suporte || ""; 
+            document.getElementById('d-duvida').value = d.texto || "";
+            window.scrollTo(0,0);
+        }
+
+        // --- MODO CRUD: ORDENS ---
+        window.addOrdem = async function() {
             const id = document.getElementById('o-id').value;
             const obj = {
-                data: formatData(document.getElementById('o-data').value), os: document.getElementById('o-os').value,
-                desk: document.getElementById('o-desk').value, situacao: document.getElementById('o-situacao').value,
-                sistema: document.getElementById('o-sistema').value, cliente: document.getElementById('o-cliente').value,
-                solicitante: document.getElementById('o-solicitante').value, versao: document.getElementById('o-versao').value,
+                data: window.formatData(document.getElementById('o-data').value), 
+                os: document.getElementById('o-os').value,
+                desk: document.getElementById('o-desk').value, 
+                situacao: document.getElementById('o-situacao').value,
+                sistema: document.getElementById('o-sistema').value, 
+                cliente: document.getElementById('o-cliente').value,
+                solicitante: document.getElementById('o-solicitante').value, 
+                versao: document.getElementById('o-versao').value,
                 log: document.getElementById('o-log').value
             };
-            if(!obj.os) return alert("O.S. obrigatória!");
-            if(id !== "") { ordens[id] = obj; document.getElementById('o-id').value = ""; }
-            else { ordens.push(obj); }
-            save();
-            ['o-os','o-desk','o-cliente','o-solicitante','o-versao','o-log'].forEach(i => document.getElementById(i).value = "");
+            if(!obj.os) return window.showNotificacao("Nº da O.S. é obrigatório!", true);
+
+            try {
+                if(id !== "") { 
+                    await updateDoc(doc(db, "ordens", id), obj);
+                    document.getElementById('o-id').value = ""; 
+                } else { 
+                    await addDoc(collection(db, "ordens"), obj);
+                }
+                document.getElementById('o-os').value = "";
+                document.getElementById('o-desk').value = "";
+                document.getElementById('o-cliente').value = "";
+                document.getElementById('o-solicitante').value = "";
+                document.getElementById('o-versao').value = "";
+                document.getElementById('o-log').value = "";
+                window.showNotificacao("Ordem salva com sucesso!");
+            } catch(e) { window.showNotificacao("Erro ao salvar: " + e, true); }
         }
 
-        function addOutra() {
+        window.editarOrdem = function(id) {
+            let o = null;
+            for(let i=0; i<window.ordens.length; i++) { if(window.ordens[i].id === id) o = window.ordens[i]; }
+            if(!o) return;
+            document.getElementById('o-id').value = id;
+            document.getElementById('o-data').value = window.converterParaISO(o.data);
+            document.getElementById('o-os').value = o.os || "";
+            document.getElementById('o-desk').value = o.desk || "";
+            document.getElementById('o-situacao').value = o.situacao || "ABERTA";
+            document.getElementById('o-sistema').value = o.sistema || "STOR";
+            document.getElementById('o-cliente').value = o.cliente || "";
+            document.getElementById('o-solicitante').value = o.solicitante || "";
+            document.getElementById('o-versao').value = o.versao || "";
+            document.getElementById('o-log').value = o.log || "";
+            window.scrollTo(0,0);
+        }
+
+        // --- MODO CRUD: OUTRAS ---
+        window.addOutra = async function() {
             const id = document.getElementById('out-id').value;
             const obj = {
-                data: formatData(document.getElementById('out-data').value), os: document.getElementById('out-os').value,
-                situacao: document.getElementById('out-situacao').value, sistema: document.getElementById('out-sistema').value,
-                cliente: document.getElementById('out-cliente').value, solicitante: document.getElementById('out-solicitante').value,
-                etapa: document.getElementById('out-etapa').value, tipo: document.getElementById('out-tipo').value, obs: document.getElementById('out-obs').value
+                data: window.formatData(document.getElementById('out-data').value), 
+                os: document.getElementById('out-os').value,
+                situacao: document.getElementById('out-situacao').value, 
+                sistema: document.getElementById('out-sistema').value,
+                cliente: document.getElementById('out-cliente').value, 
+                solicitante: document.getElementById('out-solicitante').value,
+                etapa: document.getElementById('out-etapa').value, 
+                tipo: document.getElementById('out-tipo').value, 
+                obs: document.getElementById('out-obs').value
             };
-            if(!obj.os) return alert("O.S. obrigatória!");
-            if(id !== "") { outras[id] = obj; document.getElementById('out-id').value = ""; }
-            else { outras.push(obj); }
-            save();
-            ['out-os','out-cliente','out-solicitante','out-etapa','out-tipo','out-obs'].forEach(i => document.getElementById(i).value = "");
+            if(!obj.os) return window.showNotificacao("Nº da O.S. é obrigatório!", true);
+
+            try {
+                if(id !== "") { 
+                    await updateDoc(doc(db, "outras", id), obj);
+                    document.getElementById('out-id').value = ""; 
+                } else { 
+                    await addDoc(collection(db, "outras"), obj);
+                }
+                document.getElementById('out-os').value = "";
+                document.getElementById('out-cliente').value = "";
+                document.getElementById('out-solicitante').value = "";
+                document.getElementById('out-etapa').value = "";
+                document.getElementById('out-tipo').value = "";
+                document.getElementById('out-obs').value = "";
+                window.showNotificacao("O.S salva com sucesso!");
+            } catch(e) { window.showNotificacao("Erro ao salvar: " + e, true); }
         }
 
-        function deleteItem(index, tipo) {
-            if(!confirm("Apagar?")) return;
-            if(tipo === 'd') duvidas.splice(index, 1);
-            else if(tipo === 'o') ordens.splice(index, 1);
-            else outras.splice(index, 1);
-            save();
-        }
-
-        function editarDuvida(idx) { 
-            const d = duvidas[idx]; document.getElementById('d-id').value = idx; 
-            document.getElementById('d-data').value = converterParaISO(d.data);
-            document.getElementById('d-suporte').value = d.suporte; document.getElementById('d-duvida').value = d.texto;
+        window.editarOutra = function(id) {
+            let out = null;
+            for(let i=0; i<window.outras.length; i++) { if(window.outras[i].id === id) out = window.outras[i]; }
+            if(!out) return;
+            document.getElementById('out-id').value = id;
+            document.getElementById('out-data').value = window.converterParaISO(out.data);
+            document.getElementById('out-os').value = out.os || "";
+            document.getElementById('out-situacao').value = out.situacao || "ABERTA";
+            document.getElementById('out-sistema').value = out.sistema || "STOR";
+            document.getElementById('out-cliente').value = out.cliente || "";
+            document.getElementById('out-solicitante').value = out.solicitante || "";
+            document.getElementById('out-etapa').value = out.etapa || "";
+            document.getElementById('out-tipo').value = out.tipo || "";
+            document.getElementById('out-obs').value = out.obs || "";
             window.scrollTo(0,0);
         }
 
-        function editarOrdem(idx) {
-            const o = ordens[idx]; document.getElementById('o-id').value = idx;
-            document.getElementById('o-data').value = converterParaISO(o.data);
-            ['os','desk','situacao','sistema','cliente','solicitante','versao','log'].forEach(k => document.getElementById('o-'+k).value = o[k]);
-            window.scrollTo(0,0);
+        // --- GLOBAL: DELETAR ---
+        window.deleteItem = function(id, tipo) {
+            window.customConfirm("Você tem certeza? Isso apagará o item permanentemente da nuvem.", async () => {
+                try {
+                    let colecao = (tipo === 'd') ? 'duvidas' : ((tipo === 'o') ? 'ordens' : 'outras');
+                    await deleteDoc(doc(db, colecao, id));
+                    window.showNotificacao("Item excluído com sucesso!");
+                } catch(e) { window.showNotificacao("Erro ao excluir: " + e, true); }
+            });
         }
 
-        function editarOutra(idx) {
-            const out = outras[idx]; document.getElementById('out-id').value = idx;
-            document.getElementById('out-data').value = converterParaISO(out.data);
-            ['os','situacao','sistema','cliente','solicitante','etapa','tipo','obs'].forEach(k => document.getElementById('out-'+k).value = out[k]);
-            window.scrollTo(0,0);
-        }
-
-        // --- RENDERIZAÇÃO COM ORDENAÇÃO AUTOMÁTICA ---
-        function renderAll() {
-            // 1. Render Dúvidas (Ordenado por Data)
+        // --- RENDERIZAÇÃO BLINDADA ---
+        window.renderAll = function() {
+            // 1. Dúvidas
             const fDuv = document.getElementById('f-duvidas').value.toLowerCase();
-            const duvidasOrdenadas = [...duvidas].sort(compararDatas);
+            let htmlDuvidas = "";
+            let duvOrdenadas = Array.from(window.duvidas).sort(window.compararDatas);
             
-            document.getElementById('lista-duvidas').innerHTML = duvidasOrdenadas
-                .filter(d => d.suporte.toLowerCase().includes(fDuv) || d.texto.toLowerCase().includes(fDuv))
-                .map((d) => {
-                    const originalIdx = duvidas.indexOf(d);
-                    return `<tr class="border-b text-sm">
-                        <td class="p-3"><span class="badge-data">${d.data}</span></td>
-                        <td class="p-3 font-black text-blue-900 uppercase">${d.suporte}</td>
-                        <td class="p-3 text-xs font-bold text-gray-900">${d.texto}</td>
+            duvOrdenadas.forEach(d => {
+                let suporteText = d.suporte ? d.suporte.toLowerCase() : "";
+                let duvidaText = d.texto ? d.texto.toLowerCase() : "";
+                if (suporteText.includes(fDuv) || duvidaText.includes(fDuv)) {
+                    htmlDuvidas += `<tr class="border-b text-sm">
+                        <td class="p-3"><span class="badge-data">${d.data || ''}</span></td>
+                        <td class="p-3 font-black text-blue-900 uppercase">${d.suporte || ''}</td>
+                        <td class="p-3 text-xs font-bold text-gray-900">${d.texto || ''}</td>
                         <td class="p-3 text-right space-x-2 font-black uppercase text-[10px]">
-                            <button onclick="editarDuvida(${originalIdx})" class="text-orange-600 hover:underline">Editar</button>
-                            <button onclick="deleteItem(${originalIdx},'d')" class="text-red-600">Excluir</button>
+                            <button onclick="window.editarDuvida('${d.id}')" class="text-orange-600 hover:underline cursor-pointer">Editar</button>
+                            <button onclick="window.deleteItem('${d.id}','d')" class="text-red-600 cursor-pointer hover:underline">Excluir</button>
                         </td>
-                    </tr>`}).join('');
+                    </tr>`;
+                }
+            });
+            document.getElementById('lista-duvidas').innerHTML = htmlDuvidas;
 
-            // 2. Render N3 (Ordenado por Data)
+            // 2. Ordens
             const fN3 = document.getElementById('filtro-versao').value.toLowerCase();
-            const ordensOrdenadas = [...ordens].sort(compararDatas);
+            let htmlOrdens = "";
+            let ordOrdenadas = Array.from(window.ordens).sort(window.compararDatas);
 
-            document.getElementById('lista-ordens').innerHTML = ordensOrdenadas
-                .filter(o => o.versao.toLowerCase().includes(fN3) || o.os.toLowerCase().includes(fN3) || o.cliente.toLowerCase().includes(fN3))
-                .map((o) => {
-                    const originalIdx = ordens.indexOf(o);
-                    return `<div class="bg-white p-4 rounded shadow-md border-l-8 border-red-600">
+            ordOrdenadas.forEach(o => {
+                let versaoText = o.versao ? o.versao.toLowerCase() : "";
+                let osText = o.os ? o.os.toLowerCase() : "";
+                let cliText = o.cliente ? o.cliente.toLowerCase() : "";
+                
+                if (versaoText.includes(fN3) || osText.includes(fN3) || cliText.includes(fN3)) {
+                    let stClass = (o.situacao === 'FECHADA') ? 'situacao-fechada' : 'situacao-aberta';
+                    htmlOrdens += `<div class="bg-white p-4 rounded shadow-md border-l-8 border-red-600">
                         <div class="flex justify-between font-black text-black">
-                            <span>O.S ${o.os} | <span class="text-blue-700">DESK: ${o.desk || '-'}</span></span>
-                            <span class="text-[10px] px-2 py-1 rounded border border-black ${o.situacao === 'FECHADA' ? 'situacao-fechada' : 'situacao-aberta'}">${o.situacao}</span>
+                            <span>O.S ${o.os || ''} | <span class="text-blue-700">DESK: ${o.desk || '-'}</span></span>
+                            <span class="text-[10px] px-2 py-1 rounded border border-black ${stClass}">${o.situacao || ''}</span>
                         </div>
-                        <p class="mt-1"><span class="badge-sistema">${o.sistema}</span> <span class="text-[10px] font-black text-black ml-2 uppercase">SUPORTE: ${o.solicitante || '?'}</span></p>
-                        <p class="text-[11px] font-black text-black mt-2"><span class="badge-data">${o.data}</span> | ${o.cliente}</p>
-                        <p class="mt-2 text-xs italic bg-gray-100 p-2 border border-gray-400 rounded text-black font-bold">"${o.log}"</p>
+                        <p class="mt-1"><span class="badge-sistema">${o.sistema || ''}</span> <span class="text-[10px] font-black text-black ml-2 uppercase">SUPORTE: ${o.solicitante || '?'}</span></p>
+                        <p class="text-[11px] font-black text-black mt-2"><span class="badge-data">${o.data || ''}</span> | ${o.cliente || ''}</p>
+                        <p class="mt-2 text-xs italic bg-gray-100 p-2 border border-gray-400 rounded text-black font-bold">"${o.log || ''}"</p>
                         <div class="flex justify-between mt-3 items-center">
-                            <span class="font-black text-red-700 text-sm bg-red-50 px-2 rounded border-2 border-red-200">${o.versao}</span>
+                            <span class="font-black text-red-700 text-sm bg-red-50 px-2 rounded border-2 border-red-200">${o.versao || ''}</span>
                             <div class="space-x-3 text-[10px] font-black uppercase">
-                                <button onclick="editarOrdem(${originalIdx})" class="text-orange-600">Editar</button>
-                                <button onclick="deleteItem(${originalIdx},'o')" class="text-red-500">Excluir</button>
+                                <button onclick="window.editarOrdem('${o.id}')" class="text-orange-600 cursor-pointer hover:underline">Editar</button>
+                                <button onclick="window.deleteItem('${o.id}','o')" class="text-red-500 cursor-pointer hover:underline">Excluir</button>
                             </div>
                         </div>
-                    </div>`}).join('');
+                    </div>`;
+                }
+            });
+            document.getElementById('lista-ordens').innerHTML = htmlOrdens;
 
-            // 3. Render Outras (Ordenado por Data)
+            // 3. Outras
             const fOut = document.getElementById('f-outras').value.toLowerCase();
-            const outrasOrdenadas = [...outras].sort(compararDatas);
+            let htmlOutras = "";
+            let outOrdenadas = Array.from(window.outras).sort(window.compararDatas);
 
-            document.getElementById('lista-outras').innerHTML = outrasOrdenadas
-                .filter(out => out.os.toLowerCase().includes(fOut) || out.cliente.toLowerCase().includes(fOut) || out.obs.toLowerCase().includes(fOut))
-                .map((out) => {
-                    const originalIdx = outras.indexOf(out);
-                    return `<div class="bg-white p-3 rounded shadow border-l-4 border-green-600 flex justify-between items-center border border-gray-200">
+            outOrdenadas.forEach(out => {
+                let outOsText = out.os ? out.os.toLowerCase() : "";
+                let outCliText = out.cliente ? out.cliente.toLowerCase() : "";
+                let outObsText = out.obs ? out.obs.toLowerCase() : "";
+
+                if (outOsText.includes(fOut) || outCliText.includes(fOut) || outObsText.includes(fOut)) {
+                    let stClassOut = (out.situacao === 'FECHADA') ? 'situacao-fechada' : 'situacao-aberta';
+                    htmlOutras += `<div class="bg-white p-3 rounded shadow border-l-4 border-green-600 flex justify-between items-center border border-gray-200">
                         <div>
                             <div class="flex gap-2 items-center">
-                                <span class="font-black text-black text-xs">O.S ${out.os}</span>
-                                <span class="text-[9px] font-black px-1 rounded border border-black ${out.situacao === 'FECHADA' ? 'situacao-fechada' : 'situacao-aberta'}">${out.situacao}</span>
+                                <span class="font-black text-black text-xs">O.S ${out.os || ''}</span>
+                                <span class="text-[9px] font-black px-1 rounded border border-black ${stClassOut}">${out.situacao || ''}</span>
                             </div>
-                            <p class="text-[10px] font-black text-black mt-1"><span class="badge-data">${out.data}</span> | <span class="badge-sistema text-[8px]">${out.sistema}</span> | ${out.cliente}</p>
-                            <p class="text-[10px] font-black text-red-700 italic uppercase mt-1">ETAPA: ${out.etapa}</p>
+                            <p class="text-[10px] font-black text-black mt-1"><span class="badge-data">${out.data || ''}</span> | <span class="badge-sistema text-[8px]">${out.sistema || ''}</span> | ${out.cliente || ''}</p>
+                            <p class="text-[10px] font-black text-red-700 italic uppercase mt-1">ETAPA: ${out.etapa || ''}</p>
                         </div>
                         <div class="text-right">
-                            <p class="text-[10px] text-black font-bold">${out.obs}</p>
+                            <p class="text-[10px] text-black font-bold">${out.obs || ''}</p>
                             <div class="space-x-2 text-[10px] font-black uppercase mt-1">
-                                <button onclick="editarOutra(${originalIdx})" class="text-orange-600">Editar</button>
-                                <button onclick="deleteItem(${originalIdx},'out')" class="text-red-500">Excluir</button>
+                                <button onclick="window.editarOutra('${out.id}')" class="text-orange-600 cursor-pointer hover:underline">Editar</button>
+                                <button onclick="window.deleteItem('${out.id}','out')" class="text-red-500 cursor-pointer hover:underline">Excluir</button>
                             </div>
                         </div>
-                    </div>`}).join('');
+                    </div>`;
+                }
+            });
+            document.getElementById('lista-outras').innerHTML = htmlOutras;
 
-            document.getElementById('stat-duvidas').innerText = duvidas.length;
-            document.getElementById('stat-ordens').innerText = ordens.length;
-            document.getElementById('stat-outras').innerText = outras.length;
+            document.getElementById('stat-duvidas').innerText = window.duvidas.length;
+            document.getElementById('stat-ordens').innerText = window.ordens.length;
+            document.getElementById('stat-outras').innerText = window.outras.length;
         }
 
-        // Exportação CSV
-        function exportarCSVCompleto() {
+        // --- SISTEMA DE IMPORTAÇÃO PARA O FIREBASE (MÁGICO) ---
+        window.importarJSON = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    window.customConfirm("Isto vai pegar os dados do seu arquivo JSON antigo e GRAVAR no Firebase. Deseja continuar?", async () => {
+                        window.showNotificacao("Iniciando migração... Por favor, não feche a janela.");
+                        
+                        // Envia as Dúvidas
+                        if(imported.duvidas) {
+                            for(let i=0; i<imported.duvidas.length; i++) { 
+                                await addDoc(collection(db, "duvidas"), imported.duvidas[i]); 
+                            }
+                        }
+                        // Envia as Ordens
+                        if(imported.ordens) {
+                            for(let i=0; i<imported.ordens.length; i++) { 
+                                await addDoc(collection(db, "ordens"), imported.ordens[i]); 
+                            }
+                        }
+                        // Envia as Outras O.S
+                        if(imported.outras) {
+                            for(let i=0; i<imported.outras.length; i++) { 
+                                await addDoc(collection(db, "outras"), imported.outras[i]); 
+                            }
+                        }
+                        
+                        window.showNotificacao("Migração concluída com SUCESSO! Todos os seus dados já estão na nuvem.");
+                        document.getElementById('inputJson').value = ''; // Limpa o input
+                    });
+                } catch (err) { 
+                    window.showNotificacao("Erro ao ler o arquivo JSON: " + err, true); 
+                    document.getElementById('inputJson').value = '';
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        window.exportarJSON = function() {
+            const dataFull = { duvidas: window.duvidas, ordens: window.ordens, outras: window.outras, versao: "14.0 Firebase", backup_data: new Date().toLocaleDateString() };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataFull));
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", "backup_nuvem_thomas_" + new Date().toISOString().split('T')[0] + ".json");
+            dlAnchor.click();
+        }
+
+        // --- EXPORTAÇÕES EXCEL ---
+        window.exportarCSVCompleto = function() {
             let csv = "Tipo;Data;OS;DESK;Situacao;Sistema;Cli_Sup;Versao_Etapa_Obs\n";
-            [...duvidas].sort(compararDatas).forEach(d => csv += `DUVIDA;${d.data};-;-;-;-;${d.suporte};${d.texto.replace(/;/g, ',')}\n`);
-            [...ordens].sort(compararDatas).forEach(o => csv += `N3;${o.data};${o.os};${o.desk};${o.situacao};${o.sistema};${o.cliente} | ${o.solicitante};${o.versao} - ${o.log.replace(/;/g, ',')}\n`);
-            [...outras].sort(compararDatas).forEach(out => csv += `OUTRAS;${out.data};${out.os};-;${out.situacao};${out.sistema};${out.cliente} | ${out.solicitante};${out.etapa} - ${out.obs.replace(/;/g, ',')}\n`);
+            
+            let cDuv = Array.from(window.duvidas).sort(window.compararDatas);
+            cDuv.forEach(d => { csv += "DUVIDA;" + (d.data||"") + ";-;-;-;-;" + (d.suporte||"") + ";" + (d.texto?d.texto.replace(/;/g, ','):"") + "\n"; });
+            
+            let cOrd = Array.from(window.ordens).sort(window.compararDatas);
+            cOrd.forEach(o => { csv += "N3;" + (o.data||"") + ";" + (o.os||"") + ";" + (o.desk||"") + ";" + (o.situacao||"") + ";" + (o.sistema||"") + ";" + (o.cliente||"") + " | " + (o.solicitante||"") + ";" + (o.versao||"") + " - " + (o.log?o.log.replace(/;/g, ','):"") + "\n"; });
+            
+            let cOut = Array.from(window.outras).sort(window.compararDatas);
+            cOut.forEach(out => { csv += "OUTRAS;" + (out.data||"") + ";" + (out.os||"") + ";-;" + (out.situacao||"") + ";" + (out.sistema||"") + ";" + (out.cliente||"") + " | " + (out.solicitante||"") + ";" + (out.etapa||"") + " - " + (out.obs?out.obs.replace(/;/g, ','):"") + "\n"; });
+            
             const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
             const a = document.createElement('a');
             a.href = window.URL.createObjectURL(blob);
-            a.download = "gerenciador_n2_completo_v13.csv";
+            a.download = "gerenciador_n2_completo_firebase.csv";
             a.click();
         }
 
-        function exportarN3Filtrado() {
+        window.exportarN3Filtrado = function() {
             const termo = document.getElementById('filtro-versao').value.toLowerCase();
-            const filtradas = ordens.filter(o => o.versao.toLowerCase().includes(termo)).sort(compararDatas);
-            if(filtradas.length === 0) return alert("Nada no filtro!");
+            let filtradas = [];
+            Array.from(window.ordens).forEach(o => {
+                if(o.versao && o.versao.toLowerCase().includes(termo)) filtradas.push(o);
+            });
+            filtradas.sort(window.compararDatas);
+
+            if(filtradas.length === 0) return window.showNotificacao("Nada encontrado no filtro!", true);
+            
             let csv = "Data;OS;DESK;Situacao;Sistema;Cliente;Solicitante;Versao;Log\n";
-            filtradas.forEach(o => csv += `${o.data};${o.os};${o.desk};${o.situacao};${o.sistema};${o.cliente};${o.solicitante};${o.versao};${o.log.replace(/;/g, ',')}\n`);
+            filtradas.forEach(o => {
+                csv += (o.data||"") + ";" + (o.os||"") + ";" + (o.desk||"") + ";" + (o.situacao||"") + ";" + (o.sistema||"") + ";" + (o.cliente||"") + ";" + (o.solicitante||"") + ";" + (o.versao||"") + ";" + (o.log?o.log.replace(/;/g, ','):"") + "\n";
+            });
+            
             const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
             const a = document.createElement('a');
             a.href = window.URL.createObjectURL(blob);
-            a.download = `filtro_n3_v13.csv`;
+            a.download = `filtro_n3_firebase.csv`;
             a.click();
         }
     </script>
