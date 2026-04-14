@@ -6,102 +6,158 @@
     <title>Thomas Tech - Portal de Aplicações</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        
         body {
+            font-family: 'Inter', sans-serif;
             background-image: url('https://i.postimg.cc/c17WDrpL/Fundo-Thomas-tech.png');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             min-height: 100vh;
+            /* Adicionado um overlay escuro suave para destacar o painel */
+            background-color: rgba(0, 0, 0, 0.4);
+            background-blend-mode: overlay;
         }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-bottom-width: 8px;
-            border-bottom-color: #02727e;
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.90);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Efeito de brilho na borda superior do painel */
+        .panel-highlight {
+            border-top: 6px solid #02727e;
+        }
+
+        /* Animação suave para os cards */
+        .app-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .app-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(2, 114, 126, 0.3);
+            border-color: #02727e;
         }
     </style>
 </head>
-<body class="flex items-center justify-center p-4">
+<body class="flex items-center justify-center p-4 md:p-8">
 
-    <div class="container max-w-5xl mx-auto glass-card rounded-2xl shadow-2xl p-8 text-center">
+    <div class="w-full max-w-5xl glass-panel panel-highlight rounded-2xl p-8 md:p-10 flex flex-col relative overflow-hidden">
         
-        <img src="https://i.postimg.cc/FKFkKM00/Logo_Thomas_Tech.jpg" 
-             alt="Thomas Tech Logo" 
-             class="h-48 mx-auto mb-6 drop-shadow-lg object-contain">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-[#02727e] opacity-5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
 
-        <h1 class="text-3xl font-black text-gray-800 uppercase tracking-tighter border-l-8 pl-4 inline-block mb-2" style="border-color: #02727e;">
-            Aplicações Thômas Edson
-        </h1>
-        <p class="text-gray-700 font-bold mb-2">Escolha uma ferramenta abaixo:</p>
+        <header class="flex flex-col md:flex-row items-center justify-between mb-10 pb-6 border-b border-gray-200 gap-6 relative z-10">
+            <div class="flex items-center gap-6">
+                <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100">
+                    <img src="https://i.postimg.cc/FKFkKM00/Logo_Thomas_Tech.jpg" alt="Thomas Tech Logo" class="h-24 object-contain">
+                </div>
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-black text-gray-900 tracking-tight uppercase">
+                        Aplicações <span style="color: #02727e;">Thômas Edson</span>
+                    </h1>
+                    <p class="text-sm font-bold text-gray-500 uppercase tracking-widest mt-1">Portal de Ferramentas N2</p>
+                </div>
+            </div>
+        </header>
 
-        <!-- CONTADOR GERAL -->
-        <p class="text-sm text-gray-600 mb-6">📊 Acessos ao portal: <span id="totalAcessos" class="font-bold">0</span></p>
-
-        <!-- GRID COM 3 COLUNAS -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-
-            <a href="ap1.html" onclick="contarClique('ap1')" class="p-4 rounded-lg shadow-md text-white bg-[#02727e] hover:bg-[#015862] font-bold text-left">
-                1 - Calculadora de Salário Líquido 2026<br><span class="text-xs">Acessos: <span id="ap1">0</span></span>
-            </a>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 relative z-10">
             
-            <a href="ap2.html" onclick="contarClique('ap2')" class="p-4 rounded-lg shadow-md text-white bg-[#02727e] hover:bg-[#015862] font-bold text-left">
-                2 - Ajuste erro de cálculo de SPED PIS e COFINS<br><span class="text-xs">Acessos: <span id="ap2">0</span></span>
+            <a href="ap1.html" class="app-card group bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4 cursor-pointer relative overflow-hidden">
+                <div class="bg-gray-100 text-2xl p-3 rounded-lg group-hover:bg-[#02727e] group-hover:text-white transition-colors">🧮</div>
+                <div class="flex-1">
+                    <span class="block text-xs font-bold text-gray-400 mb-1">Módulo 1</span>
+                    <h3 class="text-sm font-black text-gray-800 leading-tight group-hover:text-[#02727e] transition-colors">Calculadora de Salário Líquido 2026</h3>
+                </div>
+                <div class="absolute bottom-4 right-4 text-gray-300 opacity-0 group-hover:opacity-100 group-hover:text-[#02727e] transform translate-x-2 group-hover:translate-x-0 transition-all">➔</div>
             </a>
 
-            <a href="ap3.html" onclick="contarClique('ap3')" class="p-4 rounded-lg shadow-md text-white bg-[#02727e] hover:bg-[#015862] font-bold text-left">
-                3 - Gerenciador de Ordens N2<br><span class="text-xs">Acessos: <span id="ap3">0</span></span>
+            <a href="ap2.html" class="app-card group bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4 cursor-pointer relative overflow-hidden">
+                <div class="bg-gray-100 text-2xl p-3 rounded-lg group-hover:bg-[#02727e] group-hover:text-white transition-colors">🧾</div>
+                <div class="flex-1">
+                    <span class="block text-xs font-bold text-gray-400 mb-1">Módulo 2</span>
+                    <h3 class="text-sm font-black text-gray-800 leading-tight group-hover:text-[#02727e] transition-colors">Ajuste Erro de Cálculo Sped PIS/COFINS</h3>
+                </div>
+                <div class="absolute bottom-4 right-4 text-gray-300 opacity-0 group-hover:opacity-100 group-hover:text-[#02727e] transform translate-x-2 group-hover:translate-x-0 transition-all">➔</div>
             </a>
 
-            <a href="ap4.html" onclick="contarClique('ap4')" class="p-4 rounded-lg shadow-md text-white bg-[#02727e] hover:bg-[#015862] font-bold text-left">
-                4 - Conciliação Sefaz x Sistema<br><span class="text-xs">Acessos: <span id="ap4">0</span></span>
+            <a href="ap3.html" class="app-card group bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4 cursor-pointer relative overflow-hidden">
+                <div class="bg-gray-100 text-2xl p-3 rounded-lg group-hover:bg-[#02727e] group-hover:text-white transition-colors">🛠️</div>
+                <div class="flex-1">
+                    <span class="block text-xs font-bold text-gray-400 mb-1">Módulo 3</span>
+                    <h3 class="text-sm font-black text-gray-800 leading-tight group-hover:text-[#02727e] transition-colors">Gerenciador de Ordens N2</h3>
+                </div>
+                <div class="absolute bottom-4 right-4 text-gray-300 opacity-0 group-hover:opacity-100 group-hover:text-[#02727e] transform translate-x-2 group-hover:translate-x-0 transition-all">➔</div>
             </a>
 
-            <a href="ap5.html" onclick="contarClique('ap5')" class="p-4 rounded-lg shadow-md text-white bg-[#02727e] hover:bg-[#015862] font-bold text-left">
-                5 - Checklist de Transição Tributária<br><span class="text-xs">Acessos: <span id="ap5">0</span></span>
+            <a href="ap4.html" class="app-card group bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4 cursor-pointer relative overflow-hidden">
+                <div class="bg-gray-100 text-2xl p-3 rounded-lg group-hover:bg-[#02727e] group-hover:text-white transition-colors">⚖️</div>
+                <div class="flex-1">
+                    <span class="block text-xs font-bold text-gray-400 mb-1">Módulo 4</span>
+                    <h3 class="text-sm font-black text-gray-800 leading-tight group-hover:text-[#02727e] transition-colors">Conciliação Sefaz x Sistema</h3>
+                </div>
+                <div class="absolute bottom-4 right-4 text-gray-300 opacity-0 group-hover:opacity-100 group-hover:text-[#02727e] transform translate-x-2 group-hover:translate-x-0 transition-all">➔</div>
             </a>
 
-            <a href="ap6.html" onclick="contarClique('ap6')" class="p-4 rounded-lg shadow-md text-white bg-[#02727e] hover:bg-[#015862] font-bold text-left">
-                6 - Consulta CNPJ/IE<br><span class="text-xs">Acessos: <span id="ap6">0</span></span>
+            <a href="ap5.html" class="app-card group bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4 cursor-pointer relative overflow-hidden">
+                <div class="bg-gray-100 text-2xl p-3 rounded-lg group-hover:bg-[#02727e] group-hover:text-white transition-colors">📝</div>
+                <div class="flex-1">
+                    <span class="block text-xs font-bold text-gray-400 mb-1">Módulo 5</span>
+                    <h3 class="text-sm font-black text-gray-800 leading-tight group-hover:text-[#02727e] transition-colors">Checklist de Transição Tributária</h3>
+                </div>
+                <div class="absolute bottom-4 right-4 text-gray-300 opacity-0 group-hover:opacity-100 group-hover:text-[#02727e] transform translate-x-2 group-hover:translate-x-0 transition-all">➔</div>
             </a>
 
-            <a href="ap7.html" onclick="contarClique('ap7')" class="p-4 rounded-lg shadow-md text-white bg-[#02727e] hover:bg-[#015862] font-bold text-left">
-                7 - Gerar QR Stor Pedidos<br><span class="text-xs">Acessos: <span id="ap7">0</span></span>
+            <a href="ap6.html" class="app-card group bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4 cursor-pointer relative overflow-hidden">
+                <div class="bg-gray-100 text-2xl p-3 rounded-lg group-hover:bg-[#02727e] group-hover:text-white transition-colors">🔍</div>
+                <div class="flex-1">
+                    <span class="block text-xs font-bold text-gray-400 mb-1">Módulo 6</span>
+                    <h3 class="text-sm font-black text-gray-800 leading-tight group-hover:text-[#02727e] transition-colors">Consulta Inteligente CNPJ/IE</h3>
+                </div>
+                <div class="absolute bottom-4 right-4 text-gray-300 opacity-0 group-hover:opacity-100 group-hover:text-[#02727e] transform translate-x-2 group-hover:translate-x-0 transition-all">➔</div>
             </a>
 
-            <a href="ap8.html" onclick="contarClique('ap8')" class="p-4 rounded-lg shadow-md text-white bg-[#02727e] hover:bg-[#015862] font-bold text-left">
-                8 - Ajuste de Valor de Inventário<br><span class="text-xs">Acessos: <span id="ap8">0</span></span>
+            <a href="ap7.html" class="app-card group bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4 cursor-pointer relative overflow-hidden">
+                <div class="bg-gray-100 text-2xl p-3 rounded-lg group-hover:bg-[#02727e] group-hover:text-white transition-colors">📱</div>
+                <div class="flex-1">
+                    <span class="block text-xs font-bold text-gray-400 mb-1">Módulo 7</span>
+                    <h3 class="text-sm font-black text-gray-800 leading-tight group-hover:text-[#02727e] transition-colors">Gerador de QR Stor Pedidos</h3>
+                </div>
+                <div class="absolute bottom-4 right-4 text-gray-300 opacity-0 group-hover:opacity-100 group-hover:text-[#02727e] transform translate-x-2 group-hover:translate-x-0 transition-all">➔</div>
             </a>
-            
-            <a href="ap9.html" onclick="contarClique('ap9')" class="p-4 rounded-lg shadow-md text-white bg-[#02727e] hover:bg-[#015862] font-bold text-left">
-                9 - Procedimento Instalação Syspdv PDV<br><span class="text-xs">Acessos: <span id="ap9">0</span></span>
+
+            <a href="ap8.html" class="app-card group bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4 cursor-pointer relative overflow-hidden">
+                <div class="bg-gray-100 text-2xl p-3 rounded-lg group-hover:bg-[#02727e] group-hover:text-white transition-colors">📦</div>
+                <div class="flex-1">
+                    <span class="block text-xs font-bold text-gray-400 mb-1">Módulo 8</span>
+                    <h3 class="text-sm font-black text-gray-800 leading-tight group-hover:text-[#02727e] transition-colors">Ajuste de Valor de Inventário</h3>
+                </div>
+                <div class="absolute bottom-4 right-4 text-gray-300 opacity-0 group-hover:opacity-100 group-hover:text-[#02727e] transform translate-x-2 group-hover:translate-x-0 transition-all">➔</div>
             </a>
+
+	    <a href="suporte.html" class="app-card group bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4 cursor-pointer relative overflow-hidden">
+                <div class="bg-gray-100 text-2xl p-3 rounded-lg group-hover:bg-[#02727e] group-hover:text-white transition-colors">💻</div>
+                <div class="flex-1">
+                    <span class="block text-xs font-bold text-gray-400 mb-1">Módulo 9</span>
+                    <h3 class="text-sm font-black text-gray-800 leading-tight group-hover:text-[#02727e] transition-colors">Suporte STOR Sistemas</h3>
+                </div>
+                <div class="absolute bottom-4 right-4 text-gray-300 opacity-0 group-hover:opacity-100 group-hover:text-[#02727e] transform translate-x-2 group-hover:translate-x-0 transition-all">➔</div>
+            </a>
+
         </div>
 
-        <footer class="mt-8 pt-4 border-t border-gray-200 text-xs font-black uppercase" style="color: #02727e;">
-            Thomas Tech &copy; 2026 | Suporte N2 Especializado
+        <footer class="mt-10 pt-6 border-t border-gray-200 flex justify-between items-center relative z-10">
+            <div class="text-xs font-black uppercase text-gray-500">
+                Thomas Tech &copy; 2026
+            </div>
+            <div class="text-xs font-black uppercase px-3 py-1 rounded-full bg-[#02727e]/10 text-[#02727e]">
+                Suporte N2 Especializado
+            </div>
         </footer>
     </div>
-
-<script>
-// Contador geral
-let total = localStorage.getItem('totalAcessos') || 0;
-total++;
-localStorage.setItem('totalAcessos', total);
-document.getElementById('totalAcessos').innerText = total;
-
-// Contador por botão
-function contarClique(id) {
-    let valor = localStorage.getItem(id) || 0;
-    valor++;
-    localStorage.setItem(id, valor);
-}
-
-// Carregar contadores
-['ap1','ap2','ap3','ap4','ap5','ap6','ap7','ap8','ap9'].forEach(id => {
-    document.getElementById(id).innerText = localStorage.getItem(id) || 0;
-});
-</script>
 
 </body>
 </html>
