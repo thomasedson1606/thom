@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador N2 - Thomas Tech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body { background: #0b0f14; color: #e1e7ef; }
+        .nav-bar { background: rgba(22, 27, 34, 0.95); border-bottom: 1px solid #21262d; }
+        .glass-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .tab-button { transition: all 0.2s; cursor: pointer; }
+        .tab-button.active { background: rgba(6, 182, 212, 0.15); color: #06b6d4; border-bottom: 3px solid #06b6d4; }
+        .situacao-fechada { background: rgba(34,197,94,0.1); color: #4ade80; }
+        .situacao-aberta { background: rgba(239,68,68,0.1); color: #f87171; }
+        .badge-data { background: rgba(255,255,255,0.05); border: 1px solid #21262d; color: #e1e7ef; font-weight: 700; padding: 2px 6px; border-radius: 4px; display: inline-block; font-size: 10px; }
+        .badge-sistema { background: #02727e; color: white; font-weight: 700; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-size: 9px; }
+        .input-filtro { background: #0b0f14; border: 1px solid #21262d; color: #e1e7ef; padding: 8px; border-radius: 6px; width: 100%; font-size: 14px; font-weight: 700; }
+        .input-filtro:focus { border-color: #06b6d4; outline: none; box-shadow: 0 0 0 3px rgba(6,182,212,0.1); }
+        input, select, textarea { background: #0b0f14; border: 1px solid #21262d; color: #e1e7ef; outline: none; transition: all 0.2s; }
+        input:focus, select:focus, textarea:focus { border-color: #06b6d4; box-shadow: 0 0 0 3px rgba(6,182,212,0.1); }
+        .btn-filtro-rapido { font-size: 11px; font-weight: 700; padding: 6px 14px; border-radius: 6px; border: 1px solid transparent; cursor: pointer; transition: all 0.18s; text-transform: uppercase; letter-spacing: 0.04em; }
+        .btn-filtro-rapido.inativo { background: rgba(255,255,255,0.03); color: #484f58; border-color: #21262d; }
+        .btn-filtro-rapido.inativo:hover { background: rgba(255,255,255,0.06); }
+        .btn-sit-todas.ativo { background: rgba(6,182,212,0.15); color: #06b6d4; border-color: rgba(6,182,212,0.3); }
+        .btn-sit-aberta.ativo { background: rgba(239,68,68,0.15); color: #f87171; border-color: rgba(239,68,68,0.3); }
+        .btn-sit-fechada.ativo { background: rgba(34,197,94,0.15); color: #4ade80; border-color: rgba(34,197,94,0.3); }
+        .btn-sis-todos.ativo { background: rgba(255,255,255,0.1); color: #e1e7ef; border-color: rgba(255,255,255,0.2); }
+        .btn-sis-stor.ativo { background: rgba(6,182,212,0.15); color: #06b6d4; border-color: rgba(6,182,212,0.3); }
+        .btn-sis-agro.ativo { background: rgba(74,222,128,0.15); color: #4ade80; border-color: rgba(74,222,128,0.3); }
+        .btn-portabilidade { font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s; cursor: pointer; }
+        .btn-portabilidade:hover { background: rgba(255,255,255,0.1); }
+        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #0b0f14; } ::-webkit-scrollbar-thumb { background: #21262d; border-radius: 3px; }
+    </style>
+</head>
+<body class="font-sans relative min-h-screen">
+
+    <div id="notificacao" class="fixed top-4 right-4 p-4 rounded shadow-xl font-bold z-50 text-white transition-opacity" style="display: none;"></div>
+    <div id="modal-confirm" class="fixed inset-0 bg-black bg-opacity-70 items-center justify-center z-50" style="display: none;">
+        <div class="p-6 rounded-lg shadow-2xl max-w-sm w-full text-center" style="background: #161b22; border: 1px solid #21262d;">
+            <h3 class="font-black text-lg mb-4 text-[#e1e7ef]" id="modal-confirm-msg">Tem certeza?</h3>
+            <div class="flex justify-center gap-4">
+                <button id="btn-confirm-yes" class="bg-[#02727e] hover:bg-[#06b6d4] text-white px-4 py-2 rounded font-black cursor-pointer uppercase text-sm">Sim, continuar</button>
+                <button id="btn-confirm-no" class="bg-[#484f58] hover:bg-[#5a6370] text-white px-4 py-2 rounded font-black cursor-pointer uppercase text-sm">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="nav-bar px-4 md:px-8 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-4 flex-wrap">
+            <a href="index.html" class="text-[#484f58] hover:text-[#06b6d4] transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            </a>
+            <span class="w-px h-5 bg-[#21262d]"></span>
+            <span class="text-xs font-bold text-[#484f58] uppercase">Módulo 3</span>
+            <span class="w-px h-5 bg-[#21262d]"></span>
+            <span class="text-sm font-bold text-[#e1e7ef]">Gerenciador de Ordens N2</span>
+            <span class="text-[10px] px-2 py-0.5 rounded font-bold" style="background: rgba(34,197,94,0.1); color: #4ade80;">FIREBASE</span>
+        </div>
+        <div class="flex gap-2">
+            <button onclick="window.exportarJSON()" class="btn-portabilidade text-[#e1e7ef]">💾 GERAR BACKUP</button>
+            <label class="btn-portabilidade text-[#e1e7ef] cursor-pointer" style="background: rgba(34,197,94,0.1);">
+                📂 MIGRAR JSON
+                <input type="file" id="inputJson" accept=".json" class="hidden" onchange="window.importarJSON(event)">
+            </label>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto p-4 md:p-6">
+        <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
+            <button onclick="window.showTab(event, 'duvidas')" class="tab-button active px-4 py-2 rounded font-bold text-sm" style="background: rgba(6,182,212,0.15); color: #06b6d4;">Dúvidas N1</button>
+            <button onclick="window.showTab(event, 'ordens')" class="tab-button px-4 py-2 rounded font-bold text-sm" style="color: #484f58;">N3 & Versões</button>
+            <button onclick="window.showTab(event, 'outras')" class="tab-button px-4 py-2 rounded font-bold text-sm" style="color: #484f58;">Outras O.S.</button>
+            <button onclick="window.showTab(event, 'dash')" class="tab-button px-4 py-2 rounded font-bold text-sm" style="background: rgba(250,204,21,0.1); color: #facc15;">Dashboard</button>
+        </div>
+
+        <!-- DÚVIDAS -->
+        <div id="duvidas" class="tab-content active">
+            <div class="glass-card p-6 rounded-lg mb-6" style="border-top: 4px solid #06b6d4;">
+                <h2 class="text-lg font-bold mb-4 text-[#06b6d4] underline italic">Dúvidas do Suporte</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <input type="hidden" id="d-id">
+                    <input type="date" id="d-data" class="p-2 rounded font-bold">
+                    <input type="text" id="d-suporte" placeholder="Nome do Suporte" class="p-2 rounded font-bold">
+                    <input type="text" id="d-duvida" placeholder="Dúvida/Solução" class="p-2 rounded font-bold">
+                    <button id="btn-d-save" onclick="window.addDuvida()" class="p-2 rounded font-bold uppercase cursor-pointer" style="background: linear-gradient(135deg, #02727e, #06b6d4); color: white;">Salvar</button>
+                </div>
+            </div>
+            <div class="mb-4"><input type="text" id="f-duvidas" onkeyup="window.renderAll()" placeholder="🔍 Filtrar dúvidas (Suporte ou Texto)..." class="input-filtro"></div>
+            <div class="rounded-lg overflow-x-auto border border-[#21262d]">
+                <table class="w-full text-left">
+                    <thead class="text-xs uppercase font-black" style="background: #161b22; color: #484f58;">
+                        <tr><th class="p-3">Data</th><th class="p-3">Suporte</th><th class="p-3">Descrição</th><th class="p-3 text-right">Ações</th></tr>
+                    </thead>
+                    <tbody id="lista-duvidas"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ORDENS N3 -->
+        <div id="ordens" class="tab-content">
+            <div class="glass-card p-6 rounded-lg mb-6" style="border-top: 4px solid #f87171;">
+                <h2 class="text-lg font-bold mb-4 text-[#f87171] underline italic">N3 / QA / Desenvolvimento</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                    <input type="hidden" id="o-id">
+                    <input type="date" id="o-data" class="p-2 rounded font-bold">
+                    <input type="text" id="o-os" placeholder="Nº O.S" class="p-2 rounded font-bold">
+                    <input type="text" id="o-desk" placeholder="Nº DESK" class="p-2 rounded font-bold" style="background: rgba(250,204,21,0.05);">
+                    <select id="o-situacao" class="p-2 rounded font-black"><option value="ABERTA">ABERTA</option><option value="FECHADA">FECHADA</option></select>
+                    <select id="o-sistema" class="p-2 rounded font-black"><option value="STOR">STOR</option><option value="AGRO">AGRO</option></select>
+                    <input type="text" id="o-cliente" placeholder="Licença/Empresa" class="p-2 rounded font-bold">
+                    <input type="text" id="o-solicitante" placeholder="Solicitante (Suporte)" class="p-2 rounded font-bold">
+                    <input type="text" id="o-versao" placeholder="Versão Correção" class="p-2 rounded font-black" style="border-color: rgba(239,68,68,0.3); color: #f87171;">
+                    <textarea id="o-log" placeholder="Change Log / Detalhes" class="p-2 rounded col-span-full h-20 font-medium"></textarea>
+                    <button id="btn-o-save" onclick="window.addOrdem()" class="p-2 rounded col-span-full font-bold uppercase cursor-pointer" style="background: linear-gradient(135deg, #dc2626, #ef4444); color: white;">Registrar em Versão</button>
+                </div>
+                <div class="p-4 rounded border" style="background: rgba(22,27,34,0.6); border-color: rgba(239,68,68,0.2);">
+                    <input type="text" id="filtro-versao" onkeyup="window.renderAll()" placeholder="🔍 Filtrar N3 por O.S., Versão ou Empresa..." class="input-filtro mb-3">
+                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                        <span class="text-[10px] font-black uppercase text-[#484f58]">Situação:</span>
+                        <button id="btn-sit-todas" class="btn-filtro-rapido btn-sit-todas ativo" onclick="window.setSitFiltro('TODAS')">📋 Todas</button>
+                        <button id="btn-sit-aberta" class="btn-filtro-rapido btn-sit-aberta inativo" onclick="window.setSitFiltro('ABERTA')">🔴 Abertas</button>
+                        <button id="btn-sit-fechada" class="btn-filtro-rapido btn-sit-fechada inativo" onclick="window.setSitFiltro('FECHADA')">✅ Fechadas</button>
+                        <span id="n3-contador" class="ml-auto text-[10px] font-black text-[#484f58]"></span>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                        <span class="text-[10px] font-black uppercase text-[#484f58]">Sistema:</span>
+                        <button id="btn-sis-todos" class="btn-filtro-rapido btn-sis-todos ativo" onclick="window.setSisFiltro('TODOS')">🖥️ Todos</button>
+                        <button id="btn-sis-stor" class="btn-filtro-rapido btn-sis-stor inativo" onclick="window.setSisFiltro('STOR')">STOR</button>
+                        <button id="btn-sis-agro" class="btn-filtro-rapido btn-sis-agro inativo" onclick="window.setSisFiltro('AGRO')">AGRO</button>
+                    </div>
+                    <button onclick="window.exportarN3Filtrado()" class="px-4 py-2 rounded text-xs font-bold uppercase cursor-pointer" style="background: rgba(34,197,94,0.1); color: #4ade80;">Exportar Filtro Atual (Excel)</button>
+                </div>
+            </div>
+            <div id="lista-ordens" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </div>
+
+        <!-- OUTRAS O.S. -->
+        <div id="outras" class="tab-content">
+            <div class="glass-card p-6 rounded-lg mb-6" style="border-top: 4px solid #4ade80;">
+                <h2 class="text-lg font-bold mb-4 text-[#4ade80] underline italic">Outras O.S.</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                    <input type="hidden" id="out-id"> <input type="date" id="out-data" class="p-2 rounded font-bold">
+                    <input type="text" id="out-os" placeholder="Nº O.S" class="p-2 rounded font-bold">
+                    <select id="out-situacao" class="p-2 rounded font-black"><option value="ABERTA">ABERTA</option><option value="FECHADA">FECHADA</option></select>
+                    <select id="out-sistema" class="p-2 rounded font-black"><option value="STOR">STOR</option><option value="AGRO">AGRO</option></select>
+                    <input type="text" id="out-cliente" placeholder="Licença" class="p-2 rounded font-bold">
+                    <input type="text" id="out-solicitante" placeholder="Suporte N1" class="p-2 rounded font-bold">
+                    <input type="text" id="out-etapa" placeholder="Etapa" class="p-2 rounded font-bold">
+                    <input type="text" id="out-tipo" placeholder="Tipo" class="p-2 rounded col-span-1 md:col-span-2 font-bold">
+                    <textarea id="out-obs" placeholder="Observação" class="p-2 rounded col-span-full h-16 font-medium"></textarea>
+                    <button id="btn-out-save" onclick="window.addOutra()" class="p-2 rounded col-span-full font-bold uppercase cursor-pointer" style="background: linear-gradient(135deg, #16a34a, #22c55e); color: white;">Salvar</button>
+                </div>
+            </div>
+            <div class="p-4 rounded-lg mb-4 border" style="background: rgba(22,27,34,0.6); border-color: rgba(34,197,94,0.2);">
+                <input type="text" id="f-outras" onkeyup="window.renderAll()" placeholder="🔍 Filtrar O.S. de acompanhamento..." class="input-filtro mb-3">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                    <span class="text-[10px] font-black uppercase text-[#484f58]">Situação:</span>
+                    <button id="out-btn-sit-todas" class="btn-filtro-rapido btn-sit-todas ativo" onclick="window.setSitFiltroOutras('TODAS')">📋 Todas</button>
+                    <button id="out-btn-sit-aberta" class="btn-filtro-rapido btn-sit-aberta inativo" onclick="window.setSitFiltroOutras('ABERTA')">🔴 Abertas</button>
+                    <button id="out-btn-sit-fechada" class="btn-filtro-rapido btn-sit-fechada inativo" onclick="window.setSitFiltroOutras('FECHADA')">✅ Fechadas</button>
+                    <span id="out-contador" class="ml-auto text-[10px] font-black text-[#484f58]"></span>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="text-[10px] font-black uppercase text-[#484f58]">Sistema:</span>
+                    <button id="out-btn-sis-todos" class="btn-filtro-rapido btn-sis-todos ativo" onclick="window.setSisFiltroOutras('TODOS')">🖥️ Todos</button>
+                    <button id="out-btn-sis-stor" class="btn-filtro-rapido btn-sis-stor inativo" onclick="window.setSisFiltroOutras('STOR')">STOR</button>
+                    <button id="out-btn-sis-agro" class="btn-filtro-rapido btn-sis-agro inativo" onclick="window.setSisFiltroOutras('AGRO')">AGRO</button>
+                </div>
+            </div>
+            <div id="lista-outras" class="grid grid-cols-1 gap-3 text-sm"></div>
+        </div>
+
+        <!-- DASHBOARD -->
+        <div id="dash" class="tab-content">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 text-center font-bold">
+                <div class="p-6 rounded-lg shadow-xl" style="background: rgba(22,27,34,0.8); border-bottom: 6px solid #06b6d4;">
+                    <p class="text-[#484f58] uppercase text-xs">Total Dúvidas</p>
+                    <h3 id="stat-duvidas" class="text-4xl text-[#06b6d4] font-black">0</h3>
+                </div>
+                <div class="p-6 rounded-lg shadow-xl" style="background: rgba(22,27,34,0.8); border-bottom: 6px solid #f87171;">
+                    <p class="text-[#484f58] uppercase text-xs">Correções N3</p>
+                    <h3 id="stat-ordens" class="text-4xl text-[#f87171] font-black">0</h3>
+                </div>
+                <div class="p-6 rounded-lg shadow-xl" style="background: rgba(22,27,34,0.8); border-bottom: 6px solid #4ade80;">
+                    <p class="text-[#484f58] uppercase text-xs">Outras O.S.</p>
+                    <h3 id="stat-outras" class="text-4xl text-[#4ade80] font-black">0</h3>
+                </div>
+            </div>
+            <div class="p-6 rounded-lg text-center" style="background: rgba(22,27,34,0.6);">
+                <h3 class="font-black text-[#e1e7ef] mb-4 uppercase">Opções de Exportação</h3>
+                <button onclick="window.exportarCSVCompleto()" class="px-8 py-3 rounded font-black uppercase shadow-lg cursor-pointer" style="background: linear-gradient(135deg, #02727e, #06b6d4); color: white;">Exportar Tudo para Excel (.CSV)</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA_po9hvJqFPri_AI4uw73AiYb5BbspNjs",
+            authDomain: "thomas-teste-d7a3d.firebaseapp.com",
+            projectId: "thomas-teste-d7a3d",
+            storageBucket: "thomas-teste-d7a3d.firebasestorage.app",
+            messagingSenderId: "280109049625",
+            appId: "1:280109049625:web:487874357d0173797d0788"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.duvidas = []; window.ordens = []; window.outras = [];
+        window._n3FiltroSit = 'TODAS'; window._n3FiltroSis = 'TODOS';
+        window._outFiltroSit = 'TODAS'; window._outFiltroSis = 'TODOS';
+
+        window.setSitFiltro = function(val) {
+            window._n3FiltroSit = val;
+            ['TODAS','ABERTA','FECHADA'].forEach(v => { const btn = document.getElementById('btn-sit-' + v.toLowerCase()); if(!btn) return; btn.classList.toggle('ativo', v === val); btn.classList.toggle('inativo', v !== val); });
+            window.renderAll();
+        };
+        window.setSisFiltro = function(val) {
+            window._n3FiltroSis = val;
+            ['TODOS','STOR','AGRO'].forEach(v => { const btn = document.getElementById('btn-sis-' + v.toLowerCase()); if(!btn) return; btn.classList.toggle('ativo', v === val); btn.classList.toggle('inativo', v !== val); });
+            window.renderAll();
+        };
+        window.setSitFiltroOutras = function(val) {
+            window._outFiltroSit = val;
+            ['TODAS','ABERTA','FECHADA'].forEach(v => { const btn = document.getElementById('out-btn-sit-' + v.toLowerCase()); if(!btn) return; btn.classList.toggle('ativo', v === val); btn.classList.toggle('inativo', v !== val); });
+            window.renderAll();
+        };
+        window.setSisFiltroOutras = function(val) {
+            window._outFiltroSis = val;
+            ['TODOS','STOR','AGRO'].forEach(v => { const btn = document.getElementById('out-btn-sis-' + v.toLowerCase()); if(!btn) return; btn.classList.toggle('ativo', v === val); btn.classList.toggle('inativo', v !== val); });
+            window.renderAll();
+        };
+
+        window.showNotificacao = function(msg, isError = false) {
+            const div = document.getElementById('notificacao');
+            div.innerText = msg;
+            div.className = `fixed top-4 right-4 p-4 rounded shadow-xl font-bold z-50 text-white transition-opacity ${isError ? 'bg-red-600' : 'bg-green-600'}`;
+            div.style.display = 'block';
+            setTimeout(() => { div.style.display = 'none'; }, 4000);
+        };
+        window.customConfirm = function(msg, callbackYes) {
+            document.getElementById('modal-confirm-msg').innerText = msg;
+            const modal = document.getElementById('modal-confirm');
+            modal.style.display = 'flex';
+            document.getElementById('btn-confirm-yes').onclick = function() { modal.style.display = 'none'; callbackYes(); };
+            document.getElementById('btn-confirm-no').onclick = function() { modal.style.display = 'none'; document.getElementById('inputJson').value = ''; };
+        };
+
+        onSnapshot(collection(db, "duvidas"), (snapshot) => { window.duvidas = []; snapshot.forEach(doc => { let item = doc.data(); item.id = doc.id; window.duvidas.push(item); }); window.renderAll(); });
+        onSnapshot(collection(db, "ordens"), (snapshot) => { window.ordens = []; snapshot.forEach(doc => { let item = doc.data(); item.id = doc.id; window.ordens.push(item); }); window.renderAll(); });
+        onSnapshot(collection(db, "outras"), (snapshot) => { window.outras = []; snapshot.forEach(doc => { let item = doc.data(); item.id = doc.id; window.outras.push(item); }); window.renderAll(); });
+
+        window.formatData = function(dataISO) { if(!dataISO || dataISO.includes('/')) return dataISO; const p = dataISO.split('-'); return p[2] + '/' + p[1] + '/' + p[0]; };
+        window.converterParaISO = function(dataBR) { if(!dataBR || dataBR.includes('-')) return dataBR; const p = dataBR.split('/'); return p[2] + '-' + p[1] + '-' + p[0]; };
+        window.compararDatas = function(a, b) { return new Date(window.converterParaISO(b.data)) - new Date(window.converterParaISO(a.data)); };
+
+        window.onload = () => { const hoje = new Date().toISOString().split('T')[0]; ['d-data','o-data','out-data'].forEach(id => document.getElementById(id).value = hoje); };
+        window.showTab = function(event, tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            window.renderAll();
+        };
+
+        window.addDuvida = async function() {
+            const id = document.getElementById('d-id').value;
+            const obj = { data: window.formatData(document.getElementById('d-data').value), suporte: document.getElementById('d-suporte').value, texto: document.getElementById('d-duvida').value };
+            if(!obj.suporte || !obj.texto) return window.showNotificacao("Preencha todos os campos obrigatórios!", true);
+            try { if(id) { await updateDoc(doc(db, "duvidas", id), obj); document.getElementById('d-id').value = ""; } else { await addDoc(collection(db, "duvidas"), obj); } document.getElementById('d-duvida').value = ""; document.getElementById('btn-d-save').innerText = "Salvar"; window.showNotificacao("Dúvida salva com sucesso!"); } catch(e) { window.showNotificacao("Erro ao salvar: " + e, true); }
+        };
+        window.editarDuvida = function(id) { const d = window.duvidas.find(x => x.id === id); if(!d) return; document.getElementById('d-id').value = id; document.getElementById('d-data').value = window.converterParaISO(d.data); document.getElementById('d-suporte').value = d.suporte || ""; document.getElementById('d-duvida').value = d.texto || ""; window.scrollTo(0,0); };
+
+        window.addOrdem = async function() {
+            const id = document.getElementById('o-id').value;
+            const obj = { data: window.formatData(document.getElementById('o-data').value), os: document.getElementById('o-os').value, desk: document.getElementById('o-desk').value, situacao: document.getElementById('o-situacao').value, sistema: document.getElementById('o-sistema').value, cliente: document.getElementById('o-cliente').value, solicitante: document.getElementById('o-solicitante').value, versao: document.getElementById('o-versao').value, log: document.getElementById('o-log').value };
+            if(!obj.os) return window.showNotificacao("Nº da O.S. é obrigatório!", true);
+            try { if(id) { await updateDoc(doc(db, "ordens", id), obj); document.getElementById('o-id').value = ""; } else { await addDoc(collection(db, "ordens"), obj); } ['o-os','o-desk','o-cliente','o-solicitante','o-versao','o-log'].forEach(f => document.getElementById(f).value = ""); window.showNotificacao("Ordem salva com sucesso!"); } catch(e) { window.showNotificacao("Erro ao salvar: " + e, true); }
+        };
+        window.editarOrdem = function(id) { const o = window.ordens.find(x => x.id === id); if(!o) return; ['o-id','o-data','o-os','o-desk','o-situacao','o-sistema','o-cliente','o-solicitante','o-versao','o-log'].forEach(f => { const v = document.getElementById(f); if(f === 'o-id') v.value = id; else if(f === 'o-data') v.value = window.converterParaISO(o.data); else if(f === 'o-situacao' || f === 'o-sistema') v.value = o[f.replace('o-','')] || v.options[0].value; else if(f === 'o-log') v.value = o.log || ''; else v.value = o[f.replace('o-','')] || ''; }); window.scrollTo(0,0); };
+
+        window.addOutra = async function() {
+            const id = document.getElementById('out-id').value;
+            const obj = { data: window.formatData(document.getElementById('out-data').value), os: document.getElementById('out-os').value, situacao: document.getElementById('out-situacao').value, sistema: document.getElementById('out-sistema').value, cliente: document.getElementById('out-cliente').value, solicitante: document.getElementById('out-solicitante').value, etapa: document.getElementById('out-etapa').value, tipo: document.getElementById('out-tipo').value, obs: document.getElementById('out-obs').value };
+            if(!obj.os) return window.showNotificacao("Nº da O.S. é obrigatório!", true);
+            try { if(id) { await updateDoc(doc(db, "outras", id), obj); document.getElementById('out-id').value = ""; } else { await addDoc(collection(db, "outras"), obj); } ['out-os','out-cliente','out-solicitante','out-etapa','out-tipo','out-obs'].forEach(f => document.getElementById(f).value = ""); window.showNotificacao("O.S salva com sucesso!"); } catch(e) { window.showNotificacao("Erro ao salvar: " + e, true); }
+        };
+        window.editarOutra = function(id) { const out = window.outras.find(x => x.id === id); if(!out) return; ['out-id','out-data','out-os','out-situacao','out-sistema','out-cliente','out-solicitante','out-etapa','out-tipo','out-obs'].forEach(f => { const v = document.getElementById(f); if(f === 'out-id') v.value = id; else if(f === 'out-data') v.value = window.converterParaISO(out.data); else if(f === 'out-situacao' || f === 'out-sistema') v.value = out[f.replace('out-','')] || v.options[0].value; else v.value = out[f.replace('out-','')] || ''; }); window.scrollTo(0,0); };
+
+        window.deleteItem = function(id, tipo) {
+            window.customConfirm("Você tem certeza? Isso apagará o item permanentemente da nuvem.", async () => {
+                try { const col = tipo === 'd' ? 'duvidas' : tipo === 'o' ? 'ordens' : 'outras'; await deleteDoc(doc(db, col, id)); window.showNotificacao("Item excluído com sucesso!"); } catch(e) { window.showNotificacao("Erro ao excluir: " + e, true); }
+            });
+        };
+
+        window.renderAll = function() {
+            const fDuv = document.getElementById('f-duvidas').value.toLowerCase();
+            let htmlDuv = "";
+            [...window.duvidas].sort(window.compararDatas).forEach(d => {
+                if((d.suporte||"").toLowerCase().includes(fDuv) || (d.texto||"").toLowerCase().includes(fDuv)) {
+                    htmlDuv += `<tr class="border-b border-[#21262d] text-sm">
+                        <td class="p-3"><span class="badge-data">${d.data||''}</span></td>
+                        <td class="p-3 font-black text-[#06b6d4] uppercase">${d.suporte||''}</td>
+                        <td class="p-3 text-xs font-bold text-[#e1e7ef]">${d.texto||''}</td>
+                        <td class="p-3 text-right space-x-2 font-black uppercase text-[10px]">
+                            <button onclick="window.editarDuvida('${d.id}')" class="text-[#fb923c] hover:underline cursor-pointer">Editar</button>
+                            <button onclick="window.deleteItem('${d.id}','d')" class="text-[#f87171] hover:underline cursor-pointer">Excluir</button>
+                        </td></tr>`;
+                }
+            });
+            document.getElementById('lista-duvidas').innerHTML = htmlDuv;
+
+            const fN3 = document.getElementById('filtro-versao').value.toLowerCase();
+            const fSit = window._n3FiltroSit; const fSis = window._n3FiltroSis;
+            let htmlOrd = "", totalVis = 0, cntAberta = 0, cntFechada = 0;
+            [...window.ordens].sort(window.compararDatas).forEach(o => {
+                const textoOk = (o.versao||"").toLowerCase().includes(fN3) || (o.os||"").toLowerCase().includes(fN3) || (o.cliente||"").toLowerCase().includes(fN3);
+                if(!textoOk) return; if(fSit !== 'TODAS' && (o.situacao||"") !== fSit) return; if(fSis !== 'TODOS' && (o.sistema||"") !== fSis) return;
+                totalVis++; if((o.situacao||"") === 'ABERTA') cntAberta++; if((o.situacao||"") === 'FECHADA') cntFechada++;
+                const stClass = o.situacao === 'FECHADA' ? 'situacao-fechada' : 'situacao-aberta';
+                htmlOrd += `<div class="p-4 rounded shadow-md" style="background: rgba(22,27,34,0.8); border-left: 6px solid #f87171;">
+                    <div class="flex justify-between font-black text-[#e1e7ef]"><span>O.S ${o.os||''} | <span style="color: #06b6d4;">DESK: ${o.desk||'-'}</span></span><span class="text-[10px] px-2 py-1 rounded border ${stClass}" style="border-color: ${o.situacao === 'FECHADA' ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)'}">${o.situacao||''}</span></div>
+                    <p class="mt-1"><span class="badge-sistema">${o.sistema||''}</span> <span class="text-[10px] font-black text-[#484f58] ml-2 uppercase">SUPORTE: ${o.solicitante||'?'}</span></p>
+                    <p class="text-[11px] font-black text-[#e1e7ef] mt-2"><span class="badge-data">${o.data||''}</span> | ${o.cliente||''}</p>
+                    <p class="mt-2 text-xs italic p-2 rounded text-[#e1e7ef] font-bold" style="background: rgba(11,15,20,0.5); border: 1px solid #21262d;">"${o.log||''}"</p>
+                    <div class="flex justify-between mt-3 items-center">
+                        <span class="font-black text-sm px-2 rounded" style="background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2);">${o.versao||''}</span>
+                        <div class="space-x-3 text-[10px] font-black uppercase">
+                            <button onclick="window.editarOrdem('${o.id}')" class="text-[#fb923c] hover:underline cursor-pointer">Editar</button>
+                            <button onclick="window.deleteItem('${o.id}','o')" class="text-[#f87171] hover:underline cursor-pointer">Excluir</button>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            document.getElementById('lista-ordens').innerHTML = htmlOrd || `<div class="col-span-2 text-center text-[#484f58] font-bold py-10">Nenhuma ordem encontrada para os filtros selecionados.</div>`;
+            const contador = document.getElementById('n3-contador');
+            if(contador) contador.innerHTML = totalVis > 0 ? `<span>${totalVis} registro${totalVis!==1?'s':''} · 🔴 ${cntAberta} aberta${cntAberta!==1?'s':''} · ✅ ${cntFechada} fechada${cntFechada!==1?'s':''}</span>` : '';
+
+            const fOut = document.getElementById('f-outras').value.toLowerCase();
+            const fOutSit = window._outFiltroSit; const fOutSis = window._outFiltroSis;
+            let htmlOut = "", outTotalVis = 0, outCntAberta = 0, outCntFechada = 0;
+            [...window.outras].sort(window.compararDatas).forEach(out => {
+                const textoOk = (out.os||"").toLowerCase().includes(fOut) || (out.cliente||"").toLowerCase().includes(fOut) || (out.obs||"").toLowerCase().includes(fOut);
+                if(!textoOk) return; if(fOutSit !== 'TODAS' && (out.situacao||"") !== fOutSit) return; if(fOutSis !== 'TODOS' && (out.sistema||"") !== fOutSis) return;
+                outTotalVis++; if((out.situacao||"") === 'ABERTA') outCntAberta++; if((out.situacao||"") === 'FECHADA') outCntFechada++;
+                const stO = out.situacao === 'FECHADA' ? 'situacao-fechada' : 'situacao-aberta';
+                htmlOut += `<div class="p-3 rounded shadow flex justify-between items-center border" style="background: rgba(22,27,34,0.8); border-left: 4px solid #4ade80; border-color: #21262d;">
+                    <div><div class="flex gap-2 items-center"><span class="font-black text-[#e1e7ef] text-xs">O.S ${out.os||''}</span><span class="text-[9px] font-black px-1 rounded border ${stO}" style="border-color: ${out.situacao === 'FECHADA' ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)'}">${out.situacao||''}</span></div>
+                    <p class="text-[10px] font-black text-[#e1e7ef] mt-1"><span class="badge-data">${out.data||''}</span> | <span class="badge-sistema text-[8px]">${out.sistema||''}</span> | ${out.cliente||''}</p>
+                    <p class="text-[10px] font-black text-[#fb923c] italic uppercase mt-1">ETAPA: ${out.etapa||''}</p></div>
+                    <div class="text-right"><p class="text-[10px] text-[#e1e7ef] font-bold">${out.obs||''}</p>
+                    <div class="space-x-2 text-[10px] font-black uppercase mt-1"><button onclick="window.editarOutra('${out.id}')" class="text-[#fb923c] hover:underline cursor-pointer">Editar</button><button onclick="window.deleteItem('${out.id}','out')" class="text-[#f87171] hover:underline cursor-pointer">Excluir</button></div></div></div>`;
+            });
+            document.getElementById('lista-outras').innerHTML = htmlOut || `<div class="text-center text-[#484f58] font-bold py-10">Nenhuma O.S. encontrada para os filtros selecionados.</div>`;
+            const outContador = document.getElementById('out-contador');
+            if(outContador) outContador.innerHTML = outTotalVis > 0 ? `<span>${outTotalVis} registro${outTotalVis!==1?'s':''} · 🔴 ${outCntAberta} aberta${outCntAberta!==1?'s':''} · ✅ ${outCntFechada} fechada${outCntFechada!==1?'s':''}</span>` : '';
+            document.getElementById('stat-duvidas').innerText = window.duvidas.length;
+            document.getElementById('stat-ordens').innerText = window.ordens.length;
+            document.getElementById('stat-outras').innerText = window.outras.length;
+        };
+
+        window.importarJSON = function(event) {
+            const file = event.target.files[0]; if(!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try { const imported = JSON.parse(e.target.result);
+                    window.customConfirm("Isto vai pegar os dados do seu arquivo JSON antigo e GRAVAR no Firebase. Deseja continuar?", async () => {
+                        window.showNotificacao("Iniciando migração... Por favor, não feche a janela.");
+                        if(imported.duvidas) for(const d of imported.duvidas) await addDoc(collection(db,"duvidas"), d);
+                        if(imported.ordens) for(const o of imported.ordens) await addDoc(collection(db,"ordens"), o);
+                        if(imported.outras) for(const x of imported.outras) await addDoc(collection(db,"outras"), x);
+                        window.showNotificacao("Migração concluída com SUCESSO!");
+                        document.getElementById('inputJson').value = '';
+                    });
+                } catch(err) { window.showNotificacao("Erro ao ler o arquivo JSON: " + err, true); document.getElementById('inputJson').value = ''; }
+            }; reader.readAsText(file);
+        };
+        window.exportarJSON = function() {
+            const data = { duvidas: window.duvidas, ordens: window.ordens, outras: window.outras, versao: "14.0 Firebase", backup_data: new Date().toLocaleDateString() };
+            const a = document.createElement('a'); a.setAttribute("href", "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data))); a.setAttribute("download", "backup_nuvem_thomas_" + new Date().toISOString().split('T')[0] + ".json"); a.click();
+        };
+        window.exportarCSVCompleto = function() {
+            let csv = "Tipo;Data;OS;DESK;Situacao;Sistema;Cli_Sup;Versao_Etapa_Obs\n";
+            [...window.duvidas].sort(window.compararDatas).forEach(d => { csv += `DUVIDA;${d.data||""};-;-;-;-;${d.suporte||""};${(d.texto||"").replace(/;/g,',')}\n`; });
+            [...window.ordens].sort(window.compararDatas).forEach(o => { csv += `N3;${o.data||""};${o.os||""};${o.desk||""};${o.situacao||""};${o.sistema||""};${o.cliente||""} | ${o.solicitante||""};${o.versao||""} - ${(o.log||"").replace(/;/g,',')}\n`; });
+            [...window.outras].sort(window.compararDatas).forEach(out => { csv += `OUTRAS;${out.data||""};${out.os||""};-;${out.situacao||""};${out.sistema||""};${out.cliente||""} | ${out.solicitante||""};${out.etapa||""} - ${(out.obs||"").replace(/;/g,',')}\n`; });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(["\ufeff" + csv], { type:'text/csv;charset=utf-8;' })); a.download = "gerenciador_n2_completo_firebase.csv"; a.click();
+        };
+        window.exportarN3Filtrado = function() {
+            const termo = document.getElementById('filtro-versao').value.toLowerCase();
+            const fSit = window._n3FiltroSit; const fSis = window._n3FiltroSis;
+            const filtradas = [...window.ordens].filter(o => {
+                const textoOk = (o.versao||"").toLowerCase().includes(termo) || (o.os||"").toLowerCase().includes(termo) || (o.cliente||"").toLowerCase().includes(termo);
+                return textoOk && (fSit === 'TODAS' || (o.situacao||"") === fSit) && (fSis === 'TODOS' || (o.sistema||"") === fSis);
+            }).sort(window.compararDatas);
+            if(!filtradas.length) return window.showNotificacao("Nada encontrado no filtro!", true);
+            let csv = "Data;OS;DESK;Situacao;Sistema;Cliente;Solicitante;Versao;Log\n";
+            filtradas.forEach(o => { csv += `${o.data||""};${o.os||""};${o.desk||""};${o.situacao||""};${o.sistema||""};${o.cliente||""};${o.solicitante||""};${o.versao||""};${(o.log||"").replace(/;/g,',')}\n`; });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(["\ufeff" + csv], { type:'text/csv;charset=utf-8;' })); a.download = "filtro_n3_firebase.csv"; a.click();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta CNPJ - Thomas Tech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body { background: #0b0f14; min-height: 100vh; }
+        .nav-bar { background: rgba(22, 27, 34, 0.95); border-bottom: 1px solid #21262d; }
+        .glass-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.06); }
+        input { background: #0b0f14; border: 1px solid #21262d; color: #e1e7ef; }
+        input:focus { border-color: #06b6d4; box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1); outline: none; }
+        .api-card { background: rgba(22,27,34,0.6); border: 1px solid #21262d; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+        .api-header { padding: 12px 16px; font-weight: 700; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; }
+        .api-body { padding: 16px; flex: 1; font-size: 0.85rem; }
+        .dado-linha { margin-bottom: 8px; border-bottom: 1px dashed rgba(255,255,255,0.06); padding-bottom: 5px; }
+        .label { font-weight: 600; color: #484f58; }
+        .valor { font-weight: bold; color: #e1e7ef; float: right; text-align: right; max-width: 65%; word-wrap: break-word; }
+        .badge { padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; }
+        .btn-zap { background: #25D366; transition: all 0.2s; cursor: pointer; }
+        .btn-zap:hover { background: #1ebe57; }
+        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #0b0f14; } ::-webkit-scrollbar-thumb { background: #21262d; border-radius: 3px; }
+    </style>
+</head>
+<body class="font-sans text-[#e1e7ef]">
+
+    <nav class="nav-bar px-4 md:px-8 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <a href="index.html" class="text-[#484f58] hover:text-[#06b6d4] transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            </a>
+            <span class="w-px h-5 bg-[#21262d]"></span>
+            <span class="text-xs font-bold text-[#484f58] uppercase">Módulo 6</span>
+            <span class="w-px h-5 bg-[#21262d]"></span>
+            <span class="text-sm font-bold text-[#e1e7ef]">Consulta Inteligente CNPJ/IE</span>
+        </div>
+        <span class="text-[10px] font-bold text-[#484f58]">Thomas Tech</span>
+    </nav>
+
+    <div class="max-w-4xl mx-auto p-4 md:p-8">
+        <div class="glass-card rounded-2xl p-6 md:p-8" style="border-top: 6px solid #06b6d4;">
+            <h2 class="text-xl font-black text-[#e1e7ef] text-center mb-6 uppercase tracking-tighter">Dossiê Fiscal Inteligente</h2>
+
+            <div class="flex gap-3 mb-6">
+                <input type="text" id="cnpj" placeholder="00.000.000/0000-00" maxlength="18" oninput="formatarEntrada(this)" onkeypress="buscarComEnter(event)" class="flex-1 p-4 text-xl font-bold text-center rounded-xl">
+                <button onclick="iniciarBuscas()" class="px-8 py-4 rounded-xl font-bold text-lg transition-all active:scale-95 cursor-pointer" style="background: linear-gradient(135deg, #02727e, #06b6d4); color: white;">Consultar</button>
+            </div>
+
+            <div class="text-center font-bold mb-6 min-h-[24px]" id="status-msg"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5" id="api-grid" style="display: none;">
+                <div class="api-card">
+                    <div class="api-header" style="background: rgba(111, 66, 193, 0.2); color: #c084fc;"><span>🏢 Dados Tributários (CNPJ.ws)</span><span id="status-api1">⏳</span></div>
+                    <div class="api-body" id="body-api1"></div>
+                </div>
+                <div class="api-card">
+                    <div class="api-header" style="background: rgba(23, 162, 184, 0.2); color: #67e8f9;"><span>🇧🇷 Situação e QSA (BrasilAPI)</span><span id="status-api2">⏳</span></div>
+                    <div class="api-body" id="body-api2"></div>
+                </div>
+                <div class="api-card">
+                    <div class="api-header" style="background: rgba(32, 201, 151, 0.2); color: #6ee7b7;"><span>📍 Endereço Oficial (ViaCEP)</span><span id="status-api3">⏳</span></div>
+                    <div class="api-body" id="body-api3">Aguardando CEP...</div>
+                </div>
+            </div>
+
+            <button class="btn-zap w-full mt-6 p-4 rounded-xl font-bold text-lg hidden items-center justify-center gap-3 text-white" id="btn-zap" onclick="copiarResumoZap()">
+                📱 Copiar Resumo para WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let dadosResumo = {};
+        function formatarEntrada(campo) {
+            campo.value = campo.value.replace(/\D/g, '');
+            document.getElementById('api-grid').style.display = 'none';
+            document.getElementById('btn-zap').style.display = 'none';
+            document.getElementById('status-msg').innerText = "";
+        }
+        function buscarComEnter(event) { if (event.key === "Enter") iniciarBuscas(); }
+        function isCnpjValido(cnpj) {
+            if (cnpj.length !== 14 || /^(\d)\1{13}$/.test(cnpj)) return false;
+            let tamanho = cnpj.length - 2, numeros = cnpj.substring(0, tamanho), digitos = cnpj.substring(tamanho), soma = 0, pos = tamanho - 7;
+            for (let i = tamanho; i >= 1; i--) { soma += numeros.charAt(tamanho - i) * pos--; if (pos < 2) pos = 9; }
+            let resultado = soma % 11 < 2 ? 0 : 11 - soma % 11; if (resultado != digitos.charAt(0)) return false;
+            tamanho = tamanho + 1; numeros = cnpj.substring(0, tamanho); soma = 0; pos = tamanho - 7;
+            for (let i = tamanho; i >= 1; i--) { soma += numeros.charAt(tamanho - i) * pos--; if (pos < 2) pos = 9; }
+            resultado = soma % 11 < 2 ? 0 : 11 - soma % 11; return resultado == digitos.charAt(1);
+        }
+        function setCardLoading(idCard) {
+            document.getElementById(`status-${idCard}`).innerText = "⏳";
+            document.getElementById(`body-${idCard}`).innerHTML = "<div style='color:#484f58; font-style:italic; text-align:center; padding:10px;'>Buscando dados...</div>";
+        }
+        async function iniciarBuscas() {
+            const cnpj = document.getElementById('cnpj').value;
+            if (!isCnpjValido(cnpj)) { document.getElementById('status-msg').innerHTML = "<span style='color:#f87171;'>❌ CNPJ Inválido.</span>"; return; }
+            dadosResumo = { cnpj: cnpj };
+            document.getElementById('status-msg').innerHTML = "<span style='color:#06b6d4;'>🚀 Consultando bases...</span>";
+            document.getElementById('api-grid').style.display = 'grid';
+            document.getElementById('btn-zap').style.display = 'none';
+            setCardLoading('api1'); setCardLoading('api2'); setCardLoading('api3');
+            let cepEncontrado = null;
+            await Promise.allSettled([
+                fetchCNPJws(cnpj).then(cep => { if(cep) cepEncontrado = cep; }),
+                fetchBrasilAPI(cnpj).then(cep => { if(cep && !cepEncontrado) cepEncontrado = cep; })
+            ]);
+            if (cepEncontrado) { fetchViaCEP(cepEncontrado.replace(/\D/g, '')); }
+            else { document.getElementById('status-api3').innerText = "❌"; document.getElementById('body-api3').innerHTML = "<div style='color:#f87171; font-weight:bold; text-align:center;'>CEP não localizado.</div>"; }
+            document.getElementById('status-msg').innerHTML = "<span style='color:#4ade80;'>✅ Consultas finalizadas!</span>";
+            document.getElementById('btn-zap').style.display = 'flex';
+        }
+        async function fetchCNPJws(cnpj) {
+            try {
+                const res = await fetch(`https://publica.cnpj.ws/cnpj/${cnpj}`);
+                if (!res.ok) throw new Error("Erro");
+                const dados = await res.json();
+                dadosResumo.simples = dados.simples ? (dados.simples.optante_simples === 'S' ? 'SIM' : 'NÃO') : 'Desconhecido';
+                dadosResumo.mei = dados.simples ? (dados.simples.optante_mei === 'S' ? 'SIM' : 'NÃO') : 'Desconhecido';
+                const ie = dados.estabelecimento.inscricoes_estaduais.length > 0 ? dados.estabelecimento.inscricoes_estaduais[0].inscricao_estadual : 'Isento';
+                document.getElementById('body-api1').innerHTML = `
+                    <div class="dado-linha"><span class="label">Simples Nacional:</span> <span class="valor">${dadosResumo.simples === 'SIM' ? '<span class="badge" style="background:#22c55e;color:white;">SIM</span>' : '<span class="badge" style="background:#ef4444;color:white;">NÃO</span>'}</span></div>
+                    <div class="dado-linha"><span class="label">É MEI?:</span> <span class="valor">${dadosResumo.mei === 'SIM' ? '<span class="badge" style="background:#22c55e;color:white;">SIM</span>' : '<span class="badge" style="background:#ef4444;color:white;">NÃO</span>'}</span></div>
+                    <div class="dado-linha"><span class="label">Cod. IBGE:</span> <span class="valor">${dados.estabelecimento.cidade ? dados.estabelecimento.cidade.ibge_id : '-'}</span></div>
+                    <div class="dado-linha"><span class="label">Insc. Estadual:</span> <span class="valor">${ie}</span></div>
+                    <div class="dado-linha"><span class="label">Capital Social:</span> <span class="valor">${parseFloat(dados.capital_social).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</span></div>`;
+                document.getElementById('status-api1').innerText = "✅";
+                return dados.estabelecimento.cep;
+            } catch (e) {
+                document.getElementById('status-api1').innerText = "❌";
+                document.getElementById('body-api1').innerHTML = "<div style='color:#f87171; font-weight:bold; text-align:center;'>Falha na consulta.</div>";
+                return null;
+            }
+        }
+        async function fetchBrasilAPI(cnpj) {
+            try {
+                const res = await fetch(`https://brasilapi.com.br/api/cnpj/v1/${cnpj}`);
+                if (!res.ok) throw new Error("Erro");
+                const dados = await res.json();
+                dadosResumo.razao = dados.razao_social;
+                dadosResumo.status = dados.descricao_situacao_cadastral;
+                dadosResumo.motivo = dados.descricao_motivo_situacao_cadastral;
+                let corStatus = dados.descricao_situacao_cadastral === 'ATIVA' ? '#22c55e' : '#ef4444';
+                let socios = dados.qsa && dados.qsa.length > 0 ? dados.qsa.map(s => s.nome_socio).join('<br>') : 'Não informado';
+                document.getElementById('body-api2').innerHTML = `
+                    <div class="dado-linha"><span class="label">Razão Social:</span> <span class="valor">${dados.razao_social}</span></div>
+                    <div class="dado-linha"><span class="label">Status Receita:</span> <span class="valor"><span class="badge" style="background:${corStatus};color:white;">${dados.descricao_situacao_cadastral}</span></span></div>
+                    <div class="dado-linha"><span class="label">Motivo:</span> <span class="valor" style="color:#f87171">${dados.descricao_motivo_situacao_cadastral !== 'SEM MOTIVO' ? dados.descricao_motivo_situacao_cadastral : '-'}</span></div>
+                    <div class="dado-linha"><span class="label">Sócios (QSA):</span> <span class="valor" style="font-size:0.8rem">${socios}</span></div>`;
+                document.getElementById('status-api2').innerText = "✅";
+                return dados.cep;
+            } catch (e) {
+                document.getElementById('status-api2').innerText = "❌";
+                document.getElementById('body-api2').innerHTML = "<div style='color:#f87171; font-weight:bold; text-align:center;'>Falha na consulta.</div>";
+                return null;
+            }
+        }
+        async function fetchViaCEP(cep) {
+            try {
+                const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                if (!res.ok) throw new Error("Erro");
+                const dados = await res.json();
+                dadosResumo.endereco = `${dados.logradouro}, ${dados.bairro} - ${dados.localidade}/${dados.uf} (CEP: ${dados.cep})`;
+                document.getElementById('body-api3').innerHTML = `
+                    <div class="dado-linha"><span class="label">CEP Base:</span> <span class="valor">${dados.cep}</span></div>
+                    <div class="dado-linha"><span class="label">Logradouro:</span> <span class="valor">${dados.logradouro}</span></div>
+                    <div class="dado-linha"><span class="label">Bairro:</span> <span class="valor">${dados.bairro}</span></div>
+                    <div class="dado-linha"><span class="label">Cidade/UF:</span> <span class="valor">${dados.localidade} / ${dados.uf}</span></div>
+                    <div class="dado-linha"><span class="label">IBGE (Correios):</span> <span class="valor">${dados.ibge}</span></div>`;
+                document.getElementById('status-api3').innerText = "✅";
+            } catch (e) {
+                document.getElementById('status-api3').innerText = "❌";
+                document.getElementById('body-api3').innerHTML = "<div style='color:#f87171; font-weight:bold; text-align:center;'>Endereço não localizado.</div>";
+            }
+        }
+        function copiarResumoZap() {
+            let textoZap = `*📋 RESUMO DE CADASTRO - STOR*\n`;
+            textoZap += `*CNPJ:* ${dadosResumo.cnpj}\n`;
+            textoZap += `*Razão Social:* ${dadosResumo.razao || 'Não encontrada'}\n`;
+            let iconeStatus = dadosResumo.status === 'ATIVA' ? '🟢' : '🔴';
+            textoZap += `*Status Receita:* ${iconeStatus} ${dadosResumo.status || 'Desconhecido'}\n`;
+            if (dadosResumo.motivo && dadosResumo.motivo !== 'SEM MOTIVO') textoZap += `*Motivo:* ${dadosResumo.motivo}\n`;
+            textoZap += `*Simples Nacional:* ${dadosResumo.simples || 'Desconhecido'}\n`;
+            textoZap += `*Endereço:* ${dadosResumo.endereco || 'Não localizado'}\n`;
+            textoZap += `\n_Por favor, verifique se os dados batem com a operação antes de emitir a nota._`;
+            navigator.clipboard.writeText(textoZap).then(() => {
+                const btn = document.getElementById('btn-zap');
+                btn.innerText = "✅ Copiado! Cole no WhatsApp (Ctrl+V)";
+                setTimeout(() => { btn.innerText = "📱 Copiar Resumo para WhatsApp"; }, 3000);
+            });
+        }
+    </script>
+</body>
+</html>

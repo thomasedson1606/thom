@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Salário Líquido 2026 - Thomas Tech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body { background: #0b0f14; }
+        .nav-bar { background: rgba(22, 27, 34, 0.95); border-bottom: 1px solid #21262d; }
+        .glass-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.06); }
+        input, select { background: #0b0f14; border: 1px solid #21262d; color: #e1e7ef; transition: all 0.2s; }
+        input:focus, select:focus { border-color: #06b6d4; box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1); }
+        .result-box { background: linear-gradient(135deg, rgba(6, 182, 212, 0.05), rgba(2, 114, 126, 0.05)); border: 1px solid rgba(6, 182, 212, 0.1); }
+        .btn-primary { background: linear-gradient(135deg, #02727e, #06b6d4); transition: all 0.2s; }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 25px -5px rgba(6, 182, 212, 0.3); }
+        .btn-primary:active { transform: translateY(0); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0b0f14; }
+        ::-webkit-scrollbar-thumb { background: #21262d; border-radius: 3px; }
+    </style>
+</head>
+<body class="min-h-screen font-sans text-[#e1e7ef]">
+
+    <!-- Navigation -->
+    <nav class="nav-bar px-4 md:px-8 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <a href="index.html" class="flex items-center gap-2 text-[#484f58] hover:text-[#06b6d4] transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            </a>
+            <span class="w-px h-5 bg-[#21262d]"></span>
+            <span class="text-xs font-bold text-[#484f58] uppercase tracking-wider">Módulo 1</span>
+            <span class="w-px h-5 bg-[#21262d]"></span>
+            <span class="text-sm font-bold text-[#e1e7ef]">Calculadora de Salário Líquido 2026</span>
+        </div>
+        <span class="text-[10px] font-bold text-[#484f58]">Thomas Tech</span>
+    </nav>
+
+    <div class="max-w-lg mx-auto p-4 md:p-8">
+        <div class="glass-card rounded-2xl overflow-hidden">
+            <div class="bg-gradient-to-r from-[#02727e] to-[#06b6d4] p-6">
+                <h1 class="text-xl font-black uppercase tracking-tighter text-white">Holerite Digital N2</h1>
+                <p class="text-[9px] font-bold uppercase tracking-widest text-[#e1e7ef]/80">Cálculos Finais - Lei 15.270/2025</p>
+            </div>
+
+            <div class="p-6 space-y-5">
+                <div>
+                    <label class="block text-[10px] font-black uppercase text-[#06b6d4] mb-1">Salário Bruto Mensal</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-3 text-lg font-bold text-[#484f58]">R$</span>
+                        <input type="text" id="brutoInput" oninput="mascaraMoeda(this)" placeholder="0,00" class="w-full p-3 pl-12 text-xl font-bold rounded-xl">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-black uppercase text-[#06b6d4] mb-1">Nº de Dependentes</label>
+                    <input type="number" id="dependentes" value="0" min="0" class="w-full p-3 text-lg font-bold rounded-xl">
+                </div>
+
+                <button onclick="calcularN2()" class="btn-primary w-full text-white font-black py-4 rounded-xl uppercase tracking-widest shadow-lg active:scale-95 transition-all cursor-pointer">
+                    Calcular Líquido
+                </button>
+
+                <div id="display" class="hidden space-y-3">
+                    <div class="space-y-2 border-t border-[#21262d] pt-4 text-[11px] uppercase font-bold">
+                        <div class="flex justify-between"><span class="text-[#484f58]">INSS (Portaria 13/2026):</span><span id="vInss" class="text-red-400">- R$ 0,00</span></div>
+                        <div class="flex justify-between"><span class="text-[#484f58]">IRRF (Tabela Bruta):</span><span id="vIrrfBruto" class="text-red-300">- R$ 0,00</span></div>
+                        <div class="flex justify-between text-emerald-400 italic"><span>Redução (Isenção R$ 5k):</span><span id="vReducao">+ R$ 0,00</span></div>
+                        <div class="flex justify-between border-t border-[#21262d] pt-2 text-white bg-[#0b0f14] p-2 rounded"><span>IRRF Efetivo (Total):</span><span id="vIrrfEfetivo">R$ 0,00</span></div>
+                    </div>
+                    <div class="result-box p-5 rounded-2xl border-b-4 border-[#06b6d4]">
+                        <span class="text-[9px] font-black text-[#06b6d4] uppercase italic">Líquido Final</span>
+                        <div id="vLiquido" class="text-3xl font-black text-white">R$ 0,00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function mascaraMoeda(i) {
+            let v = i.value.replace(/\D/g,'');
+            v = (v/100).toFixed(2) + '';
+            v = v.replace(".", ",");
+            v = v.replace(/(\d)(\d{3})(\d{3}),/g, "$1.$2.$3,");
+            v = v.replace(/(\d)(\d{3}),/g, "$1.$2,");
+            i.value = v;
+        }
+        function converterParaFloat(valorStr) {
+            if(!valorStr) return 0;
+            return parseFloat(valorStr.replace(/\./g, '').replace(',', '.'));
+        }
+        function calcularN2() {
+            const bruto = converterParaFloat(document.getElementById('brutoInput').value);
+            const numDep = parseInt(document.getElementById('dependentes').value) || 0;
+            let inss = 0;
+            if (bruto <= 1621.00) inss = bruto * 0.075;
+            else if (bruto <= 2902.84) inss = (bruto * 0.09) - 24.315;
+            else if (bruto <= 4354.27) inss = (bruto * 0.12) - 111.4002;
+            else if (bruto <= 8475.55) inss = (bruto * 0.14) - 198.4856;
+            else inss = 988.09;
+            const baseIRRF = bruto - inss - (numDep * 189.59);
+            let irrfBruto = 0;
+            if (baseIRRF <= 2428.80) irrfBruto = 0;
+            else if (baseIRRF <= 2826.65) irrfBruto = (baseIRRF * 0.075) - 182.16;
+            else if (baseIRRF <= 3751.05) irrfBruto = (baseIRRF * 0.15) - 394.16;
+            else if (baseIRRF <= 4664.68) irrfBruto = (baseIRRF * 0.225) - 675.49;
+            else irrfBruto = (baseIRRF * 0.275) - 908.73;
+            let valorReducao = 0;
+            if (bruto <= 5000.00) { valorReducao = 312.89; }
+            else if (bruto <= 7350.00) { valorReducao = 978.62 - (0.133145 * bruto); }
+            else { valorReducao = 0; }
+            const irrfFinal = Math.max(0, irrfBruto - valorReducao);
+            const liquido = bruto - inss - irrfFinal;
+            const fmt = (v) => v.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+            document.getElementById('display').classList.remove('hidden');
+            document.getElementById('vInss').innerText = `- R$ ${fmt(inss)}`;
+            document.getElementById('vIrrfBruto').innerText = `- R$ ${fmt(irrfBruto)}`;
+            document.getElementById('vReducao').innerText = `+ R$ ${fmt(valorReducao)}`;
+            document.getElementById('vIrrfEfetivo').innerText = `R$ ${fmt(irrfFinal)}`;
+            document.getElementById('vLiquido').innerText = `R$ ${fmt(liquido)}`;
+        }
+    </script>
+</body>
+</html>

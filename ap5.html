@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist Tributário - Thomas Tech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body { background: #0b0f14; color: #e1e7ef; min-height: 100vh; }
+        .nav-bar { background: rgba(22, 27, 34, 0.95); border-bottom: 1px solid #21262d; }
+        .glass-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); }
+        .step-done { text-decoration: line-through; color: #484f58; }
+        .card-done { border-left: 10px solid #4ade80 !important; }
+        .pending { border-left: 10px solid #fb923c; }
+        .checkbox-custom { width: 1.2rem; height: 1.2rem; cursor: pointer; accent-color: #06b6d4; }
+        input, select { background: #0b0f14; border: 1px solid #21262d; color: #e1e7ef; outline: none; transition: all 0.2s; }
+        input:focus, select:focus { border-color: #06b6d4; box-shadow: 0 0 0 3px rgba(6,182,212,0.1); }
+        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #0b0f14; } ::-webkit-scrollbar-thumb { background: #21262d; border-radius: 3px; }
+    </style>
+</head>
+<body class="font-sans p-4 md:p-8 relative">
+
+    <div id="notificacao" class="fixed top-4 right-4 p-4 rounded shadow-xl font-bold z-50 text-white transition-opacity" style="display: none;"></div>
+    <div id="modal-confirm" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50" style="display: none;">
+        <div class="p-6 rounded-lg shadow-2xl max-w-sm w-full text-center" style="background: #161b22; border: 1px solid #21262d;">
+            <h3 class="font-black text-lg mb-4 text-[#e1e7ef]" id="modal-confirm-msg">Tem certeza?</h3>
+            <div class="flex justify-center gap-4">
+                <button id="btn-confirm-yes" class="bg-[#02727e] hover:bg-[#06b6d4] text-white px-4 py-2 rounded font-black cursor-pointer uppercase text-sm">Sim, continuar</button>
+                <button id="btn-confirm-no" class="bg-[#484f58] hover:bg-[#5a6370] text-white px-4 py-2 rounded font-black cursor-pointer uppercase text-sm">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="nav-bar px-4 md:px-8 py-3 flex items-center justify-between rounded-xl mb-8" style="background: rgba(22,27,34,0.95);">
+        <div class="flex items-center gap-4">
+            <a href="index.html" class="text-[#484f58] hover:text-[#06b6d4] transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            </a>
+            <span class="w-px h-5 bg-[#21262d]"></span>
+            <span class="text-xs font-bold text-[#484f58] uppercase">Módulo 5</span>
+            <span class="w-px h-5 bg-[#21262d]"></span>
+            <span class="text-sm font-bold text-[#e1e7ef]">Checklist de Transição Tributária</span>
+            <span class="text-[10px] px-2 py-0.5 rounded font-bold" style="background: rgba(34,197,94,0.1); color: #4ade80;">FIREBASE</span>
+        </div>
+        <div class="flex gap-2">
+            <button onclick="window.exportarDados()" class="text-[10px] font-bold px-3 py-2 rounded uppercase cursor-pointer" style="background: rgba(255,255,255,0.05); color: #e1e7ef; border: 1px solid rgba(255,255,255,0.1);">💾 Exportar Backup</button>
+            <label class="text-[10px] font-bold px-3 py-2 rounded uppercase cursor-pointer" style="background: rgba(34,197,94,0.1); color: #4ade80;">
+                📂 Migrar JSON
+                <input type="file" id="inputImport" accept=".json" class="hidden" onchange="window.importarDados(event)">
+            </label>
+        </div>
+    </nav>
+
+    <div class="max-w-5xl mx-auto">
+        <div class="glass-card p-6 rounded-xl mb-10" style="border-top: 6px solid #06b6d4;">
+            <h2 class="text-sm font-black text-[#484f58] uppercase mb-4">📝 Iniciar Nova Troca de Regime</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                <div>
+                    <label class="block text-[10px] font-bold uppercase text-[#06b6d4]">Número da O.S.</label>
+                    <input type="text" id="reg-os" placeholder="Ex: 123456" class="w-full p-2 rounded font-bold">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-[10px] font-bold uppercase text-[#06b6d4]">Licença / Nome da Empresa</label>
+                    <input type="text" id="reg-cliente" placeholder="Razão Social ou Nome Fantasia" class="w-full p-2 rounded font-bold">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase text-[#06b6d4]">Data de Início</label>
+                    <input type="date" id="reg-data" class="w-full p-2 rounded font-bold">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-[10px] font-bold uppercase text-[#fb923c]">Regime ANTERIOR</label>
+                    <select id="reg-ant" class="w-full p-2 rounded font-bold">
+                        <option value="Simples Nacional">Simples Nacional</option>
+                        <option value="Lucro Presumido">Lucro Presumido</option>
+                        <option value="Lucro Real">Lucro Real</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase text-[#4ade80]">NOVO Regime</label>
+                    <select id="reg-novo" class="w-full p-2 rounded font-bold">
+                        <option value="Lucro Presumido">Lucro Presumido</option>
+                        <option value="Lucro Real">Lucro Real</option>
+                        <option value="Simples Nacional">Simples Nacional</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button onclick="window.iniciarChecklist()" class="w-full p-3 rounded font-black uppercase tracking-widest transition shadow-md cursor-pointer" style="background: linear-gradient(135deg, #02727e, #06b6d4); color: white;">
+                        Gerar Checklist
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-end mb-4">
+            <span id="contador-ativos" class="text-xs font-bold px-3 py-2 rounded uppercase italic" style="background: rgba(6,182,212,0.1); color: #06b6d4;">0 Processos</span>
+        </div>
+
+        <div id="lista-processos" class="grid grid-cols-1 gap-8"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA_po9hvJqFPri_AI4uw73AiYb5BbspNjs",
+            authDomain: "thomas-teste-d7a3d.firebaseapp.com",
+            projectId: "thomas-teste-d7a3d",
+            storageBucket: "thomas-teste-d7a3d.firebasestorage.app",
+            messagingSenderId: "280109049625",
+            appId: "1:280109049625:web:487874357d0173797d0788"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        window.processos = [];
+
+        const etapasMestra = [
+            { id: 1, txt: "Enviado planilha com dados para a contabilidade" },
+            { id: 2, txt: "Resposta recebida: Planilha de dados preenchida pela contabilidade" },
+            { id: 3, txt: "Enviado planilha de produtos do sistema (para depara tributário)" },
+            { id: 4, txt: "Resposta recebida: Lista de produtos com tributação definida" },
+            { id: 5, txt: "Análise técnica dos produtos (NCMs, Exceções e Regras)" },
+            { id: 6, txt: "SISTEMA: Alterar configuração de regime nos Dados da Empresa" },
+            { id: 7, txt: "SISTEMA: Cadastrar/Revisar novas alíquotas de impostos" },
+            { id: 8, txt: "SISTEMA: Alterar Produtos (Alíquotas, CFOP, CST ICMS, PIS, COFINS, IPI)" },
+            { id: 9, txt: "SISTEMA: Configurar Natureza da Receita (se houver/exigido)" },
+            { id: 10, txt: "Envio de planilha final com produtos já atualizados para conferência" },
+            { id: 11, txt: "Validação final e OK formal da Contabilidade" }
+        ];
+
+        window.showNotificacao = function(msg, isError = false) {
+            const div = document.getElementById('notificacao');
+            div.innerText = msg;
+            div.className = `fixed top-4 right-4 p-4 rounded shadow-xl font-bold z-50 text-white transition-opacity ${isError ? 'bg-red-600' : 'bg-green-600'}`;
+            div.style.display = 'block'; setTimeout(() => { div.style.display = 'none'; }, 4000);
+        };
+        window.customConfirm = function(msg, callbackYes) {
+            document.getElementById('modal-confirm-msg').innerText = msg;
+            const modal = document.getElementById('modal-confirm');
+            modal.style.display = 'flex';
+            document.getElementById('btn-confirm-yes').onclick = function() { modal.style.display = 'none'; callbackYes(); };
+            document.getElementById('btn-confirm-no').onclick = function() { modal.style.display = 'none'; document.getElementById('inputImport').value = ''; };
+        };
+
+        onSnapshot(collection(db, "checklist_tributario"), (snapshot) => {
+            window.processos = [];
+            snapshot.forEach(doc => { let item = doc.data(); item.firebaseId = doc.id; window.processos.push(item); });
+            window.processos.sort((a, b) => b.id - a.id);
+            window.renderAll();
+        });
+
+        window.onload = () => { document.getElementById('reg-data').value = new Date().toISOString().split('T')[0]; };
+
+        window.iniciarChecklist = async function() {
+            const os = document.getElementById('reg-os').value;
+            const cliente = document.getElementById('reg-cliente').value;
+            const data = document.getElementById('reg-data').value;
+            const ant = document.getElementById('reg-ant').value;
+            const novo = document.getElementById('reg-novo').value;
+            if(!os || !cliente) return window.showNotificacao("Por favor, preencha a O.S. e a Empresa.", true);
+            const processo = { id: Date.now(), os, cliente, data: data.split('-').reverse().join('/'), ant, novo, concluido: false, etapas: etapasMestra.map(e => ({ id: e.id, txt: e.txt, status: false })) };
+            try { await addDoc(collection(db, "checklist_tributario"), processo); document.getElementById('reg-os').value = ""; document.getElementById('reg-cliente').value = ""; window.showNotificacao("Processo de Checklist criado com sucesso!"); } catch(e) { window.showNotificacao("Erro ao criar: " + e, true); }
+        };
+
+        window.toggleEtapa = async function(firebaseId, etapaId) {
+            const proc = window.processos.find(p => p.firebaseId === firebaseId);
+            if (!proc) return;
+            const novasEtapas = proc.etapas.map(e => e.id === etapaId ? { id: e.id, txt: e.txt, status: !e.status } : e);
+            const isConcluido = novasEtapas.every(e => e.status === true);
+            try { await updateDoc(doc(db, "checklist_tributario", firebaseId), { etapas: novasEtapas, concluido: isConcluido }); } catch(e) { window.showNotificacao("Erro ao atualizar: " + e, true); }
+        };
+
+        window.excluir = function(firebaseId) {
+            window.customConfirm("Deseja remover este processo permanentemente do Firebase?", async () => {
+                try { await deleteDoc(doc(db, "checklist_tributario", firebaseId)); window.showNotificacao("Processo removido com sucesso!"); } catch(e) { window.showNotificacao("Erro ao remover: " + e, true); }
+            });
+        };
+
+        window.importarDados = function(event) {
+            const file = event.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try { const importados = JSON.parse(e.target.result);
+                    window.customConfirm("Isto vai pegar os dados de Tributação do seu arquivo JSON antigo e GRAVAR no Firebase. Deseja continuar?", async () => {
+                        window.showNotificacao("Iniciando migração... Por favor, aguarde.");
+                        for(let i=0; i<importados.length; i++) { let item = importados[i]; if(item.firebaseId) delete item.firebaseId; await addDoc(collection(db, "checklist_tributario"), item); }
+                        window.showNotificacao("Migração do Checklist concluída com SUCESSO!");
+                        document.getElementById('inputImport').value = '';
+                    });
+                } catch(err) { window.showNotificacao("Erro ao ler o arquivo JSON.", true); document.getElementById('inputImport').value = ''; }
+            }; reader.readAsText(file);
+        };
+
+        window.exportarDados = function() {
+            if (window.processos.length === 0) return window.showNotificacao("Não há dados para exportar.", true);
+            const a = document.createElement('a'); a.setAttribute("href", "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(window.processos))); a.setAttribute("download", "backup_tributario_firebase_" + new Date().toISOString().split('T')[0] + ".json"); a.click();
+        };
+
+        window.renderAll = function() {
+            const container = document.getElementById('lista-processos');
+            document.getElementById('contador-ativos').innerText = `${window.processos.length} Processos`;
+            if(window.processos.length === 0) { container.innerHTML = `<div class="text-center p-10 font-bold border-2 border-dashed border-[#21262d] rounded-xl italic text-xl" style="color: #484f58; background: rgba(22,27,34,0.6);">Nenhum acompanhamento em aberto no Firebase.</div>`; return; }
+
+            let htmlCompleto = "";
+            window.processos.forEach(p => {
+                let htmlEtapas = "", concluidasCount = 0;
+                p.etapas.forEach(e => {
+                    if(e.status) concluidasCount++;
+                    htmlEtapas += `<label class="flex items-center space-x-3 p-2 rounded cursor-pointer group" style="transition: all 0.15s;">
+                        <input type="checkbox" ${e.status ? 'checked' : ''} onchange="window.toggleEtapa('${p.firebaseId}', ${e.id})" class="checkbox-custom rounded">
+                        <span class="text-sm ${e.status ? 'step-done font-normal' : 'text-[#e1e7ef] font-bold'}">${e.txt}</span>
+                    </label>`;
+                });
+                let borderClass = p.concluido ? 'card-done' : 'pending';
+                let porcentagem = Math.round((concluidasCount / p.etapas.length) * 100);
+                htmlCompleto += `<div class="rounded-xl shadow-xl border ${borderClass} transition-all overflow-hidden" style="background: rgba(22,27,34,0.8); border-color: #21262d;">
+                    <div class="p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4" style="background: rgba(11,15,20,0.5); border-bottom: 1px solid #21262d;">
+                        <div><div class="flex items-center gap-2 mb-1"><span class="text-[10px] px-2 py-0.5 rounded font-bold" style="background: rgba(6,182,212,0.15); color: #06b6d4;">O.S. ${p.os}</span><span class="text-[#484f58] text-xs font-bold">${p.data}</span></div>
+                        <h3 class="text-xl font-black text-[#e1e7ef] uppercase">${p.cliente}</h3></div>
+                    <div class="flex items-center gap-4"><div class="text-right"><p class="text-[9px] font-black text-[#484f58] uppercase">Fluxo</p>
+                    <div class="flex items-center gap-2"><span class="text-[10px] font-bold px-2 py-1 rounded border" style="background: rgba(251,146,60,0.1); color: #fb923c; border-color: rgba(251,146,60,0.2);">${p.ant}</span>
+                    <span class="text-[#484f58]">➔</span>
+                    <span class="text-[10px] font-bold px-2 py-1 rounded border" style="background: rgba(74,222,128,0.1); color: #4ade80; border-color: rgba(74,222,128,0.2);">${p.novo}</span></div></div>
+                    <button onclick="window.excluir('${p.firebaseId}')" class="text-[#484f58] hover:text-[#f87171] transition ml-4 cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button></div></div>
+                    <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1">${htmlEtapas}</div>
+                    <div class="p-2 text-center" style="background: rgba(11,15,20,0.5);">
+                    <div class="w-full h-1.5 rounded-full overflow-hidden" style="background: #21262d;"><div class="h-full transition-all" style="width:${porcentagem}%; background: linear-gradient(90deg, #02727e, #06b6d4);"></div></div>
+                    <p class="text-[9px] font-bold text-[#484f58] mt-1 uppercase">Progresso: ${porcentagem}%</p></div></div>`;
+            });
+            container.innerHTML = htmlCompleto;
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPED PIS/COFINS - Thomas Tech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body { background: #0b0f14; }
+        .nav-bar { background: rgba(22, 27, 34, 0.95); border-bottom: 1px solid #21262d; }
+        .glass-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.06); }
+        input { background: #0b0f14; border: 1px solid #21262d; color: #e1e7ef; transition: all 0.2s; }
+        input:focus { border-color: #06b6d4; box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1); }
+        .valor-positivo { color: #4ade80 !important; font-weight: 900; }
+        .valor-negativo { color: #f87171 !important; font-weight: 900; }
+        .campo-resultado { background: rgba(22, 27, 34, 0.6); border: 1px solid #21262d; min-height: 100px; }
+        .btn-copiar { background: #02727e; color: white; font-size: 10px; padding: 4px 8px; border-radius: 4px; font-weight: 900; text-transform: uppercase; transition: all 0.2s; cursor: pointer; }
+        .btn-copiar:hover { background: #06b6d4; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0b0f14; }
+        ::-webkit-scrollbar-thumb { background: #21262d; border-radius: 3px; }
+    </style>
+</head>
+<body class="min-h-screen font-sans text-[#e1e7ef] p-4 md:p-10">
+
+    <nav class="nav-bar px-4 md:px-8 py-3 flex items-center justify-between rounded-xl mb-8" style="background: rgba(22,27,34,0.95);">
+        <div class="flex items-center gap-4">
+            <a href="index.html" class="flex items-center gap-2 text-[#484f58] hover:text-[#06b6d4] transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            </a>
+            <span class="w-px h-5 bg-[#21262d]"></span>
+            <span class="text-xs font-bold text-[#484f58] uppercase tracking-wider">Módulo 2</span>
+            <span class="w-px h-5 bg-[#21262d]"></span>
+            <span class="text-sm font-bold text-[#e1e7ef]">Ajuste SPED PIS/COFINS</span>
+        </div>
+        <span class="text-[10px] font-bold text-[#484f58]">Thomas Tech</span>
+    </nav>
+
+    <div class="max-w-3xl mx-auto glass-card rounded-xl p-6 md:p-10" style="border-top: 6px solid #06b6d4;">
+        <h1 class="text-2xl font-black text-[#e1e7ef] mb-8 uppercase border-b-4 border-[#06b6d4] pb-2 italic text-center md:text-left">
+            Ajuste erro de calculo de Sped PIS e COFINS
+        </h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="space-y-6">
+                <div>
+                    <label class="text-[10px] font-black uppercase text-[#06b6d4] mb-1 block">Valor Esperado</label>
+                    <input type="number" id="val_esp" oninput="calcular()" placeholder="0,00" step="0.01" class="w-full p-4 mt-1 rounded-lg font-black text-xl">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black uppercase text-[#06b6d4] mb-1 block">Receita Bruta</label>
+                    <input type="number" id="rec_bru" oninput="calcular()" placeholder="0,00" step="0.01" class="w-full p-4 mt-1 rounded-lg font-black text-xl">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black uppercase text-[#06b6d4] mb-1 block">Natureza de Receita (MAIOR)</label>
+                    <input type="number" id="nat_mai" oninput="calcular()" placeholder="0,00" step="0.01" class="w-full p-4 mt-1 rounded-lg font-black text-xl">
+                </div>
+            </div>
+            <div class="flex flex-col justify-start space-y-6">
+                <div class="p-6 rounded-lg border border-[#21262d] text-center" style="background: rgba(22, 27, 34, 0.6);">
+                    <span class="text-[10px] font-black uppercase text-[#484f58] block mb-2">Diferença Encontrada</span>
+                    <span id="res_dif" class="text-3xl font-black text-[#e1e7ef]">R$ 0,00</span>
+                </div>
+                <div class="text-[11px] font-black text-[#484f58] border-l-4 border-[#06b6d4] pl-4 py-2" style="background: rgba(6, 182, 212, 0.05);">
+                    DICA THOMAS: Ao clicar em copiar, o valor vai apenas com números e vírgula (ex: 1250,50).
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+            <div class="campo-resultado p-5 rounded-lg flex flex-col justify-center items-center shadow-lg">
+                <span class="text-[10px] font-black uppercase text-[#06b6d4] mb-1">Novo Valor Esperado</span>
+                <span id="fin_esp" class="text-2xl font-black text-[#e1e7ef]">R$ 0,00</span>
+                <button onclick="copiarValor('val_puro_esp')" class="btn-copiar mt-3">📋 Copiar Valor</button>
+            </div>
+            <div class="campo-resultado p-5 rounded-lg flex flex-col justify-center items-center shadow-lg">
+                <span class="text-[10px] font-black uppercase text-[#06b6d4] mb-1">Novo Natureza de Receita</span>
+                <span id="fin_nat" class="text-2xl font-black text-[#e1e7ef]">R$ 0,00</span>
+                <button onclick="copiarValor('val_puro_nat')" class="btn-copiar mt-3">📋 Copiar Valor</button>
+            </div>
+        </div>
+
+        <input type="hidden" id="val_puro_esp" value="0">
+        <input type="hidden" id="val_puro_nat" value="0">
+
+        <div class="mt-10 flex justify-center">
+            <button onclick="limpar()" class="bg-red-600 text-white px-10 py-3 rounded-full font-black hover:bg-red-800 transition uppercase tracking-widest shadow-md cursor-pointer">
+                Zerar Campos
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function formatarMoeda(valor) {
+            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+        function calcular() {
+            const vEsp = parseFloat(document.getElementById('val_esp').value) || 0;
+            const rBru = parseFloat(document.getElementById('rec_bru').value) || 0;
+            const nMai = parseFloat(document.getElementById('nat_mai').value) || 0;
+            const diferenca = vEsp - rBru;
+            const displayDif = document.getElementById('res_dif');
+            displayDif.innerText = formatarMoeda(diferenca);
+            displayDif.classList.remove('valor-positivo', 'valor-negativo');
+            if (diferenca > 0) displayDif.classList.add('valor-positivo');
+            else if (diferenca < 0) displayDif.classList.add('valor-negativo');
+            document.getElementById('fin_esp').innerText = formatarMoeda(vEsp);
+            document.getElementById('val_puro_esp').value = vEsp.toFixed(2).replace('.', ',');
+            const novoNat = nMai + diferenca;
+            document.getElementById('fin_nat').innerText = formatarMoeda(novoNat);
+            document.getElementById('val_puro_nat').value = novoNat.toFixed(2).replace('.', ',');
+        }
+        function copiarValor(idCampoPuro) {
+            const valorParaCopiar = document.getElementById(idCampoPuro).value;
+            navigator.clipboard.writeText(valorParaCopiar).then(() => {
+                const btn = event.target;
+                const originalText = btn.innerText;
+                btn.innerText = "✅ COPIADO!";
+                btn.style.backgroundColor = "#16a34a";
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.backgroundColor = "#02727e";
+                }, 1000);
+            });
+        }
+        function limpar() {
+            document.getElementById('val_esp').value = '';
+            document.getElementById('rec_bru').value = '';
+            document.getElementById('nat_mai').value = '';
+            calcular();
+            document.getElementById('val_esp').focus();
+        }
+    </script>
+</body>
+</html>
