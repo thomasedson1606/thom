@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conversor de Imagens para PDF ou Word (A4)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#0b0f14;color:#e1e7ef;min-height:100vh;padding:0}
+.nav-bar{background:rgba(22,27,34,0.95);border-bottom:1px solid #21262d}
+.container{max-width:900px;margin:24px auto;padding:0 20px}
+.card{background:#161b22;border:1px solid #21262d;border-radius:14px;padding:30px}
+header{text-align:center;margin-bottom:28px;border-bottom:1px solid #21262d;padding-bottom:20px}
+header h1{font-size:24px;font-weight:800;margin-bottom:6px}
+header h1 span{background:linear-gradient(135deg,#e1e7ef,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+header p{color:#484f58;font-size:14px}
+.upload-section{border:2px dashed #06b6d4;padding:30px;text-align:center;border-radius:10px;background:rgba(6,182,212,.03);cursor:pointer;transition:background .3s;margin-bottom:24px}
+.upload-section:hover{background:rgba(6,182,212,.08)}
+.upload-section p{color:#484f58;margin-bottom:12px;font-size:15px}
+.upload-section input[type=file]{display:none}
+.btn-custom{display:inline-block;background:linear-gradient(135deg,#02727e,#06b6d4);color:white;padding:10px 20px;border-radius:6px;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-size:14px}
+.btn-custom:hover{transform:translateY(-1px);box-shadow:0 8px 25px -5px rgba(6,182,212,.3)}
+.controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.options{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.options label{font-size:12px;font-weight:600;color:#484f58;text-transform:uppercase;letter-spacing:.05em}
+.options select{padding:7px 12px;border-radius:6px;border:1px solid #21262d;background:#0b0f14;color:#e1e7ef;outline:none;font-size:13px;cursor:pointer}
+.options select:focus{border-color:#06b6d4}
+.preview-title{font-size:16px;font-weight:600;margin-bottom:14px;color:#06b6d4;display:none}
+.preview-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px;margin-bottom:28px}
+.preview-item{position:relative;background:#0b0f14;border:1px solid #21262d;border-radius:8px;padding:8px;cursor:grab;transition:all .2s}
+.preview-item:active{cursor:grabbing}
+.preview-item:hover{transform:translateY(-2px);border-color:#06b6d4;box-shadow:0 4px 12px rgba(6,182,212,.1)}
+.preview-item img{width:100%;height:140px;object-fit:contain;border-radius:4px;background:rgba(255,255,255,.02)}
+.remove-btn{position:absolute;top:-8px;right:-8px;background:#ef4444;color:white;border:none;border-radius:50%;width:24px;height:24px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.4);transition:background .2s}
+.remove-btn:hover{background:#dc2626}
+.page-badge{position:absolute;bottom:12px;left:12px;background:rgba(0,0,0,.7);color:white;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600}
+.actions{text-align:center;border-top:1px solid #21262d;padding-top:24px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
+.btn-action{font-size:15px;padding:12px 24px;min-width:180px}
+.btn-pdf{background:linear-gradient(135deg,#059669,#10b981)}
+.btn-pdf:hover{box-shadow:0 8px 25px -5px rgba(16,185,129,.3)}
+.btn-word{background:linear-gradient(135deg,#2563eb,#3b82f6)}
+.btn-word:hover{box-shadow:0 8px 25px -5px rgba(59,130,246,.3)}
+.btn-action:disabled{background:#21262d !important;color:#484f58 !important;cursor:not-allowed;transform:none !important;box-shadow:none !important}
+.status{width:100%;margin-top:12px;font-weight:600;color:#06b6d4;display:none;text-align:center;font-size:14px}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#0b0f14}
+::-webkit-scrollbar-thumb{background:#21262d;border-radius:3px}
+</style>
+</head>
+<body>
+
+<nav class="nav-bar px-4 md:px-8 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+        <a href="index.html" class="flex items-center gap-2 text-[#484f58] hover:text-[#06b6d4] transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        </a>
+        <span class="w-px h-5" style="background:#21262d"></span>
+        <span class="text-xs font-bold uppercase tracking-wider" style="color:#484f58">Módulo 13</span>
+        <span class="w-px h-5" style="background:#21262d"></span>
+        <span class="text-sm font-bold" style="color:#e1e7ef">Conversor Imagens → PDF / Word</span>
+    </div>
+    <span class="text-[10px] font-bold" style="color:#484f58">Thomas Tech</span>
+</nav>
+
+<div class="container">
+    <div class="card">
+
+        <header>
+            <h1><span>Imagens para PDF ou Word (A4)</span></h1>
+            <p>Insira suas imagens, ordene-as livremente e exporte tudo adaptado para páginas A4.</p>
+        </header>
+
+        <div class="upload-section" onclick="document.getElementById('file-input').click()">
+            <p>Arraste e solte imagens aqui ou clique para selecionar</p>
+            <span class="btn-custom">Selecionar Imagens</span>
+            <input type="file" id="file-input" accept="image/*" multiple>
+        </div>
+
+        <div class="controls">
+            <div class="options">
+                <label for="margin-select">Margem:</label>
+                <select id="margin-select">
+                    <option value="0">Sem Margem</option>
+                    <option value="10" selected>Fina (10mm)</option>
+                    <option value="20">Larga (20mm)</option>
+                </select>
+            </div>
+            <div class="options">
+                <label for="orientation-select">Orientação:</label>
+                <select id="orientation-select">
+                    <option value="auto" selected>Automática</option>
+                    <option value="portrait">Retrato</option>
+                    <option value="landscape">Paisagem</option>
+                </select>
+            </div>
+        </div>
+
+        <h2 class="preview-title" id="preview-title">Imagens carregadas (arraste para reordenar):</h2>
+        <div class="preview-container" id="preview-container"></div>
+
+        <div class="actions">
+            <button id="generate-pdf-btn" class="btn-custom btn-action btn-pdf" disabled>Exportar para PDF</button>
+            <button id="generate-docx-btn" class="btn-custom btn-action btn-word" disabled>Exportar para Word</button>
+            <div class="status" id="status-message">Processando e gerando arquivo...</div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+const fileInput = document.getElementById('file-input');
+const previewContainer = document.getElementById('preview-container');
+const previewTitle = document.getElementById('preview-title');
+const generatePdfBtn = document.getElementById('generate-pdf-btn');
+const generateDocxBtn = document.getElementById('generate-docx-btn');
+const statusMessage = document.getElementById('status-message');
+
+let imagesList = [];
+
+const sortable = new Sortable(previewContainer, {
+    animation: 150,
+    onEnd: function () {
+        const newOrder = [];
+        const items = previewContainer.querySelectorAll('.preview-item');
+        items.forEach(item => {
+            const index = parseInt(item.getAttribute('data-index'));
+            newOrder.push(imagesList[index]);
+        });
+        imagesList = newOrder;
+        renderPreview();
+    }
+});
+
+fileInput.addEventListener('change', handleFileSelect);
+
+const uploadSection = document.querySelector('.upload-section');
+uploadSection.addEventListener('dragover', (e) => { e.preventDefault(); uploadSection.style.background = 'rgba(6,182,212,0.12)'; });
+uploadSection.addEventListener('dragleave', () => { uploadSection.style.background = 'rgba(6,182,212,0.03)'; });
+uploadSection.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadSection.style.background = 'rgba(6,182,212,0.03)';
+    if (e.dataTransfer.files.length > 0) processFiles(e.dataTransfer.files);
+});
+
+function handleFileSelect(e) { processFiles(e.target.files); }
+
+function processFiles(files) {
+    const promises = [];
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (!file.type.startsWith('image/')) continue;
+        const promise = new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = function(event) { resolve({ src: event.target.result, name: file.name }); };
+            reader.readAsDataURL(file);
+        });
+        promises.push(promise);
+    }
+    Promise.all(promises).then(newImages => {
+        imagesList = [...imagesList, ...newImages];
+        renderPreview();
+        fileInput.value = '';
+    });
+}
+
+function renderPreview() {
+    previewContainer.innerHTML = '';
+    const hasImages = imagesList.length > 0;
+    previewTitle.style.display = hasImages ? 'block' : 'none';
+    generatePdfBtn.disabled = !hasImages;
+    generateDocxBtn.disabled = !hasImages;
+    imagesList.forEach((imgData, index) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'preview-item';
+        itemDiv.setAttribute('data-index', index);
+        itemDiv.innerHTML = `<img src="${imgData.src}" alt="${imgData.name}"><button class="remove-btn" onclick="removeImage(${index})">&times;</button><div class="page-badge">Pág. ${index + 1}</div>`;
+        previewContainer.appendChild(itemDiv);
+    });
+}
+
+window.removeImage = function(index) {
+    imagesList.splice(index, 1);
+    renderPreview();
+};
+
+async function calculateImageDimensions(src, pWidth, pHeight, margin) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+            const imgRatio = img.naturalWidth / img.naturalHeight;
+            const maxW = pWidth - (margin * 2);
+            const maxH = pHeight - (margin * 2);
+            let renderW = maxW;
+            let renderH = renderW / imgRatio;
+            if (renderH > maxH) { renderH = maxH; renderW = renderH * imgRatio; }
+            resolve({ width: renderW, height: renderH, ratio: imgRatio });
+        };
+        img.src = src;
+    });
+}
+
+generatePdfBtn.addEventListener('click', async () => {
+    if (imagesList.length === 0) return;
+    setLoading(true);
+    const { jsPDF } = window.jspdf;
+    const a4Width = 210, a4Height = 297;
+    const margin = parseFloat(document.getElementById('margin-select').value);
+    const orientationOption = document.getElementById('orientation-select').value;
+    let pdf = null;
+    for (let i = 0; i < imagesList.length; i++) {
+        const imgData = imagesList[i];
+        const tempImg = new Image();
+        tempImg.src = imgData.src;
+        await new Promise(r => tempImg.onload = r);
+        const isLandscapeImg = (tempImg.naturalWidth / tempImg.naturalHeight) > 1;
+        let currentOrientation = 'p';
+        if (orientationOption === 'auto' && isLandscapeImg) currentOrientation = 'l';
+        else if (orientationOption === 'landscape') currentOrientation = 'l';
+        const pWidth = currentOrientation === 'p' ? a4Width : a4Height;
+        const pHeight = currentOrientation === 'p' ? a4Height : a4Width;
+        if (i === 0) { pdf = new jsPDF({ orientation: currentOrientation, unit: 'mm', format: 'a4' }); }
+        else { pdf.addPage('a4', currentOrientation); }
+        const dims = await calculateImageDimensions(imgData.src, pWidth, pHeight, margin);
+        const xOffset = margin + (pWidth - (margin * 2) - dims.width) / 2;
+        const yOffset = margin + (pHeight - (margin * 2) - dims.height) / 2;
+        let format = 'JPEG';
+        if (imgData.src.includes('image/png')) format = 'PNG';
+        if (imgData.src.includes('image/webp')) format = 'WEBP';
+        pdf.addImage(imgData.src, format, xOffset, yOffset, dims.width, dims.height);
+    }
+    pdf.save('imagens_compiladas.pdf');
+    setLoading(false);
+});
+
+generateDocxBtn.addEventListener('click', async () => {
+    if (imagesList.length === 0) return;
+    setLoading(true);
+    const margin = parseFloat(document.getElementById('margin-select').value);
+    const orientationOption = document.getElementById('orientation-select').value;
+    let docxContent = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset="utf-8"><title>Imagens Compiladas</title><!--[if gte mso 9]><xml><o:DocumentProperties><o:Author>Conversor Web</o:Author></o:DocumentProperties></xml><![endif]--><style>@page{size:210mm 297mm;margin:${margin}mm}body{font-family:'Segoe UI',Arial,sans-serif}.page-break{page-break-before:always}.container-img{text-align:center;width:100%;height:100%;display:table-cell;vertical-align:middle}.img-fit{max-width:100%;max-height:100%}</style></head><body>`;
+    for (let i = 0; i < imagesList.length; i++) {
+        const imgData = imagesList[i];
+        const tempImg = new Image();
+        tempImg.src = imgData.src;
+        await new Promise(r => tempImg.onload = r);
+        const isLandscapeImg = (tempImg.naturalWidth / tempImg.naturalHeight) > 1;
+        let useLandscape = false;
+        if (orientationOption === 'auto' && isLandscapeImg) useLandscape = true;
+        else if (orientationOption === 'landscape') useLandscape = true;
+        const baseWidthMm = useLandscape ? 297 : 210;
+        const baseHeightMm = useLandscape ? 210 : 297;
+        const availableWidthMm = baseWidthMm - (margin * 2);
+        const availableHeightMm = baseHeightMm - (margin * 2);
+        let sectionStyle = useLandscape ? "mso-page-orientation:landscape;size:297mm 210mm;" : "mso-page-orientation:portrait;size:210mm 297mm;";
+        if (i > 0) { docxContent += `<div class="page-break" style="${sectionStyle}">`; }
+        else { docxContent += `<div style="${sectionStyle}">`; }
+        docxContent += `<div class="container-img" style="width:${availableWidthMm}mm;height:${availableHeightMm}mm"><img class="img-fit" src="${imgData.src}" style="max-width:${availableWidthMm}mm;max-height:${availableHeightMm}mm"/></div></div>`;
+    }
+    docxContent += `</body></html>`;
+    const blob = new Blob([docxContent], { type: 'application/msword;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const downloadLink = document.createElement('a');
+    downloadLink.href = url; downloadLink.download = 'imagens_compiladas.docx';
+    document.body.appendChild(downloadLink); downloadLink.click(); document.body.removeChild(downloadLink);
+    setLoading(false);
+});
+
+function setLoading(isLoading) {
+    if (isLoading) {
+        statusMessage.style.display = 'block';
+        generatePdfBtn.disabled = true;
+        generateDocxBtn.disabled = true;
+    } else {
+        statusMessage.style.display = 'none';
+        generatePdfBtn.disabled = false;
+        generateDocxBtn.disabled = false;
+    }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comparador Caracter por Caracter</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#0b0f14;color:#e1e7ef;min-height:100vh;padding:0}
+.nav-bar{background:rgba(22,27,34,0.95);border-bottom:1px solid #21262d}
+.container{max-width:1400px;margin:24px auto;padding:0 20px}
+h1{text-align:center;margin-bottom:24px;font-weight:800;font-size:26px}
+h1 span{background:linear-gradient(135deg,#e1e7ef,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.inputs{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+textarea{width:100%;height:300px;padding:15px;border-radius:10px;border:1px solid #21262d;background:#0b0f14;color:#e1e7ef;font-family:Consolas,monospace;font-size:14px;resize:vertical;white-space:pre;outline:none;transition:border-color .2s}
+textarea:focus{border-color:#06b6d4}
+.btn-comp{width:100%;padding:14px;border:none;border-radius:10px;background:linear-gradient(135deg,#02727e,#06b6d4);color:white;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;margin-bottom:20px}
+.btn-comp:hover{transform:translateY(-1px);box-shadow:0 8px 25px -5px rgba(6,182,212,.3)}
+.resultados{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+.resultado-box{background:#161b22;border:1px solid #21262d;border-radius:10px;padding:15px;overflow:auto;white-space:pre-wrap;word-break:break-all;font-family:Consolas,monospace;line-height:1.7;min-height:300px;font-size:13px}
+.igual{color:#e1e7ef}
+.diferente{background:#ef4444;color:white;border-radius:3px;padding:1px 3px}
+.faltando{background:#facc15;color:#0b0f14;border-radius:3px;padding:1px 3px}
+.info{margin-top:20px;background:#161b22;border:1px solid #21262d;padding:15px;border-radius:10px;font-size:14px;line-height:1.6}
+.info b{color:#06b6d4}
+label{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#06b6d4;margin-bottom:8px}
+@media(max-width:900px){.inputs,.resultados{grid-template-columns:1fr}}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#0b0f14}
+::-webkit-scrollbar-thumb{background:#21262d;border-radius:3px}
+</style>
+</head>
+<body>
+
+<nav class="nav-bar px-4 md:px-8 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+        <a href="index.html" class="flex items-center gap-2 text-[#484f58] hover:text-[#06b6d4] transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        </a>
+        <span class="w-px h-5" style="background:#21262d"></span>
+        <span class="text-xs font-bold uppercase tracking-wider" style="color:#484f58">Módulo 12</span>
+        <span class="w-px h-5" style="background:#21262d"></span>
+        <span class="text-sm font-bold" style="color:#e1e7ef">Comparador Caracter por Caracter</span>
+    </div>
+    <span class="text-[10px] font-bold" style="color:#484f58">Thomas Tech</span>
+</nav>
+
+<div class="container">
+
+    <h1><span>Comparador Caracter por Caracter</span></h1>
+
+    <div class="inputs">
+        <div>
+            <label>Texto 1</label>
+            <textarea id="texto1"></textarea>
+        </div>
+        <div>
+            <label>Texto 2</label>
+            <textarea id="texto2"></textarea>
+        </div>
+    </div>
+
+    <button class="btn-comp" onclick="comparar()">Comparar Textos</button>
+
+    <div class="info" id="info"></div>
+
+    <div class="resultados">
+        <div class="resultado-box" id="resultado1"></div>
+        <div class="resultado-box" id="resultado2"></div>
+    </div>
+
+</div>
+
+<script>
+function escapeHtml(text) {
+    return text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+function comparar(){
+    const texto1 = document.getElementById("texto1").value;
+    const texto2 = document.getElementById("texto2").value;
+    let html1 = "", html2 = "";
+    let diferencas = 0;
+    const max = Math.max(texto1.length, texto2.length);
+    for(let i = 0; i < max; i++){
+        const c1 = texto1[i] || "";
+        const c2 = texto2[i] || "";
+        const char1 = escapeHtml(c1);
+        const char2 = escapeHtml(c2);
+        if(c1 === c2){
+            html1 += `<span class="igual">${char1}</span>`;
+            html2 += `<span class="igual">${char2}</span>`;
+        }else{
+            diferencas++;
+            html1 += c1 === "" ? `<span class="faltando">∅</span>` : `<span class="diferente">${char1}</span>`;
+            html2 += c2 === "" ? `<span class="faltando">∅</span>` : `<span class="diferente">${char2}</span>`;
+        }
+    }
+    document.getElementById("resultado1").innerHTML = html1;
+    document.getElementById("resultado2").innerHTML = html2;
+    document.getElementById("info").innerHTML = `
+        <b>Total de caracteres Texto 1:</b> ${texto1.length}<br>
+        <b>Total de caracteres Texto 2:</b> ${texto2.length}<br>
+        <b>Total de diferenças:</b> ${diferencas}
+    `;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Validador LCDPR - Receita Federal</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#0b0f14;color:#e1e7ef;min-height:100vh;padding:0}
+.nav-bar{background:rgba(22,27,34,0.95);border-bottom:1px solid #21262d}
+.container{width:95%;max-width:1500px;margin:20px auto}
+.card{background:#161b22;border-radius:12px;padding:20px;margin-bottom:20px;border:1px solid #21262d}
+.upload-area{border:2px dashed #06b6d4;border-radius:12px;padding:40px;text-align:center;background:rgba(6,182,212,0.03)}
+input[type=file]{margin-top:15px}
+button{background:linear-gradient(135deg,#02727e,#06b6d4);color:white;border:none;padding:12px 20px;border-radius:8px;cursor:pointer;font-weight:700;margin-right:10px;transition:all .2s}
+button:hover{transform:translateY(-1px);box-shadow:0 8px 25px -5px rgba(6,182,212,.3)}
+.success{color:#4ade80;font-weight:bold}
+.error{color:#f87171;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin-top:20px;font-size:13px}
+th{background:linear-gradient(135deg,#02727e,#06b6d4);color:white;padding:10px;font-size:13px;text-align:left}
+td{border:1px solid #21262d;padding:10px;vertical-align:top}
+tr:nth-child(even){background:rgba(255,255,255,.02)}
+tr:hover{background:rgba(6,182,212,.08)}
+.badge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.badge-error{background:rgba(248,113,113,.15);color:#f87171}
+.summary{display:flex;gap:20px;flex-wrap:wrap;margin-top:20px}
+.summary-box{flex:1;min-width:200px;background:rgba(255,255,255,.03);border:1px solid #21262d;padding:15px;border-radius:10px}
+.summary-box h2{margin:0;font-size:28px;color:#06b6d4}
+.summary-box p{margin:5px 0 0;color:#484f58;font-size:13px}
+.line-preview{background:#0b0f14;color:#4ade80;padding:10px;border-radius:6px;font-family:monospace;overflow:auto;white-space:pre-wrap;border:1px solid #21262d}
+textarea{width:100%;height:180px;padding:15px;border-radius:8px;border:1px solid #21262d;background:#0b0f14;color:#e1e7ef;font-family:monospace;font-size:14px;outline:none;transition:border-color .2s}
+textarea:focus{border-color:#06b6d4}
+.info{background:rgba(251,191,36,.08);border-left:3px solid #fbbf24;padding:10px;border-radius:6px;margin-bottom:15px;color:#fbbf24;font-size:13px}
+h1,h2,h3{font-weight:700}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#0b0f14}
+::-webkit-scrollbar-thumb{background:#21262d;border-radius:3px}
+</style>
+</head>
+<body>
+
+<nav class="nav-bar px-4 md:px-8 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+        <a href="index.html" class="flex items-center gap-2 text-[#484f58] hover:text-[#06b6d4] transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        </a>
+        <span class="w-px h-5" style="background:#21262d"></span>
+        <span class="text-xs font-bold uppercase tracking-wider" style="color:#484f58">Módulo 11</span>
+        <span class="w-px h-5" style="background:#21262d"></span>
+        <span class="text-sm font-bold" style="color:#e1e7ef">Validador LCDPR - Receita Federal</span>
+    </div>
+    <span class="text-[10px] font-bold" style="color:#484f58">Thomas Tech</span>
+</nav>
+
+<div class="container">
+
+    <div class="card">
+        <div class="upload-area">
+            <h2 style="color:#06b6d4;margin-bottom:8px">Importar Arquivo LCDPR (.txt)</h2>
+            <p style="color:#484f58">Selecione o arquivo TXT do LCDPR para validar todos os registros.</p>
+            <input type="file" id="fileInput" accept=".txt">
+            <br><br>
+            <button onclick="validarArquivo()">VALIDAR ARQUIVO</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2 style="color:#06b6d4;margin-bottom:8px">Resumo da Validação</h2>
+        <div class="summary">
+            <div class="summary-box">
+                <h2 id="totalLinhas">0</h2>
+                <p>Total de Linhas</p>
+            </div>
+            <div class="summary-box">
+                <h2 id="totalErros">0</h2>
+                <p>Total de Erros</p>
+            </div>
+            <div class="summary-box">
+                <h2 id="statusGeral">-</h2>
+                <p>Status</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2 style="color:#06b6d4;margin-bottom:8px">Erros Encontrados</h2>
+        <div class="info">Clique sobre uma linha da tabela para editar e corrigir o registro.</div>
+        <table id="tabelaErros">
+            <thead>
+                <tr>
+                    <th>Linha</th>
+                    <th>Registro</th>
+                    <th>Campo</th>
+                    <th>Erro</th>
+                    <th>Valor Encontrado</th>
+                    <th>Valor Esperado</th>
+                    <th>Conteúdo da Linha</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2 style="color:#06b6d4;margin-bottom:8px">Editor de Correção</h2>
+        <textarea id="editorLinha"></textarea>
+        <br><br>
+        <button onclick="salvarLinhaCorrigida()">SALVAR CORREÇÃO</button>
+        <button onclick="baixarNovoTXT()">GERAR NOVO TXT</button>
+    </div>
+
+</div>
+
+<script>
+let linhasOriginais = [];
+let linhaSelecionada = null;
+
+const registros = {
+    "0000": {
+        campos: [
+            { nome:"REG", obrigatorio:true },
+            { nome:"NOME_ESC", obrigatorio:true, fixo:"LCDPR" },
+            { nome:"COD_VER", obrigatorio:true, fixo:"0013" },
+            { nome:"CPF", obrigatorio:true, tipo:"cpf" },
+            { nome:"NOME", obrigatorio:true },
+            { nome:"IND_SIT_INI_PER", obrigatorio:true, valores:["0","1","2"] },
+            { nome:"SIT_ESPECIAL", obrigatorio:true, valores:["0","1","2","3"] },
+            { nome:"DT_SIT_ESP", obrigatorio:false, tipo:"data" },
+            { nome:"DT_INI", obrigatorio:true, tipo:"data" },
+            { nome:"DT_FIN", obrigatorio:true, tipo:"data" }
+        ]
+    },
+    "0010": {
+        campos: [
+            { nome:"REG", obrigatorio:true },
+            { nome:"FORMA_APUR", obrigatorio:true, valores:["1","2"] }
+        ]
+    },
+    "0030": {
+        campos: [
+            { nome:"REG", obrigatorio:true },
+            { nome:"ENDERECO", obrigatorio:true },
+            { nome:"NUM", obrigatorio:true },
+            { nome:"COMPL", obrigatorio:false },
+            { nome:"BAIRRO", obrigatorio:true },
+            { nome:"UF", obrigatorio:true, tamanho:2 },
+            { nome:"COD_MUN", obrigatorio:true, tamanho:7 },
+            { nome:"CEP", obrigatorio:true, tamanho:8 },
+            { nome:"NUM_TEL", obrigatorio:false },
+            { nome:"EMAIL", obrigatorio:true, tipo:"email" }
+        ]
+    },
+    "0040": {
+        campos: [
+            { nome:"REG", obrigatorio:true },
+            { nome:"COD_IMOVEL", obrigatorio:true },
+            { nome:"PAIS", obrigatorio:true },
+            { nome:"MOEDA", obrigatorio:true },
+            { nome:"CAD_ITR", obrigatorio:true },
+            { nome:"CAEPF", obrigatorio:false },
+            { nome:"INSCR_ESTADUAL", obrigatorio:false },
+            { nome:"NOME_IMOVEL", obrigatorio:true },
+            { nome:"ENDERECO", obrigatorio:true },
+            { nome:"NUM", obrigatorio:false },
+            { nome:"COMPL", obrigatorio:false },
+            { nome:"BAIRRO", obrigatorio:true },
+            { nome:"UF", obrigatorio:true },
+            { nome:"COD_MUN", obrigatorio:true },
+            { nome:"CEP", obrigatorio:true },
+            { nome:"TIPO_EXPLORACAO", obrigatorio:true, valores:["1","2","3","4","5","6"] },
+            { nome:"PARTICIPACAO", obrigatorio:true }
+        ]
+    },
+    "0045": {
+        campos: [
+            { nome:"REG", obrigatorio:true },
+            { nome:"COD_IMOVEL", obrigatorio:true },
+            { nome:"TIPO_CONTRAPARTE", obrigatorio:true, valores:["1","2","3","4","5"] },
+            { nome:"ID_CONTRAPARTE", obrigatorio:true },
+            { nome:"NOME_CONTRAPARTE", obrigatorio:true },
+            { nome:"PERC_CONTRAPARTE", obrigatorio:true }
+        ]
+    },
+    "0050": {
+        campos: [
+            { nome:"REG", obrigatorio:true },
+            { nome:"COD_CONTA", obrigatorio:true },
+            { nome:"PAIS_CTA", obrigatorio:true },
+            { nome:"BANCO", obrigatorio:true },
+            { nome:"NOME_BANCO", obrigatorio:true },
+            { nome:"AGENCIA", obrigatorio:true },
+            { nome:"NUM_CONTA", obrigatorio:true }
+        ]
+    },
+    "Q100": {
+        campos: [
+            { nome:"REG", obrigatorio:true },
+            { nome:"DATA", obrigatorio:true, tipo:"data" },
+            { nome:"COD_IMOVEL", obrigatorio:true },
+            { nome:"COD_CONTA", obrigatorio:true },
+            { nome:"NUM_DOC", obrigatorio:false },
+            { nome:"TIPO_DOC", obrigatorio:true, valores:["1","2","3","4","5","6"] },
+            { nome:"HIST", obrigatorio:true },
+            { nome:"ID_PARTIC", obrigatorio:true },
+            { nome:"TIPO_LANC", obrigatorio:true, valores:["1","2","3"] },
+            { nome:"VL_ENTRADA", obrigatorio:true, tipo:"valor" },
+            { nome:"VL_SAIDA", obrigatorio:true, tipo:"valor" },
+            { nome:"SLD_FIN", obrigatorio:true, tipo:"valor" },
+            { nome:"NAT_SLD_FIN", obrigatorio:true, valores:["N","P"] }
+        ]
+    },
+    "Q200": {
+        campos: [
+            { nome:"REG", obrigatorio:true },
+            { nome:"MES", obrigatorio:true },
+            { nome:"VL_ENTRADA", obrigatorio:true },
+            { nome:"VL_SAIDA", obrigatorio:true },
+            { nome:"SLD_FIN", obrigatorio:true },
+            { nome:"NAT_SLD_FIN", obrigatorio:true, valores:["N","P"] }
+        ]
+    },
+    "9999": {
+        campos: [
+            { nome:"REG", obrigatorio:true },
+            { nome:"IDENT_NOM", obrigatorio:false },
+            { nome:"IDENT_CPF_CNPJ", obrigatorio:false },
+            { nome:"IND_CRC", obrigatorio:false },
+            { nome:"EMAIL", obrigatorio:false },
+            { nome:"FONE", obrigatorio:false },
+            { nome:"QTD_LIN", obrigatorio:true }
+        ]
+    }
+};
+
+function validarArquivo(){
+    const fileInput = document.getElementById('fileInput');
+    if(!fileInput.files.length){ alert("Selecione um arquivo TXT."); return; }
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+    reader.onload = function(e){ processarArquivo(e.target.result); };
+    reader.readAsText(file, 'UTF-8');
+}
+
+function processarArquivo(texto){
+    const linhas = texto.split(/\r?\n/).filter(l => l.trim() !== "");
+    linhasOriginais = [...linhas];
+    const tbody = document.querySelector("#tabelaErros tbody");
+    tbody.innerHTML = "";
+    let erros = [];
+    linhas.forEach((linha, index) => {
+        const numeroLinha = index + 1;
+        const campos = linha.split("|");
+        const reg = campos[0];
+        if(!registros[reg]){
+            erros.push({ linha:numeroLinha, registro:reg, campo:"REG", erro:"Registro inválido", encontrado:reg, esperado:"Registro válido LCDPR", conteudo:linha });
+            return;
+        }
+        const estrutura = registros[reg];
+        estrutura.campos.forEach((campoDef, idx) => {
+            const valor = campos[idx] || "";
+            if(campoDef.obrigatorio && valor.trim() === ""){
+                erros.push({ linha:numeroLinha, registro:reg, campo:campoDef.nome, erro:"Campo obrigatório não preenchido", encontrado:"Vazio", esperado:"Preenchimento obrigatório", conteudo:linha });
+            }
+            if(campoDef.fixo && valor !== campoDef.fixo){
+                erros.push({ linha:numeroLinha, registro:reg, campo:campoDef.nome, erro:"Valor fixo inválido", encontrado:valor, esperado:campoDef.fixo, conteudo:linha });
+            }
+            if(campoDef.valores && valor){
+                if(!campoDef.valores.includes(valor)){
+                    erros.push({ linha:numeroLinha, registro:reg, campo:campoDef.nome, erro:"Valor inválido", encontrado:valor, esperado:campoDef.valores.join(", "), conteudo:linha });
+                }
+            }
+            if(campoDef.tamanho && valor){
+                if(valor.length !== campoDef.tamanho){
+                    erros.push({ linha:numeroLinha, registro:reg, campo:campoDef.nome, erro:"Tamanho inválido", encontrado:valor.length, esperado:campoDef.tamanho, conteudo:linha });
+                }
+            }
+            if(campoDef.tipo === "cpf" && valor){
+                if(!/^\d{11}$/.test(valor)){
+                    erros.push({ linha:numeroLinha, registro:reg, campo:campoDef.nome, erro:"CPF inválido", encontrado:valor, esperado:"11 números", conteudo:linha });
+                }
+            }
+            if(campoDef.tipo === "data" && valor){
+                if(!/^\d{8}$/.test(valor)){
+                    erros.push({ linha:numeroLinha, registro:reg, campo:campoDef.nome, erro:"Data inválida", encontrado:valor, esperado:"Formato DDMMAAAA", conteudo:linha });
+                }
+            }
+            if(campoDef.tipo === "email" && valor){
+                if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor)){
+                    erros.push({ linha:numeroLinha, registro:reg, campo:campoDef.nome, erro:"Email inválido", encontrado:valor, esperado:"email@dominio.com", conteudo:linha });
+                }
+            }
+            if(campoDef.tipo === "valor" && valor){
+                if(!/^\d+$/.test(valor)){
+                    erros.push({ linha:numeroLinha, registro:reg, campo:campoDef.nome, erro:"Valor monetário inválido", encontrado:valor, esperado:"Somente números", conteudo:linha });
+                }
+            }
+        });
+    });
+    document.getElementById("totalLinhas").innerText = linhas.length;
+    document.getElementById("totalErros").innerText = erros.length;
+    document.getElementById("statusGeral").innerHTML = erros.length === 0 ? '<span class="success">VALIDADO</span>' : '<span class="error">COM ERROS</span>';
+    renderizarErros(erros);
+}
+
+function renderizarErros(erros){
+    const tbody = document.querySelector("#tabelaErros tbody");
+    tbody.innerHTML = "";
+    erros.forEach(err => {
+        const tr = document.createElement("tr");
+        tr.style.cursor = "pointer";
+        tr.onclick = () => selecionarLinha(err.linha);
+        tr.innerHTML = `<td>${err.linha}</td><td>${err.registro}</td><td>${err.campo}</td><td><span class="badge badge-error">${err.erro}</span></td><td>${err.encontrado}</td><td>${err.esperado}</td><td><div class="line-preview">${escapeHtml(err.conteudo)}</div></td>`;
+        tbody.appendChild(tr);
+    });
+}
+
+function selecionarLinha(numeroLinha){
+    linhaSelecionada = numeroLinha - 1;
+    document.getElementById("editorLinha").value = linhasOriginais[linhaSelecionada];
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+}
+
+function salvarLinhaCorrigida(){
+    if(linhaSelecionada === null){ alert("Selecione uma linha primeiro."); return; }
+    linhasOriginais[linhaSelecionada] = document.getElementById("editorLinha").value;
+    alert("Linha corrigida com sucesso!");
+}
+
+function baixarNovoTXT(){
+    const blob = new Blob([linhasOriginais.join("\r\n")], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "LCDPR_CORRIGIDO.txt";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function escapeHtml(text) {
+    return text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+</script>
+
+</body>
+</html>
