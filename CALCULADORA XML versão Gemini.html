@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thomas Tech | Analisador & Exportador Fiscal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body { background: #0b0f14; }
+        .nav-bar { background: rgba(22, 27, 34, 0.95); border-bottom: 1px solid #21262d; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0b0f14; }
+        ::-webkit-scrollbar-thumb { background: #21262d; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #30363d; }
+    </style>
+</head>
+<body class="min-h-screen text-[#e1e7ef]">
+
+    <!-- Navigation -->
+    <nav class="nav-bar px-4 md:px-8 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <a href="CALCULADORA XML.html" class="flex items-center gap-2 text-[#484f58] hover:text-[#06b6d4] transition-colors" style="flex-shrink:0;white-space:nowrap">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                <span class="text-[10px] font-bold tracking-wider" style="color:#06b6d4">← VOLTAR</span>
+            </a>
+            <span class="w-px h-5 bg-[#21262d]" style="flex-shrink:0"></span>
+            <span class="text-xs font-bold text-[#484f58] uppercase tracking-wider" style="flex-shrink:0">Leitor XML Gemini</span>
+            <span class="w-px h-5 bg-[#21262d]" style="flex-shrink:0"></span>
+            <span class="text-sm font-bold text-[#e1e7ef]" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">Analisador & Exportador Fiscal - Gemini</span>
+        </div>
+        <span class="text-[10px] font-bold text-[#484f58]">Thomas Tech</span>
+    </nav>
+
+    <div class="max-w-6xl mx-auto p-4 md:p-8 space-y-6">
+
+        <!-- Header Card -->
+        <div class="bg-[#161b22] border border-[#21262d] rounded-xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-black text-[#e1e7ef] uppercase">Analisador & Exportador XML</h1>
+                <p class="text-xs text-[#484f58] font-medium">Consolidação por CFOP e Alíquota com exportação XLSX</p>
+            </div>
+            <div class="text-right">
+                <span class="block font-bold text-lg text-[#e1e7ef]">Thomas Tech</span>
+                <span class="text-xs text-[#484f58]">Versão Gemini (2026)</span>
+            </div>
+        </div>
+
+        <!-- Upload + Export -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="md:col-span-3 bg-[#161b22] border-2 border-dashed border-[#21262d] hover:border-[#06b6d4] transition-colors rounded-xl p-8 text-center cursor-pointer">
+                <input type="file" id="xmlInput" accept=".xml" multiple class="hidden">
+                <label for="xmlInput" class="cursor-pointer block">
+                    <svg class="w-10 h-10 mx-auto mb-3 text-[#484f58]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                    <p class="text-sm font-bold text-[#e1e7ef]">Importar Arquivos XML</p>
+                    <p class="text-xs text-[#484f58] font-mono mt-1">Arraste ou clique para selecionar</p>
+                </label>
+            </div>
+            <button id="btnExport" class="hidden bg-[#166534] hover:bg-[#15803d] text-white font-bold py-4 px-6 rounded-xl transition-all flex items-center justify-center gap-2 text-sm">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Exportar Excel
+            </button>
+        </div>
+
+        <!-- Dashboard (initially hidden) -->
+        <div id="dashboard" class="hidden space-y-6">
+
+            <!-- KPI Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-[#161b22] border border-[#21262d] rounded-xl p-6 border-b-4 border-b-[#06b6d4]">
+                    <p class="text-[10px] font-bold text-[#484f58] uppercase tracking-wider">Total vNF</p>
+                    <p id="totalGeralNotas" class="text-2xl font-mono font-black text-[#e1e7ef] mt-1">R$ 0,00</p>
+                </div>
+                <div class="bg-[#161b22] border border-[#21262d] rounded-xl p-6 border-b-4 border-b-[#06b6d4]">
+                    <p class="text-[10px] font-bold text-[#484f58] uppercase tracking-wider">Total Base ICMS</p>
+                    <p id="totalGeralBase" class="text-2xl font-mono font-black text-[#06b6d4] mt-1">R$ 0,00</p>
+                </div>
+                <div class="bg-[#161b22] border border-[#21262d] rounded-xl p-6 border-b-4 border-b-[#fb923c]">
+                    <p class="text-[10px] font-bold text-[#484f58] uppercase tracking-wider">Total Valor ICMS</p>
+                    <p id="totalGeralIcms" class="text-2xl font-mono font-black text-[#fb923c] mt-1">R$ 0,00</p>
+                </div>
+            </div>
+
+            <!-- Resumo CFOP -->
+            <div class="bg-[#161b22] border border-[#21262d] rounded-xl overflow-hidden">
+                <div class="bg-[#0b0f14] px-6 py-4 border-b border-[#21262d]">
+                    <h2 class="font-bold text-[#06b6d4] uppercase text-xs tracking-wider">Resumo por CFOP e Alíquota</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="text-[#484f58] text-[10px] font-bold uppercase tracking-wider">
+                            <tr class="border-b border-[#21262d]">
+                                <th class="px-6 py-4 text-left">CFOP</th>
+                                <th class="px-6 py-4 text-center">Alíquota (%)</th>
+                                <th class="px-6 py-4 text-right">Base de Cálculo</th>
+                                <th class="px-6 py-4 text-right">Valor ICMS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="corpoResumo" class="divide-y divide-[#21262d]"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Notas Detalhadas -->
+            <div class="bg-[#161b22] border border-[#21262d] rounded-xl overflow-hidden">
+                <div class="bg-[#0b0f14] px-6 py-4 border-b border-[#21262d]">
+                    <h2 class="font-bold text-[#484f58] uppercase text-xs tracking-wider">Relação Detalhada das Notas</h2>
+                </div>
+                <div class="overflow-y-auto max-h-96">
+                    <table class="w-full text-xs text-left">
+                        <thead class="text-[#484f58] text-[10px] font-bold uppercase tracking-wider sticky top-0 bg-[#0b0f14]">
+                            <tr class="border-b border-[#21262d]">
+                                <th class="px-6 py-3">Chave de Acesso</th>
+                                <th class="px-6 py-3 text-center">Nº Nota</th>
+                                <th class="px-6 py-3 text-right">Valor Total</th>
+                                <th class="px-6 py-3 text-right">Base ICMS</th>
+                                <th class="px-6 py-3 text-right">Vlr. ICMS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="corpoNotas" class="divide-y divide-[#21262d]"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let dadosParaExportar = { notas: [], resumo: [] };
+
+        document.getElementById('xmlInput').addEventListener('change', async function(e) {
+            const files = Array.from(e.target.files);
+            if (files.length === 0) return;
+
+            let totais = { vNF: 0, vBC: 0, vICMS: 0 };
+            let consolidado = {};
+            let listaNotas = [];
+
+            for (const file of files) {
+                try {
+                    const text = await file.text();
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(text, "text/xml");
+
+                    const nNF = xmlDoc.getElementsByTagName("nNF")[0]?.textContent || "N/A";
+                    const chNFe = xmlDoc.getElementsByTagName("chNFe")[0]?.textContent || 
+                                 xmlDoc.getElementsByTagName("infNFe")[0]?.getAttribute("Id")?.replace("NFe", "") || "N/A";
+                    const vNF = parseFloat(xmlDoc.getElementsByTagName("vNF")[0]?.textContent || 0);
+                    
+                    let notaBase = 0;
+                    let notaIcms = 0;
+
+                    const itens = xmlDoc.getElementsByTagName("det");
+                    for (let item of itens) {
+                        const cfop = item.getElementsByTagName("CFOP")[0]?.textContent;
+                        const pICMS = item.getElementsByTagName("pICMS")[0]?.textContent;
+                        const vBCItem = parseFloat(item.getElementsByTagName("vBC")[0]?.textContent || 0);
+                        const vICMSItem = parseFloat(item.getElementsByTagName("vICMS")[0]?.textContent || 0);
+
+                        if (cfop) {
+                            const aliq = pICMS ? parseFloat(pICMS).toFixed(2) : "0.00";
+                            const chave = `${cfop}_${aliq}`;
+
+                            if (!consolidado[chave]) {
+                                consolidado[chave] = { cfop: cfop, aliq: aliq, bc: 0, icms: 0 };
+                            }
+                            consolidado[chave].bc += vBCItem;
+                            consolidado[chave].icms += vICMSItem;
+                            
+                            notaBase += vBCItem;
+                            notaIcms += vICMSItem;
+                        }
+                    }
+
+                    totais.vNF += vNF;
+                    totais.vBC += notaBase;
+                    totais.vICMS += notaIcms;
+
+                    listaNotas.push({ 
+                        chave: chNFe, 
+                        numero: nNF, 
+                        total: vNF, 
+                        base: notaBase, 
+                        icms: notaIcms 
+                    });
+
+                } catch (err) { console.error("Erro arquivo:", file.name); }
+            }
+
+            dadosParaExportar.notas = listaNotas;
+            dadosParaExportar.resumo = Object.values(consolidado);
+            renderizar(totais, consolidado, listaNotas);
+            document.getElementById('btnExport').classList.remove('hidden');
+        });
+
+        function format(v) {
+            return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        function renderizar(totais, consolidado, notas) {
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('totalGeralNotas').textContent = format(totais.vNF);
+            document.getElementById('totalGeralBase').textContent = format(totais.vBC);
+            document.getElementById('totalGeralIcms').textContent = format(totais.vICMS);
+
+            document.getElementById('corpoResumo').innerHTML = Object.values(consolidado)
+                .sort((a, b) => a.cfop.localeCompare(b.cfop) || b.aliq - a.aliq)
+                .map(item => `
+                    <tr class="hover:bg-[#0b0f14] text-xs">
+                        <td class="px-6 py-4 font-bold text-[#06b6d4]">${item.cfop}</td>
+                        <td class="px-6 py-4 text-center">${parseFloat(item.aliq).toFixed(2)}%</td>
+                        <td class="px-6 py-4 text-right font-mono">${format(item.bc)}</td>
+                        <td class="px-6 py-4 text-right font-mono text-[#fb923c]">${format(item.icms)}</td>
+                    </tr>
+                `).join('');
+
+            document.getElementById('corpoNotas').innerHTML = notas.map(n => `
+                <tr class="hover:bg-[#0b0f14]">
+                    <td class="px-6 py-3 font-mono text-[#484f58]">${n.chave}</td>
+                    <td class="px-6 py-3 text-center font-bold">${n.numero}</td>
+                    <td class="px-6 py-3 text-right font-mono">${format(n.total)}</td>
+                    <td class="px-6 py-3 text-right font-mono text-[#06b6d4]">${format(n.base)}</td>
+                    <td class="px-6 py-3 text-right font-mono text-[#fb923c]">${format(n.icms)}</td>
+                </tr>
+            `).join('');
+        }
+
+        document.getElementById('btnExport').addEventListener('click', function() {
+            const wb = XLSX.utils.book_new();
+            
+            const wsNotasData = dadosParaExportar.notas.map(n => ({
+                "Chave de Acesso": n.chave,
+                "Nº Nota": n.numero,
+                "Valor Total (vNF)": n.total,
+                "Base ICMS Itens": n.base,
+                "Valor ICMS Itens": n.icms
+            }));
+            const wsNotas = XLSX.utils.json_to_sheet(wsNotasData);
+
+            const wsResumoData = dadosParaExportar.resumo.map(r => ({
+                "CFOP": r.cfop,
+                "Alíquota %": parseFloat(r.aliq),
+                "Soma Base de Cálculo": r.bc,
+                "Soma Valor ICMS": r.icms
+            }));
+            const wsResumo = XLSX.utils.json_to_sheet(wsResumoData);
+
+            XLSX.utils.book_append_sheet(wb, wsNotas, "Relação de Notas");
+            XLSX.utils.book_append_sheet(wb, wsResumo, "Resumo Impostos");
+
+            XLSX.writeFile(wb, "Relatorio_Fiscal_ThomasTech.xlsx");
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leitor XML Fiscal - Thomas Tech</title>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { font-family: 'Inter', sans-serif; }
+body { background: #0b0f14; }
+.nav-bar { background: rgba(22, 27, 34, 0.95); border-bottom: 1px solid #21262d; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0b0f14; }
+::-webkit-scrollbar-thumb { background: #21262d; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #30363d; }
+</style>
+</head>
+<body class="min-h-screen text-[#e1e7ef]">
+    <nav class="nav-bar px-4 md:px-8 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <a href="CALCULADORA XML.html" class="flex items-center gap-2 text-[#484f58] hover:text-[#06b6d4] transition-colors" style="flex-shrink:0;white-space:nowrap">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                <span class="text-[10px] font-bold tracking-wider" style="color:#06b6d4">← VOLTAR</span>
+            </a>
+            <span class="w-px h-5 bg-[#21262d]" style="flex-shrink:0"></span>
+            <span class="text-xs font-bold text-[#484f58] uppercase tracking-wider" style="flex-shrink:0">Leitor XML GPT</span>
+            <span class="w-px h-5 bg-[#21262d]" style="flex-shrink:0"></span>
+            <span class="text-sm font-bold text-[#e1e7ef]" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">Leitor XML Fiscal - GPT</span>
+        </div>
+        <span class="text-[10px] font-bold text-[#484f58]">Thomas Tech</span>
+    </nav>
+    <div class="max-w-7xl mx-auto p-4 md:p-8">
+        <div class="mb-6">
+            <div class="bg-[#161b22] border border-[#21262d] rounded-xl p-6">
+                <label class="block text-xs font-bold text-[#06b6d4] uppercase tracking-wider mb-3">
+                    <svg class="inline w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                    Importar XMLs
+                </label>
+                <input type="file" id="xmlFiles" multiple accept=".xml" class="w-full text-sm text-[#e1e7ef] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#02727e] file:text-white hover:file:bg-[#06b6d4] file:cursor-pointer file:transition-colors cursor-pointer bg-[#0b0f14] border border-[#21262d] rounded-lg p-3">
+            </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="bg-[#161b22] border border-[#21262d] rounded-xl p-5 text-center">
+                <p class="text-[10px] font-bold text-[#484f58] uppercase tracking-wider">Total das Notas</p>
+                <p id="totalNotas" class="text-2xl font-black text-[#e1e7ef] mt-1">R$ 0,00</p>
+            </div>
+            <div class="bg-[#161b22] border border-[#21262d] rounded-xl p-5 text-center">
+                <p class="text-[10px] font-bold text-[#484f58] uppercase tracking-wider">Total Base ICMS</p>
+                <p id="totalBase" class="text-2xl font-black text-[#06b6d4] mt-1">R$ 0,00</p>
+            </div>
+            <div class="bg-[#161b22] border border-[#21262d] rounded-xl p-5 text-center">
+                <p class="text-[10px] font-bold text-[#484f58] uppercase tracking-wider">Total Valor ICMS</p>
+                <p id="totalICMS" class="text-2xl font-black text-[#fb923c] mt-1">R$ 0,00</p>
+            </div>
+            <div class="bg-[#161b22] border border-[#21262d] rounded-xl p-5 text-center">
+                <p class="text-[10px] font-bold text-[#484f58] uppercase tracking-wider">Total XMLs</p>
+                <p id="totalArquivos" class="text-2xl font-black text-[#4ade80] mt-1">0</p>
+            </div>
+        </div>
+        <div class="mb-6">
+            <button onclick="exportarExcel()" class="bg-[#166534] hover:bg-[#15803d] text-white text-xs font-bold py-3 px-6 rounded-lg transition-colors flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Exportar XLSX
+            </button>
+        </div>
+        <div class="flex gap-2 mb-4">
+            <button class="tab active px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer" style="background:rgba(2,114,126,0.15);color:#06b6d4;border:1px solid rgba(2,114,126,0.3)" onclick="abrirAba('resumo')">Resumo CFOP</button>
+            <button class="tab px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer" style="background:rgba(255,255,255,0.03);color:#484f58;border:1px solid rgba(255,255,255,0.06)" onclick="abrirAba('detalhes')">Notas Detalhadas</button>
+        </div>
+        <div id="resumo" class="content block">
+            <div class="bg-[#161b22] border border-[#21262d] rounded-xl overflow-hidden">
+                <table class="w-full text-sm">
+                    <thead><tr class="bg-[#0b0f14] text-[#06b6d4] text-[10px] font-bold uppercase tracking-wider"><th class="px-6 py-4 text-left">CFOP</th><th class="px-6 py-4 text-center">Alíquota</th><th class="px-6 py-4 text-right">Base ICMS</th><th class="px-6 py-4 text-right">Valor ICMS</th></tr></thead>
+                    <tbody id="tbodyResumo" class="divide-y divide-[#21262d]"></tbody>
+                </table>
+            </div>
+        </div>
+        <div id="detalhes" class="content hidden">
+            <div class="bg-[#161b22] border border-[#21262d] rounded-xl overflow-hidden max-h-96 overflow-y-auto">
+                <table class="w-full text-sm">
+                    <thead class="sticky top-0 bg-[#0b0f14]"><tr class="text-[#06b6d4] text-[10px] font-bold uppercase tracking-wider"><th class="px-6 py-4 text-left">Arquivo</th><th class="px-6 py-4 text-left">Número NF</th><th class="px-6 py-4 text-left">Emitente</th><th class="px-6 py-4 text-left">Data</th><th class="px-6 py-4 text-center">CFOP</th><th class="px-6 py-4 text-center">Alíquota</th><th class="px-6 py-4 text-right">Base ICMS</th><th class="px-6 py-4 text-right">Valor ICMS</th><th class="px-6 py-4 text-right">Total Nota</th></tr></thead>
+                    <tbody id="tbodyDetalhes" class="divide-y divide-[#21262d]"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+<script>
+let dadosExcel = [];
+function abrirAba(id){
+    document.querySelectorAll('.content').forEach(el=>el.classList.remove('block','hidden'));
+    document.querySelectorAll('.tab').forEach(el=>{el.style.background='rgba(255,255,255,0.03)';el.style.color='#484f58';el.style.borderColor='rgba(255,255,255,0.06)';});
+    const target=document.getElementById(id);
+    target.classList.add('block');
+    target.classList.remove('hidden');
+    event.target.style.background='rgba(2,114,126,0.15)';
+    event.target.style.color='#06b6d4';
+    event.target.style.borderColor='rgba(2,114,126,0.3)';
+}
+document.getElementById('xmlFiles').addEventListener('change', async (e)=>{
+    const files=e.target.files;
+    let totalNotas=0,totalBase=0,totalICMS=0;
+    let resumo={};
+    dadosExcel=[];
+    document.getElementById('tbodyResumo').innerHTML='';
+    document.getElementById('tbodyDetalhes').innerHTML='';
+    for(const file of files){
+        const texto=await file.text();
+        const parser=new DOMParser();
+        const xml=parser.parseFromString(texto,"text/xml");
+        const nNF=xml.getElementsByTagName('nNF')[0]?.textContent||'';
+        const emitente=xml.getElementsByTagName('xNome')[0]?.textContent||'';
+        const data=xml.getElementsByTagName('dhEmi')[0]?.textContent||'';
+        const totalNota=parseFloat(xml.getElementsByTagName('vNF')[0]?.textContent||0);
+        totalNotas+=totalNota;
+        const dets=xml.getElementsByTagName('det');
+        for(let det of dets){
+            const cfop=det.getElementsByTagName('CFOP')[0]?.textContent||'';
+            const vBC=parseFloat(det.getElementsByTagName('vBC')[0]?.textContent||0);
+            const pICMS=parseFloat(det.getElementsByTagName('pICMS')[0]?.textContent||0);
+            const vICMS=parseFloat(det.getElementsByTagName('vICMS')[0]?.textContent||0);
+            totalBase+=vBC;
+            totalICMS+=vICMS;
+            const chave=cfop+"_"+pICMS;
+            if(!resumo[chave]){resumo[chave]={cfop:cfop,aliquota:pICMS,base:0,icms:0};}
+            resumo[chave].base+=vBC;
+            resumo[chave].icms+=vICMS;
+            document.getElementById('tbodyDetalhes').innerHTML+=`<tr class="hover:bg-[#0b0f14] text-xs"><td class="px-6 py-3 text-[#06b6d4]">${file.name}</td><td class="px-6 py-3">${nNF}</td><td class="px-6 py-3">${emitente}</td><td class="px-6 py-3">${data.substring(0,10)}</td><td class="px-6 py-3 text-center font-bold">${cfop}</td><td class="px-6 py-3 text-center">${pICMS.toFixed(2)}%</td><td class="px-6 py-3 text-right font-mono">${formatar(vBC)}</td><td class="px-6 py-3 text-right font-mono text-[#fb923c]">${formatar(vICMS)}</td><td class="px-6 py-3 text-right font-mono font-bold">${formatar(totalNota)}</td></tr>`;
+            dadosExcel.push({Arquivo:file.name,NumeroNF:nNF,Emitente:emitente,Data:data.substring(0,10),CFOP:cfop,Aliquota:pICMS,BaseICMS:vBC,ValorICMS:vICMS,TotalNota:totalNota});
+        }
+    }
+    Object.values(resumo).forEach(item=>{document.getElementById('tbodyResumo').innerHTML+=`<tr class="hover:bg-[#0b0f14] text-xs"><td class="px-6 py-3 font-bold text-[#06b6d4]">${item.cfop}</td><td class="px-6 py-3 text-center">${item.aliquota.toFixed(2)}%</td><td class="px-6 py-3 text-right font-mono">${formatar(item.base)}</td><td class="px-6 py-3 text-right font-mono text-[#fb923c]">${formatar(item.icms)}</td></tr>`;});
+    document.getElementById('totalNotas').innerText=formatar(totalNotas);
+    document.getElementById('totalBase').innerText=formatar(totalBase);
+    document.getElementById('totalICMS').innerText=formatar(totalICMS);
+    document.getElementById('totalArquivos').innerText=files.length;
+});
+function exportarExcel(){
+    const ws=XLSX.utils.json_to_sheet(dadosExcel);
+    const wb=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb,ws,"XML Fiscal");
+    XLSX.writeFile(wb,"relatorio_xml.xlsx");
+}
+function formatar(valor){return valor.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});}
+</script>
+</body>
+</html>
