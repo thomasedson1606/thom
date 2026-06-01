@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filtro de Sistemas - GPT</title>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: #f4f6f9; padding: 30px; }
+        .container { max-width: 1400px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { margin-bottom: 20px; color: #333; }
+        .upload { margin-bottom: 25px; }
+        .filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        select { padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 14px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { background: #1f4e78; color: white; padding: 12px; text-align: left; position: sticky; top: 0; }
+        td { padding: 10px; border-bottom: 1px solid #ddd; font-size: 14px; }
+        tr:hover { background: #f1f1f1; }
+        .table-container { overflow-x: auto; max-height: 700px; overflow-y: auto; border: 1px solid #ddd; border-radius: 10px; }
+        .info { margin-top: 15px; color: #555; font-weight: bold; }
+        .empty { text-align: center; padding: 30px; color: #888; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📊 Consulta de Sistemas</h1>
+    <div class="upload">
+        <input type="file" id="fileInput" accept=".xls,.xlsx">
+    </div>
+    <div class="filters">
+        <select id="cidadeFilter"><option value="">Todas as cidades</option></select>
+        <select id="sistemaFilter"><option value="">Todos os sistemas</option></select>
+        <select id="versaoFilter"><option value="">Todas as versões</option></select>
+    </div>
+    <div class="info" id="resultadoInfo"></div>
+    <div class="table-container">
+        <table>
+            <thead><tr><th>Número</th><th>Cidade</th><th>Sistema</th><th>Nome</th><th>Endereço</th><th>Servidor</th><th>Versão</th><th>Status</th></tr></thead>
+            <tbody id="tableBody"><tr><td colspan="8" class="empty">Carregue uma planilha para iniciar.</td></tr></tbody>
+        </table>
+    </div>
+</div>
+<script>
+let dados = [];
+let dadosFiltrados = [];
+const fileInput = document.getElementById('fileInput');
+const cidadeFilter = document.getElementById('cidadeFilter');
+const sistemaFilter = document.getElementById('sistemaFilter');
+const versaoFilter = document.getElementById('versaoFilter');
+const tableBody = document.getElementById('tableBody');
+const resultadoInfo = document.getElementById('resultadoInfo');
+fileInput.addEventListener('change', carregarArquivo);
+cidadeFilter.addEventListener('change', aplicarFiltros);
+sistemaFilter.addEventListener('change', aplicarFiltros);
+versaoFilter.addEventListener('change', aplicarFiltros);
+function carregarArquivo(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
+        processarDados(rows);
+    };
+    reader.readAsArrayBuffer(file);
+}
+function processarDados(rows) {
+    dados = [];
+    let cidadeAtual = '';
+    rows.forEach(row => {
+        const linhaTexto = row.map(c => String(c).trim());
+        const indiceCidade = linhaTexto.findIndex(c => c.toUpperCase() === 'CIDADE:');
+        if (indiceCidade !== -1) {
+            cidadeAtual = linhaTexto[indiceCidade + 1] || cidadeAtual;
+            return;
+        }
+        const numero = linhaTexto[1] || '';
+        const sistema = linhaTexto[3] || '';
+        const nome = linhaTexto[6] || '';
+        const endereco = linhaTexto[9] || '';
+        const servidor = linhaTexto[12] || '';
+        const versao = linhaTexto[15] || '';
+        const status = linhaTexto[16] || '';
+        if (numero && sistema && nome && versao && numero !== 'Num.') {
+            dados.push({ numero, cidade: cidadeAtual, sistema, nome, endereco, servidor, versao, status });
+        }
+    });
+    preencherFiltros();
+    aplicarFiltros();
+}
+function preencherFiltros() {
+    preencherSelect(cidadeFilter, [...new Set(dados.map(d => d.cidade).filter(Boolean))].sort(), 'Todas as cidades');
+    preencherSelect(sistemaFilter, [...new Set(dados.map(d => d.sistema).filter(Boolean))].sort(), 'Todos os sistemas');
+    preencherSelect(versaoFilter, [...new Set(dados.map(d => d.versao).filter(Boolean))].sort(), 'Todas as versões');
+}
+function preencherSelect(select, valores, textoPadrao) {
+    select.innerHTML = '';
+    const option = document.createElement('option');
+    option.value = ''; option.textContent = textoPadrao;
+    select.appendChild(option);
+    valores.forEach(valor => {
+        const opt = document.createElement('option');
+        opt.value = valor; opt.textContent = valor;
+        select.appendChild(opt);
+    });
+}
+function aplicarFiltros() {
+    const cidade = cidadeFilter.value;
+    const sistema = sistemaFilter.value;
+    const versao = versaoFilter.value;
+    dadosFiltrados = dados.filter(item => (!cidade || item.cidade === cidade) && (!sistema || item.sistema === sistema) && (!versao || item.versao === versao));
+    renderizarTabela();
+}
+function renderizarTabela() {
+    tableBody.innerHTML = '';
+    resultadoInfo.innerHTML = `Total encontrado: ${dadosFiltrados.length}`;
+    if (dadosFiltrados.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="8" class="empty">Nenhum registro encontrado.</td></tr>`;
+        return;
+    }
+    dadosFiltrados.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${item.numero}</td><td>${item.cidade}</td><td>${item.sistema}</td><td>${item.nome}</td><td>${item.endereco}</td><td>${item.servidor}</td><td>${item.versao}</td><td>${item.status}</td>`;
+        tableBody.appendChild(tr);
+    });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,468 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Versões STOR — 16/05/2026</title>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #21262d;
+    --accent: #2ea043;
+    --accent2: #1f6feb;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --tag-green: rgba(46,160,67,.15);
+    --tag-blue: rgba(31,111,235,.15);
+    --tag-yellow: rgba(210,153,34,.15);
+    --tag-red: rgba(248,81,73,.15);
+  }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+  }
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-logo {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: .08em;
+    background: var(--tag-green);
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(46,160,67,.3);
+  }
+  .header-title { font-size: 15px; font-weight: 600; color: var(--text); }
+  .header-date {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .header-count {
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--bg);
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .header-count span { color: var(--text); font-weight: 600; }
+  .btn-import {
+    background: var(--tag-blue);
+    border: 1px solid rgba(31,111,235,.3);
+    color: #58a6ff;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all .15s;
+    white-space: nowrap;
+  }
+  .btn-import:hover { background: rgba(31,111,235,.25); }
+  .btn-import input { display: none; }
+  .btn-import-label { cursor: pointer; }
+
+  .filters-wrapper {
+    padding: 24px 32px 0;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 200px;
+  }
+  .filter-group label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--muted);
+    font-weight: 600;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .filter-group select {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    padding: 9px 36px 9px 12px;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .filter-group select:focus {
+    outline: none;
+    border-color: var(--accent2);
+    box-shadow: 0 0 0 3px rgba(31,111,235,.2);
+  }
+  .filter-group select:hover { border-color: #484f58; }
+  .btn-clear {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--muted);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    padding: 9px 16px;
+    cursor: pointer;
+    transition: all .15s;
+    white-space: nowrap;
+    align-self: flex-end;
+  }
+  .btn-clear:hover { border-color: #484f58; color: var(--text); }
+  .search-wrapper { padding: 16px 32px 0; }
+  .search-input {
+    width: 100%;
+    max-width: 480px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    padding: 9px 12px 9px 38px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 12px center;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .search-input::placeholder { color: var(--muted); }
+  .search-input:focus {
+    outline: none;
+    border-color: var(--accent2);
+    box-shadow: 0 0 0 3px rgba(31,111,235,.2);
+  }
+  .active-filters {
+    padding: 12px 32px 0;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    min-height: 0;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--tag-blue);
+    border: 1px solid rgba(31,111,235,.3);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 12px;
+    color: #58a6ff;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .pill .pill-x { cursor: pointer; opacity: .7; }
+  .pill .pill-x:hover { opacity: 1; }
+
+  .results-wrapper { padding: 20px 32px 48px; }
+
+  .empty-state {
+    text-align: center;
+    padding: 80px 32px;
+    color: var(--muted);
+  }
+  .empty-state .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: .4; }
+  .empty-state p { font-size: 15px; }
+  .empty-state small { font-size: 13px; }
+
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 13px;
+  }
+  thead {
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  thead th {
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--muted);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    white-space: nowrap;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  tbody tr { transition: background .1s; }
+  tbody tr:nth-child(even) { background: rgba(255,255,255,.015); }
+  tbody tr:hover { background: rgba(255,255,255,.04); }
+  td {
+    padding: 10px 14px;
+    vertical-align: middle;
+    color: var(--text);
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+  }
+  td.num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    width: 60px;
+  }
+  td.nome { font-weight: 600; max-width: 260px; }
+  td.cidade { color: var(--muted); font-size: 12px; max-width: 160px; }
+  td.endereco { color: var(--muted); font-size: 12px; max-width: 240px; line-height: 1.4; }
+  td.servidor { color: var(--muted); font-size: 12px; max-width: 140px; }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: 'IBM Plex Mono', monospace;
+    white-space: nowrap;
+  }
+  .tag-sistema-stor   { background: var(--tag-blue);   color: #58a6ff; border: 1px solid rgba(31,111,235,.3); }
+  .tag-sistema-storagro { background: var(--tag-yellow); color: #d29922; border: 1px solid rgba(210,153,34,.3); }
+
+  .versao {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    background: var(--tag-green);
+    border: 1px solid rgba(46,160,67,.25);
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .sit-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .sit-ativa        { background: var(--tag-green);  color: #3fb950; border: 1px solid rgba(46,160,67,.3); }
+  .sit-impl         { background: var(--tag-yellow); color: #d29922; border: 1px solid rgba(210,153,34,.3); }
+  .sit-bloqueada    { background: var(--tag-red);    color: #f85149; border: 1px solid rgba(248,81,73,.3); }
+
+  @media (max-width: 768px) {
+    .header { padding: 14px 16px; flex-wrap: wrap; }
+    .header-date { display: none; }
+    .filters-wrapper { padding: 16px 16px 0; }
+    .search-wrapper { padding: 12px 16px 0; }
+    .active-filters { padding: 10px 16px 0; }
+    .results-wrapper { padding: 16px 16px 40px; }
+    td.endereco { display: none; }
+    td.servidor { display: none; }
+  }
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-logo">STOR</div>
+  <div class="header-title">Relação de Servidores / Versão</div>
+  <div class="header-count">Exibindo <span id="count-display">0</span> de <span id="total-display">0</span></div>
+  <label class="btn-import" style="margin-left:auto">
+    <span class="btn-import-label">📂 Importar XLSX</span>
+    <input type="file" id="fileInput" accept=".xls,.xlsx">
+  </label>
+  <div class="header-date">16/05/2026</div>
+</header>
+<div class="filters-wrapper">
+  <div class="filter-group">
+    <label>Cidade</label>
+    <select id="f-cidade"><option value="">Todas as cidades</option></select>
+  </div>
+  <div class="filter-group">
+    <label>Versão</label>
+    <select id="f-versao"><option value="">Todas as versões</option></select>
+  </div>
+  <div class="filter-group">
+    <label>Sistema</label>
+    <select id="f-sistema"><option value="">Todos os sistemas</option></select>
+  </div>
+  <button class="btn-clear" onclick="clearFilters()">✕ Limpar</button>
+</div>
+<div class="search-wrapper">
+  <input class="search-input" type="text" id="f-search" placeholder="Buscar por nome, endereço ou servidor…">
+</div>
+<div class="active-filters" id="active-filters"></div>
+<div class="results-wrapper">
+  <div class="empty-state" id="empty-state" style="display:none">
+    <div class="empty-icon">🔍</div>
+    <p>Nenhum resultado encontrado</p>
+    <small>Tente ajustar os filtros</small>
+  </div>
+  <div class="table-wrap" id="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nome</th>
+          <th>Sistema</th>
+          <th>Versão</th>
+          <th>Cidade</th>
+          <th>Endereço</th>
+          <th>Servidor</th>
+          <th>Situação</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</div>
+<script>
+let DATA = [];
+let dadosImportados = [];
+
+// Funcao para importar XLSX
+document.getElementById('fileInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+        const data = new Uint8Array(ev.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+        dadosImportados = [];
+        let cidadeAtual = '';
+        rows.forEach(row => {
+            const linha = row.map(c => String(c).trim());
+            const idx = linha.findIndex(c => c.toUpperCase() === 'CIDADE:');
+            if (idx !== -1) { cidadeAtual = linha[idx+1] || cidadeAtual; return; }
+            const num = linha[1] || '';
+            const sis = linha[3] || '';
+            const nome = linha[6] || '';
+            const end = linha[9] || '';
+            const srv = linha[12] || '';
+            const ver = linha[15] || '';
+            const sit = linha[16] || '';
+            if (num && sis && nome && ver && num !== 'Num.') {
+                dadosImportados.push({ num, cidade: cidadeAtual, sistema: sis, nome, endereco: end, servidor: srv, versao: ver, sit });
+            }
+        });
+        DATA = dadosImportados;
+        populate();
+        render();
+    };
+    reader.readAsArrayBuffer(file);
+});
+
+function populate() {
+  const cidades = [...new Set(DATA.map(r=>r.cidade))].sort();
+  const versoes = [...new Set(DATA.map(r=>r.versao).filter(Boolean))].sort();
+  const sistemas = [...new Set(DATA.map(r=>r.sistema).filter(Boolean))].sort();
+  const fC = document.getElementById('f-cidade');
+  const fV = document.getElementById('f-versao');
+  const fS = document.getElementById('f-sistema');
+  fC.innerHTML = '<option value="">Todas as cidades</option>';
+  fV.innerHTML = '<option value="">Todas as versões</option>';
+  fS.innerHTML = '<option value="">Todos os sistemas</option>';
+  cidades.forEach(c => { const o = document.createElement('option'); o.value = o.textContent = c; fC.appendChild(o); });
+  versoes.forEach(v => { const o = document.createElement('option'); o.value = o.textContent = v; fV.appendChild(o); });
+  sistemas.forEach(s => { const o = document.createElement('option'); o.value = o.textContent = s; fS.appendChild(o); });
+  document.getElementById('total-display').textContent = DATA.length;
+}
+
+function sitClass(sit) {
+  if (!sit) return '';
+  const s = sit.toLowerCase();
+  if (s.includes('implant')) return 'sit-impl';
+  if (s.includes('bloq')) return 'sit-bloqueada';
+  return 'sit-ativa';
+}
+
+function render() {
+  const cidade = document.getElementById('f-cidade').value;
+  const versao = document.getElementById('f-versao').value;
+  const sistema = document.getElementById('f-sistema').value;
+  const search = document.getElementById('f-search').value.toLowerCase().trim();
+
+  const filtered = DATA.filter(r => {
+    if (cidade && r.cidade !== cidade) return false;
+    if (versao && r.versao !== versao) return false;
+    if (sistema && r.sistema !== sistema) return false;
+    if (search) {
+      const hay = (r.nome + r.endereco + r.servidor + r.num).toLowerCase();
+      if (!hay.includes(search)) return false;
+    }
+    return true;
+  });
+
+  const tbody = document.getElementById('tbody');
+  if (filtered.length === 0) {
+    tbody.innerHTML = '';
+    document.getElementById('table-wrap').style.display = 'none';
+    document.getElementById('empty-state').style.display = 'block';
+  } else {
+    document.getElementById('table-wrap').style.display = 'block';
+    document.getElementById('empty-state').style.display = 'none';
+    tbody.innerHTML = filtered.map(r => `\n      <tr>\n        <td class="num">${r.num}</td>\n        <td class="nome">${r.nome}</td>\n        <td><span class="tag tag-sistema-${r.sistema.toLowerCase()}">${r.sistema}</span></td>\n        <td><span class="versao">${r.versao||'—'}</span></td>\n        <td class="cidade">${r.cidade}</td>\n        <td class="endereco">${r.endereco||'—'}</td>\n        <td class="servidor">${r.servidor||'—'}</td>\n        <td><span class="sit-tag ${sitClass(r.sit)}">${r.sit||'—'}</span></td>\n      </tr>`).join('');
+  }
+  document.getElementById('count-display').textContent = filtered.length;
+  updatePills(cidade, versao, sistema, search);
+}
+
+function updatePills(cidade, versao, sistema, search) {
+  const el = document.getElementById('active-filters');
+  el.innerHTML = '';
+  if (cidade) el.innerHTML += '<span class="pill">Cidade: ' + cidade + ' <span class="pill-x" onclick="clearField(\'f-cidade\')">✕</span></span>';
+  if (versao) el.innerHTML += '<span class="pill">Versão: ' + versao + ' <span class="pill-x" onclick="clearField(\'f-versao\')">✕</span></span>';
+  if (sistema) el.innerHTML += '<span class="pill">Sistema: ' + sistema + ' <span class="pill-x" onclick="clearField(\'f-sistema\')">✕</span></span>';
+  if (search) el.innerHTML += '<span class="pill">Busca: "' + search + '" <span class="pill-x" onclick="clearSearch()">✕</span></span>';
+}
+
+function clearField(id) { document.getElementById(id).value = ''; render(); }
+function clearSearch() { document.getElementById('f-search').value = ''; render(); }
+function clearFilters() {
+  ['f-cidade','f-versao','f-sistema'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-search').value = '';
+  render();
+}
+
+['f-cidade','f-versao','f-sistema'].forEach(id =>
+  document.getElementById(id).addEventListener('change', render));
+document.getElementById('f-search').addEventListener('input', render);
+
+populate();
+render();
+</script>
+</body>
+</html>
