@@ -21,6 +21,21 @@
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0b0f14; }
         ::-webkit-scrollbar-thumb { background: #21262d; border-radius: 3px; }
+        /* Theme Toggle */
+[data-theme="light"] { --bg: #f5f7fa; --surface: #ffffff; --border: #d1d5db; --text: #1a1a2e; --muted: #6b7280; --accent: #0284c7; }
+[data-theme="light"] body { background: var(--bg) !important; color: var(--text) !important; }
+[data-theme="light"] .nav-bar, [data-theme="light"] nav { background: rgba(255,255,255,0.95) !important; border-color: var(--border) !important; }
+[data-theme="light"] .glass-card { background: rgba(255,255,255,0.8) !important; border-color: rgba(0,0,0,0.08) !important; }
+[data-theme="light"] .module-card { background: var(--surface) !important; border-color: var(--border) !important; }
+[data-theme="light"] .icon-box { background: rgba(2,114,126,0.08) !important; border-color: rgba(2,114,126,0.15) !important; }
+[data-theme="light"] .text-\[\#e1e7ef\] { color: var(--text) !important; }
+[data-theme="light"] .text-\[\#484f58\] { color: var(--muted) !important; }
+[data-theme="light"] .text-white { color: var(--text) !important; }
+[data-theme="light"] .border-\[\#21262d\] { border-color: var(--border) !important; }
+[data-theme="light"] .bg-\[\#0b0f14\] { background: var(--bg) !important; }
+[data-theme="light"] .bg-\[\#161b22\] { background: var(--surface) !important; }
+[data-theme="light"] .hover\:border-\[\#02727e\]:hover { border-color: var(--accent) !important; }
+[data-theme="light"] input, [data-theme="light"] textarea, [data-theme="light"] select { background: var(--surface) !important; border-color: var(--border) !important; color: var(--text) !important; }
     </style>
 </head>
 <body class="min-h-screen font-sans text-[#e1e7ef] p-4 md:p-10">
@@ -134,5 +149,9 @@
             document.getElementById('val_esp').focus();
         }
     </script>
+<script>
+(function(){var t=localStorage.getItem('theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');function toggle(){var h=document.documentElement;if(h.getAttribute('data-theme')==='light'){h.removeAttribute('data-theme');localStorage.setItem('theme','dark');}else{h.setAttribute('data-theme','light');localStorage.setItem('theme','light');}}var nav=document.querySelector('nav')||document.querySelector('.nav-bar');if(nav){var btn=document.createElement('button');btn.innerHTML=document.documentElement.getAttribute('data-theme')==='light'?'🌙':'☀️';btn.style.cssText='background:none;border:none;cursor:pointer;font-size:18px;padding:2px 8px;margin-left:auto;line-height:1';btn.title='Alternar tema claro/escuro';btn.onclick=toggle;nav.appendChild(btn);}
+})();
+</script>
 </body>
 </html>

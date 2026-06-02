@@ -203,6 +203,25 @@ td.empty{color:#cbd5e1;font-style:italic;}
   .filter-wrap{flex-direction:column;}
   .template-cols{grid-template-columns:1fr 1fr;}
 }
+/* Theme Toggle */
+[data-theme="dark"] { --bg: #0d1117; --surface: #161b22; --border: #21262d; --text: #e6edf3; --muted: #8b949e; --card-bg: #161b22; }
+[data-theme="dark"] body { background: var(--bg) !important; color: var(--text) !important; }
+[data-theme="dark"] .nav-bar { background: var(--surface) !important; border-color: var(--border) !important; }
+[data-theme="dark"] .topbar { background: var(--surface) !important; border-color: var(--border) !important; }
+[data-theme="dark"] .topbar h1 { color: var(--text) !important; }
+[data-theme="dark"] .topbar p { color: var(--muted) !important; }
+[data-theme="dark"] .main-panel, [data-theme="dark"] .glass-card { background: var(--surface) !important; border-color: var(--border) !important; }
+[data-theme="dark"] .text-\[#1c2333\] { color: var(--text) !important; }
+[data-theme="dark"] .text-\[#6b7280\] { color: var(--muted) !important; }
+[data-theme="dark"] .border-\[\#d1d5db\] { border-color: var(--border) !important; }
+[data-theme="dark"] .bg-\[\#f0f3f7\] { background: var(--bg) !important; }
+[data-theme="dark"] .bg-white { background: var(--surface) !important; }
+[data-theme="dark"] input, [data-theme="dark"] textarea, [data-theme="dark"] select { background: #0d1117 !important; border-color: var(--border) !important; color: var(--text) !important; }
+[data-theme="dark"] .table-wrap { border-color: var(--border) !important; }
+[data-theme="dark"] th { background: #1f4e78 !important; color: #fff !important; }
+[data-theme="dark"] td { color: var(--text) !important; border-color: var(--border) !important; }
+[data-theme="dark"] ::-webkit-scrollbar-track { background: var(--bg) !important; }
+[data-theme="dark"] ::-webkit-scrollbar-thumb { background: var(--border) !important; }
 </style>
 </head>
 <body>
@@ -914,6 +933,10 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('template-body').classList.add('open');
   document.getElementById('template-header').classList.add('open');
 });
+</script>
+<script>
+(function(){var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');function toggle(){var h=document.documentElement;if(h.getAttribute('data-theme')==='dark'){h.removeAttribute('data-theme');localStorage.setItem('theme','light');}else{h.setAttribute('data-theme','dark');localStorage.setItem('theme','dark');}}var nav=document.querySelector('nav')||document.querySelector('.nav-bar')||document.querySelector('.topbar');if(nav){var btn=document.createElement('button');btn.innerHTML=document.documentElement.getAttribute('data-theme')==='dark'?'☀️':'🌙';btn.style.cssText='background:none;border:none;cursor:pointer;font-size:18px;padding:2px 8px;margin-left:auto;line-height:1';btn.title='Alternar tema claro/escuro';btn.onclick=toggle;nav.appendChild(btn);}
+})();
 </script>
 </body>
 </html>

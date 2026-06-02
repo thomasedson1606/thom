@@ -20,6 +20,18 @@
         .table-container { overflow-x: auto; max-height: 700px; overflow-y: auto; border: 1px solid #ddd; border-radius: 10px; }
         .info { margin-top: 15px; color: #555; font-weight: bold; }
         .empty { text-align: center; padding: 30px; color: #888; }
+    /* Theme Toggle */
+[data-theme="dark"] { --bg: #0d1117; --surface: #161b22; --border: #21262d; --text: #e6edf3; --muted: #8b949e; }
+[data-theme="dark"] body { background: var(--bg) !important; }
+[data-theme="dark"] .container { background: var(--surface) !important; box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important; }
+[data-theme="dark"] h1 { color: var(--text) !important; }
+[data-theme="dark"] select { background: #0d1117 !important; border-color: var(--border) !important; color: var(--text) !important; }
+[data-theme="dark"] th { background: #1f4e78 !important; color: #fff !important; }
+[data-theme="dark"] td { color: var(--text) !important; border-color: var(--border) !important; }
+[data-theme="dark"] tr:hover { background: rgba(255,255,255,0.05) !important; }
+[data-theme="dark"] .info { color: var(--muted) !important; }
+[data-theme="dark"] .empty { color: var(--muted) !important; }
+[data-theme="dark"] input[type="file"] { color: var(--text) !important; }
     </style>
 </head>
 <body>
@@ -131,6 +143,10 @@ function renderizarTabela() {
         tableBody.appendChild(tr);
     });
 }
+</script>
+<script>
+(function(){var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');function toggle(){var h=document.documentElement;if(h.getAttribute('data-theme')==='dark'){h.removeAttribute('data-theme');localStorage.setItem('theme','light');}else{h.setAttribute('data-theme','dark');localStorage.setItem('theme','dark');}}var nav=document.querySelector('nav')||document.querySelector('.container');if(nav){var btn=document.createElement('button');btn.innerHTML=document.documentElement.getAttribute('data-theme')==='dark'?'☀️':'🌙';btn.style.cssText='background:none;border:none;cursor:pointer;font-size:18px;padding:2px 8px;margin-left:15px;line-height:1';btn.title='Alternar tema claro/escuro';btn.onclick=toggle;var h1=nav.querySelector('h1');if(h1)h1.parentNode.insertBefore(btn,h1.nextSibling);else nav.insertBefore(btn,nav.firstChild);}
+})();
 </script>
 </body>
 </html>

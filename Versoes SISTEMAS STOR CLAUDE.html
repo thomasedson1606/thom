@@ -291,6 +291,35 @@
     td.endereco { display: none; }
     td.servidor { display: none; }
   }
+/* Theme Toggle */
+[data-theme="light"] { --bg: #f5f7fa; --surface: #ffffff; --border: #d1d5db; --text: #1a1a2e; --muted: #6b7280; }
+[data-theme="light"] body { background: var(--bg) !important; color: var(--text) !important; }
+[data-theme="light"] .header { background: var(--surface) !important; border-color: var(--border) !important; }
+[data-theme="light"] .header-logo { color: #2ea043 !important; border-color: rgba(46,160,67,0.3) !important; background: rgba(46,160,67,0.08) !important; }
+[data-theme="light"] .header-title { color: var(--text) !important; }
+[data-theme="light"] .header-count { background: var(--bg) !important; border-color: var(--border) !important; color: var(--muted) !important; }
+[data-theme="light"] .header-count span { color: var(--text) !important; }
+[data-theme="light"] .header-date { color: var(--muted) !important; }
+[data-theme="light"] .btn-import { background: rgba(31,111,235,0.1) !important; border-color: rgba(31,111,235,0.2) !important; color: #2563eb !important; }
+[data-theme="light"] .btn-voltar { background: var(--bg) !important; border-color: var(--border) !important; color: var(--muted) !important; }
+[data-theme="light"] .filter-group label { color: var(--muted) !important; }
+[data-theme="light"] select { background: var(--surface) !important; border-color: var(--border) !important; color: var(--text) !important; }
+[data-theme="light"] .search-input { background: var(--surface) !important; border-color: var(--border) !important; color: var(--text) !important; }
+[data-theme="light"] .btn-clear { color: var(--muted) !important; border-color: var(--border) !important; }
+[data-theme="light"] .pill { background: rgba(31,111,235,0.1) !important; border-color: rgba(31,111,235,0.2) !important; color: #2563eb !important; }
+[data-theme="light"] .table-wrap { border-color: var(--border) !important; }
+[data-theme="light"] thead { background: var(--surface) !important; }
+[data-theme="light"] thead th { background: var(--surface) !important; color: var(--muted) !important; border-color: var(--border) !important; }
+[data-theme="light"] tbody tr:nth-child(even) { background: rgba(0,0,0,0.02) !important; }
+[data-theme="light"] td { color: var(--text) !important; border-color: var(--border) !important; }
+[data-theme="light"] td.num { color: var(--muted) !important; }
+[data-theme="light"] td.cidade, [data-theme="light"] td.endereco, [data-theme="light"] td.servidor { color: var(--muted) !important; }
+[data-theme="light"] .tag-sistema-stor { background: rgba(31,111,235,0.1) !important; border-color: rgba(31,111,235,0.2) !important; color: #2563eb !important; }
+[data-theme="light"] .tag-sistema-storagro { background: rgba(210,153,34,0.12) !important; border-color: rgba(210,153,34,0.25) !important; color: #b8860b !important; }
+[data-theme="light"] .versao { color: #2ea043 !important; border-color: rgba(46,160,67,0.25) !important; background: rgba(46,160,67,0.08) !important; }
+[data-theme="light"] .empty-state { color: var(--muted) !important; }
+[data-theme="light"] ::-webkit-scrollbar-track { background: var(--bg) !important; }
+[data-theme="light"] ::-webkit-scrollbar-thumb { background: var(--border) !important; }
 </style>
 </head>
 <body>
@@ -464,6 +493,10 @@ document.getElementById('f-search').addEventListener('input', render);
 
 populate();
 render();
+</script>
+<script>
+(function(){var t=localStorage.getItem('theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');function toggle(){var h=document.documentElement;if(h.getAttribute('data-theme')==='light'){h.removeAttribute('data-theme');localStorage.setItem('theme','dark');}else{h.setAttribute('data-theme','light');localStorage.setItem('theme','light');}}var nav=document.querySelector('nav')||document.querySelector('.header')||document.querySelector('.nav-bar')||document.querySelector('.topbar');if(nav){var btn=document.createElement('button');btn.innerHTML=document.documentElement.getAttribute('data-theme')==='light'?'🌙':'☀️';btn.style.cssText='background:none;border:none;cursor:pointer;font-size:18px;padding:2px 8px;margin-left:auto;line-height:1';btn.title='Alternar tema claro/escuro';btn.onclick=toggle;nav.appendChild(btn);}
+})();
 </script>
 </body>
 </html>

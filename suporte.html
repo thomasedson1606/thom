@@ -26,6 +26,12 @@
         .nav-right { font-size: 10px; font-weight: 700; color: #484f58; }
         .container { height: calc(100vh - 52px); }
         iframe { width: 100%; height: 100%; border: none; display: block; }
+    /* Theme Toggle */
+[data-theme="light"] { --bg: #f5f7fa; --surface: #ffffff; --border: #d1d5db; --text: #1a1a2e; --muted: #6b7280; }
+[data-theme="light"] body { background: var(--bg) !important; color: var(--text) !important; }
+[data-theme="light"] .nav-bar { background: var(--surface) !important; border-color: var(--border) !important; }
+[data-theme="light"] .nav-bar a { color: var(--accent, #06b6d4) !important; }
+[data-theme="light"] .nav-bar span { color: var(--muted) !important; }
     </style>
 </head>
 <body>
@@ -45,5 +51,9 @@
     <div class="container">
         <iframe src="https://olyrum.github.io/alltools/"></iframe>
     </div>
+<script>
+(function(){var t=localStorage.getItem('theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');function toggle(){var h=document.documentElement;if(h.getAttribute('data-theme')==='light'){h.removeAttribute('data-theme');localStorage.setItem('theme','dark');}else{h.setAttribute('data-theme','light');localStorage.setItem('theme','light');}}var nav=document.querySelector('nav')||document.querySelector('.nav-bar')||document.querySelector('.header')||document.querySelector('.topbar');if(nav){var btn=document.createElement('button');btn.innerHTML=document.documentElement.getAttribute('data-theme')==='light'?'🌙':'☀️';btn.style.cssText='background:none;border:none;cursor:pointer;font-size:18px;padding:2px 8px;margin-left:auto;line-height:1';btn.title='Alternar tema claro/escuro';btn.onclick=toggle;nav.appendChild(btn);}
+})();
+</script>
 </body>
 </html>
