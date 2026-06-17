@@ -1,521 +1,617 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thomas Tech - Portal de Aplicações N2</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        * { font-family: 'Inter', sans-serif; }
-        body {
-            background: #0b0f14;
-            min-height: 100vh;
-            background-image: radial-gradient(ellipse at 20% 50%, rgba(2, 114, 126, 0.08) 0%, transparent 60%), radial-gradient(ellipse at 80% 50%, rgba(2, 114, 126, 0.05) 0%, transparent 60%);
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-        }
-        .glass-card:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(2, 114, 126, 0.3);
-        }
-        .module-card {
-            background: #161b22;
-            border: 1px solid #21262d;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-        .module-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #02727e, #06b6d4);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.3s ease;
-        }
-        .module-card:hover::before { transform: scaleX(1); }
-        .module-card:hover {
-            transform: translateY(-4px);
-            border-color: #02727e;
-            box-shadow: 0 12px 40px -8px rgba(2, 114, 126, 0.2);
-        }
-        .module-card .icon-box {
-            background: rgba(2, 114, 126, 0.1);
-            border: 1px solid rgba(2, 114, 126, 0.2);
-            transition: all 0.3s ease;
-        }
-        .module-card:hover .icon-box {
-            background: rgba(2, 114, 126, 0.2);
-            border-color: rgba(2, 114, 126, 0.4);
-            transform: scale(1.05);
-        }
-        .search-input {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #e1e7ef;
-            transition: all 0.2s;
-        }
-        .search-input:focus {
-            border-color: #02727e;
-            box-shadow: 0 0 0 3px rgba(2, 114, 126, 0.15);
-        }
-        .search-input::placeholder { color: #484f58; }
-        .badge-cat {
-            font-size: 9px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            padding: 2px 8px;
-            border-radius: 999px;
-            background: rgba(2, 114, 126, 0.1);
-            color: #06b6d4;
-            border: 1px solid rgba(2, 114, 126, 0.2);
-        }
-        .badge-cat.fiscal { background: rgba(249, 115, 22, 0.1); color: #fb923c; border-color: rgba(249, 115, 22, 0.2); }
-        .badge-cat.ferramenta { background: rgba(99, 102, 241, 0.1); color: #818cf8; border-color: rgba(99, 102, 241, 0.2); }
-        .badge-cat.consultor { background: rgba(34, 197, 94, 0.1); color: #4ade80; border-color: rgba(34, 197, 94, 0.2); }
-        .badge-cat.suporte { background: rgba(236, 72, 153, 0.1); color: #f472b6; border-color: rgba(236, 72, 153, 0.2); }
-        .gradient-text {
-            background: linear-gradient(135deg, #e1e7ef 0%, #06b6d4 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .fade-in { animation: fadeInUp 0.5s ease forwards; opacity: 0; }
-        .fade-in:nth-child(1) { animation-delay: 0.05s; }
-        .fade-in:nth-child(2) { animation-delay: 0.1s; }
-        .fade-in:nth-child(3) { animation-delay: 0.15s; }
-        .fade-in:nth-child(4) { animation-delay: 0.2s; }
-        .fade-in:nth-child(5) { animation-delay: 0.25s; }
-        .fade-in:nth-child(6) { animation-delay: 0.3s; }
-        .fade-in:nth-child(7) { animation-delay: 0.35s; }
-        .fade-in:nth-child(8) { animation-delay: 0.4s; }
-        .fade-in:nth-child(9) { animation-delay: 0.45s; }
-        .fade-in:nth-child(10) { animation-delay: 0.5s; }
-        .fade-in:nth-child(11) { animation-delay: 0.55s; }
-        .fade-in:nth-child(12) { animation-delay: 0.6s; }
-        .fade-in:nth-child(13) { animation-delay: 0.65s; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0b0f14; }
-        ::-webkit-scrollbar-thumb { background: #21262d; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #30363d; }
-/* Theme Toggle */
-[data-theme="light"] { --bg: #f5f7fa; --surface: #ffffff; --border: #d1d5db; --text: #1a1a2e; --muted: #6b7280; --accent: #0284c7; }
-[data-theme="light"] body { background: var(--bg) !important; color: var(--text) !important; }
-[data-theme="light"] .nav-bar, [data-theme="light"] nav { background: rgba(255,255,255,0.95) !important; border-color: var(--border) !important; }
-[data-theme="light"] .glass-card { background: rgba(255,255,255,0.8) !important; border-color: rgba(0,0,0,0.08) !important; }
-[data-theme="light"] .module-card, [data-theme="light"] .version-card { background: var(--surface) !important; border-color: var(--border) !important; }
-[data-theme="light"] .icon-box { background: rgba(2,114,126,0.08) !important; border-color: rgba(2,114,126,0.15) !important; }
-[data-theme="light"] .text-\[\#e1e7ef\] { color: var(--text) !important; }
-[data-theme="light"] .text-\[\#484f58\] { color: var(--muted) !important; }
-[data-theme="light"] .text-white { color: var(--text) !important; }
-[data-theme="light"] .border-\[\#21262d\] { border-color: var(--border) !important; }
-[data-theme="light"] .bg-\[\#0b0f14\] { background: var(--bg) !important; }
-[data-theme="light"] .bg-\[\#161b22\] { background: var(--surface) !important; }
-[data-theme="light"] .hover\:border-\[\#02727e\]:hover { border-color: var(--accent) !important; }
-[data-theme="light"] .badge-cat { background: rgba(0,0,0,0.05) !important; color: #555 !important; }
-[data-theme="light"] .search-box { background: var(--surface) !important; border-color: var(--border) !important; color: var(--text) !important; }
-[data-theme="light"] select { background: var(--surface) !important; border-color: var(--border) !important; color: var(--text) !important; }
-[data-theme="light"] input, [data-theme="light"] textarea { background: var(--surface) !important; border-color: var(--border) !important; color: var(--text) !important; }
-[data-theme="light"] th { background: #e5e7eb !important; color: #374151 !important; }
-[data-theme="light"] .badge-version.gpt { background: rgba(16,163,127,0.15) !important; }
-[data-theme="light"] .badge-version.gemini { background: rgba(59,130,246,0.15) !important; }
-[data-theme="light"] .badge-version.claude { background: rgba(168,85,247,0.15) !important; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Thomas Tech - Portal de Aplicações N2</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e13;
+    --bg-2:#0d1219;
+    --surface:#12171f;
+    --surface-2:#181f29;
+    --border:#222a35;
+    --border-soft:rgba(255,255,255,.07);
+    --text:#e7ecf3;
+    --muted:#7c8794;
+    --accent:#02888f;
+    --accent-2:#06b6d4;
+    --shadow:rgba(2,14,18,.55);
+    --grain-op:.035;
+  }
+  [data-theme="light"]{
+    --bg:#eef1f5;
+    --bg-2:#e6eaf0;
+    --surface:#ffffff;
+    --surface-2:#f4f7fa;
+    --border:#dde3ea;
+    --border-soft:rgba(10,30,40,.06);
+    --text:#152030;
+    --muted:#6b7686;
+    --shadow:rgba(30,50,60,.16);
+    --grain-op:.018;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ font-family:'Inter',sans-serif; margin:0; height:100%; overflow:hidden; background:var(--bg); color:var(--text); }
+  button{ font-family:inherit; }
+
+  /* ---------- background layers ---------- */
+  .bg-aurora{ position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
+  .bg-aurora span{ position:absolute; border-radius:50%; filter:blur(80px); opacity:.5; }
+  .bg-aurora span:nth-child(1){ width:48vw; height:48vw; background:var(--accent); top:-14%; left:-12%; animation:float1 28s ease-in-out infinite; }
+  .bg-aurora span:nth-child(2){ width:40vw; height:40vw; background:var(--accent-2); bottom:-16%; right:-10%; animation:float2 34s ease-in-out infinite; }
+  .bg-aurora span:nth-child(3){ width:24vw; height:24vw; background:#6d6ef0; top:30%; right:14%; opacity:.16; animation:float3 40s ease-in-out infinite; }
+  [data-theme="light"] .bg-aurora span{ opacity:.16; }
+  @keyframes float1{ 0%,100%{ transform:translate(0,0); } 50%{ transform:translate(6vw,8vh); } }
+  @keyframes float2{ 0%,100%{ transform:translate(0,0); } 50%{ transform:translate(-7vw,-6vh); } }
+  @keyframes float3{ 0%,100%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(-4vw,6vh) scale(1.18); } }
+  .bg-grain{ position:fixed; inset:0; z-index:1; pointer-events:none; opacity:var(--grain-op); mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>"); }
+
+  /* ---------- desktop ---------- */
+  .desktop{ position:fixed; inset:0; overflow:hidden; }
+  .desktop-scroll{ position:absolute; inset:0; overflow-y:auto; padding:26px clamp(16px,4vw,56px) 116px; }
+
+  .brand-mark{ position:relative; z-index:2; display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .brand-mark .logo{ width:30px; height:30px; border-radius:9px; background:linear-gradient(135deg,var(--accent),var(--accent-2)); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:12px; flex-shrink:0; }
+  .brand-mark .name{ font-size:11px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+
+  .ambient{ position:relative; z-index:2; margin-bottom:30px; max-width:600px; }
+  .ambient-clock{ display:flex; align-items:baseline; gap:6px; font-family:'JetBrains Mono',monospace; line-height:1; }
+  .ambient-clock .h{ font-size:clamp(46px,7.5vw,80px); font-weight:800; letter-spacing:-.02em; color:var(--text); text-shadow:0 2px 26px var(--shadow); }
+  .ambient-clock .s{ font-size:clamp(18px,2.6vw,26px); font-weight:600; color:var(--muted); align-self:flex-end; margin-bottom:8px; }
+  .ambient-date{ font-size:13.5px; font-weight:700; color:var(--muted); text-transform:capitalize; margin-top:2px; }
+  .ambient-weather{ display:inline-flex; align-items:center; gap:8px; margin-top:12px; padding:7px 14px; border-radius:999px; background:var(--border-soft); backdrop-filter:blur(10px); width:fit-content; font-size:12.5px; font-weight:700; color:var(--text); border:1px solid var(--border-soft); }
+  .ambient-weather.is-hidden{ display:none; }
+
+  /* ---------- desktop icons ---------- */
+  .icon-grid{ position:relative; z-index:2; display:grid; grid-template-columns:repeat(auto-fill,96px); gap:14px 6px; justify-content:start; }
+  .icon-tile{ display:flex; flex-direction:column; align-items:center; gap:8px; width:96px; padding:10px 6px; border-radius:14px; border:1px solid transparent; background:transparent; cursor:pointer; transition:background .15s,border-color .15s,transform .1s; -webkit-tap-highlight-color:transparent; opacity:0; animation:tileIn .4s ease forwards; }
+  .icon-tile:hover{ background:var(--border-soft); border-color:var(--border-soft); }
+  .icon-tile:active{ transform:scale(.95); }
+  @keyframes tileIn{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:translateY(0); } }
+  .icon-glyph{ width:52px; height:52px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:23px; background:var(--surface); border:1px solid var(--border); box-shadow:0 8px 20px -8px var(--shadow); position:relative; }
+  .icon-glyph::after{ content:''; position:absolute; left:5px; top:5px; width:6px; height:6px; border-radius:50%; box-shadow:0 0 0 2px var(--surface); }
+  .icon-glyph.cat-fiscal::after{ background:#fb923c; }
+  .icon-glyph.cat-ferramenta::after{ background:#818cf8; }
+  .icon-glyph.cat-consultor::after{ background:#4ade80; }
+  .icon-glyph.cat-suporte::after{ background:#f472b6; }
+  .icon-label{ font-size:11px; font-weight:600; color:var(--text); text-align:center; line-height:1.25; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-shadow:0 1px 8px var(--shadow); }
+
+  /* ---------- windows ---------- */
+  #windowsLayer{ position:absolute; inset:0; z-index:5; pointer-events:none; }
+  .os-window{ position:absolute; pointer-events:auto; display:flex; flex-direction:column; min-width:300px; min-height:220px; background:var(--surface); border:1px solid var(--border); border-radius:14px; box-shadow:0 30px 60px -22px var(--shadow), 0 0 0 1px var(--border-soft); overflow:hidden; }
+  .os-window.opening{ animation:winOpen .18s ease-out; }
+  .os-window.closing{ animation:winClose .15s ease-in forwards; }
+  @keyframes winOpen{ from{ opacity:0; transform:scale(.96) translateY(10px); } to{ opacity:1; transform:scale(1) translateY(0); } }
+  @keyframes winClose{ from{ opacity:1; transform:scale(1); } to{ opacity:0; transform:scale(.95); } }
+  .os-window.minimized{ opacity:0 !important; transform:scale(.05) translateY(70vh); pointer-events:none; transition:transform .22s ease,opacity .2s ease; }
+  .os-window.maximized{ top:0 !important; left:0 !important; width:100% !important; height:100% !important; border-radius:0; }
+  .os-window.focused{ box-shadow:0 40px 80px -22px var(--shadow), 0 0 0 1px var(--accent-2); }
+  .os-titlebar{ display:flex; align-items:center; gap:8px; padding:0 6px 0 14px; height:42px; flex-shrink:0; background:var(--surface-2); border-bottom:1px solid var(--border); user-select:none; touch-action:none; }
+  .os-title-icon{ font-size:15px; }
+  .os-title-text{ font-size:12.5px; font-weight:700; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; }
+  .os-controls{ display:flex; align-items:center; gap:2px; }
+  .os-btn{ width:34px; height:30px; border-radius:7px; border:none; background:transparent; color:var(--muted); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background .12s,color .12s; }
+  .os-btn svg{ width:11px; height:11px; }
+  .os-btn:hover{ background:var(--border-soft); color:var(--text); }
+  .os-close:hover{ background:#e5484d; color:#fff; }
+  .os-body{ flex:1; position:relative; background:#fff; min-height:0; }
+  .os-body iframe{ width:100%; height:100%; border:none; display:block; }
+  .os-resize{ position:absolute; right:0; bottom:0; width:18px; height:18px; cursor:nwse-resize; touch-action:none; z-index:2; }
+  .os-resize::after{ content:''; position:absolute; right:4px; bottom:4px; width:8px; height:8px; border-right:2px solid var(--border); border-bottom:2px solid var(--border); opacity:.8; }
+  .os-window.maximized .os-resize{ display:none; }
+
+  /* ---------- taskbar ---------- */
+  .taskbar{ position:fixed; left:0; right:0; bottom:0; z-index:40; height:60px; display:flex; align-items:center; gap:10px; padding:0 12px; background:var(--surface); border-top:1px solid var(--border); backdrop-filter:blur(18px); }
+  .start-btn{ display:flex; align-items:center; gap:8px; height:42px; padding:0 16px; border-radius:10px; border:none; background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#fff; font-weight:800; font-size:13px; cursor:pointer; flex-shrink:0; box-shadow:0 8px 22px -8px var(--shadow); }
+  .taskbar-apps{ flex:1; display:flex; gap:6px; overflow-x:auto; height:100%; align-items:center; scrollbar-width:none; min-width:0; }
+  .taskbar-apps::-webkit-scrollbar{ display:none; }
+  .taskbar-app{ flex-shrink:0; display:flex; align-items:center; gap:6px; height:42px; padding:0 12px; border-radius:9px; border:1px solid transparent; background:var(--border-soft); color:var(--text); font-size:12px; font-weight:700; cursor:pointer; max-width:180px; }
+  .taskbar-app-label{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .taskbar-app.active{ border-color:var(--accent-2); background:rgba(6,182,212,.14); }
+  .taskbar-app.is-min{ opacity:.5; }
+  .taskbar-right{ display:flex; align-items:center; gap:8px; flex-shrink:0; }
+  .online-pill{ display:none; align-items:center; gap:6px; font-size:10px; font-weight:800; letter-spacing:.07em; color:var(--accent-2); padding:7px 11px; border-radius:999px; background:rgba(6,182,212,.1); border:1px solid rgba(6,182,212,.22); }
+  .online-dot{ width:6px; height:6px; border-radius:50%; background:#4ade80; animation:pulse 2s infinite; }
+  @keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.35; } }
+  .theme-btn{ width:38px; height:38px; border-radius:9px; border:1px solid var(--border); background:var(--border-soft); cursor:pointer; font-size:15px; flex-shrink:0; }
+  .taskbar-clock{ font-family:'JetBrains Mono',monospace; font-size:13.5px; font-weight:700; color:var(--text); min-width:46px; text-align:right; flex-shrink:0; }
+
+  @media (min-width:880px){ .online-pill{ display:flex; } }
+
+  /* ---------- launcher ---------- */
+  .launcher{ position:fixed; left:12px; bottom:72px; width:min(840px,calc(100vw - 24px)); max-height:min(640px,calc(100vh - 100px)); background:var(--surface); border:1px solid var(--border); border-radius:18px; box-shadow:0 44px 90px -20px var(--shadow); z-index:50; display:flex; flex-direction:column; overflow:hidden; transform-origin:bottom left; transition:transform .16s ease,opacity .16s ease; }
+  .launcher.is-hidden{ opacity:0; transform:scale(.97) translateY(8px); pointer-events:none; }
+  .launcher-header{ padding:18px 18px 14px; border-bottom:1px solid var(--border); flex-shrink:0; }
+  .launcher-title-row{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .launcher-title-row .logo{ width:34px; height:34px; border-radius:10px; background:linear-gradient(135deg,var(--accent),var(--accent-2)); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:13px; flex-shrink:0; }
+  .search-wrap{ position:relative; }
+  .search-wrap svg{ position:absolute; left:13px; top:50%; transform:translateY(-50%); width:16px; height:16px; color:var(--muted); }
+  .launcher-search{ width:100%; background:var(--border-soft); border:1px solid var(--border); border-radius:10px; padding:11px 14px 11px 40px; font-size:13px; font-weight:500; color:var(--text); outline:none; }
+  .launcher-search::placeholder{ color:var(--muted); }
+  .launcher-search:focus{ border-color:var(--accent-2); box-shadow:0 0 0 3px rgba(6,182,212,.15); }
+  .launcher-filters{ display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+  .launcher-filter{ padding:7px 13px; border-radius:8px; font-size:10.5px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; border:1px solid var(--border); background:var(--border-soft); color:var(--muted); cursor:pointer; }
+  .launcher-filter.active{ background:rgba(6,182,212,.15); color:var(--accent-2); border-color:rgba(6,182,212,.35); }
+  .launcher-body{ padding:14px 18px 20px; overflow-y:auto; }
+  .launcher-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; }
+  .launcher-card{ text-align:left; background:var(--surface-2); border:1px solid var(--border); border-radius:12px; padding:14px; cursor:pointer; display:flex; flex-direction:column; transition:transform .15s,border-color .15s; }
+  .launcher-card:hover{ transform:translateY(-3px); border-color:var(--accent); }
+  .launcher-card-icon{ width:42px; height:42px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:19px; background:rgba(2,114,126,.12); border:1px solid rgba(2,114,126,.22); flex-shrink:0; }
+  .launcher-card-title{ color:var(--text); font-size:13px; font-weight:700; margin-top:8px; line-height:1.3; }
+  .launcher-card-desc{ color:var(--muted); font-size:11.5px; font-weight:500; line-height:1.5; margin-top:6px; flex:1; }
+  .launcher-card-foot{ border-top:1px solid var(--border); margin-top:12px; padding-top:10px; display:flex; align-items:center; gap:8px; }
+  .launcher-mod{ font-size:9.5px; font-weight:800; color:var(--accent-2); }
+  .badge-cat{ font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; padding:2px 8px; border-radius:999px; display:inline-block; }
+  .badge-cat.fiscal{ background:rgba(249,115,22,.12); color:#fb923c; border:1px solid rgba(249,115,22,.22); }
+  .badge-cat.ferramenta{ background:rgba(99,102,241,.12); color:#818cf8; border:1px solid rgba(99,102,241,.22); }
+  .badge-cat.consultor{ background:rgba(34,197,94,.12); color:#4ade80; border:1px solid rgba(34,197,94,.22); }
+  .badge-cat.suporte{ background:rgba(236,72,153,.12); color:#f472b6; border:1px solid rgba(236,72,153,.22); }
+  .launcher-empty{ text-align:center; padding:46px 0; color:var(--muted); }
+  .launcher-footer{ display:flex; justify-content:space-between; align-items:center; gap:10px; padding:0 4px 4px; font-size:10.5px; font-weight:700; color:var(--muted); flex-wrap:wrap; }
+
+  ::-webkit-scrollbar{ width:6px; height:6px; }
+  ::-webkit-scrollbar-track{ background:transparent; }
+  ::-webkit-scrollbar-thumb{ background:var(--border); border-radius:3px; }
+  ::-webkit-scrollbar-thumb:hover{ background:var(--muted); }
+
+  @media (max-width:640px){
+    .icon-grid{ grid-template-columns:repeat(auto-fill,80px); gap:12px 2px; }
+    .icon-tile{ width:80px; }
+    .icon-glyph{ width:48px; height:48px; }
+    .ambient-clock .h{ font-size:42px; }
+    .taskbar-app .taskbar-app-label{ display:none; }
+    .taskbar-app{ padding:0 10px; }
+    .launcher{ left:8px; right:8px; bottom:68px; width:auto; }
+  }
+</style>
 </head>
-<body class="p-4 md:p-8">
+<body>
 
-    <div class="max-w-7xl mx-auto">
+  <div class="bg-aurora"><span></span><span></span><span></span></div>
+  <div class="bg-grain"></div>
 
-        <!-- Header -->
-        <header class="glass-card rounded-2xl p-6 md:p-8 mb-8 flex flex-col md:flex-row items-center justify-between gap-6 fade-in">
-            <div class="flex items-center gap-5">
-                <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-[#02727e] to-[#06b6d4] flex items-center justify-center text-white text-2xl font-black shadow-lg shadow-[#02727e]/20">
-                    TT
-                </div>
-                <div>
-                    <h1 class="text-2xl md:text-3xl font-black text-white tracking-tight">
-                        Aplicações <span class="gradient-text">Thômas Edson</span>
-                    </h1>
-                    <p class="text-xs font-semibold text-[#484f58] uppercase tracking-[0.2em] mt-1">Portal de Ferramentas N2</p>
-                </div>
-            </div>
-            <div class="flex items-center gap-4">
-                <span class="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#02727e]/10 border border-[#02727e]/20 text-xs font-bold text-[#06b6d4]">
-                    <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                    ONLINE
-                </span>
-                <span class="text-xs font-bold text-[#484f58]">v2.0</span>
-            </div>
-        </header>
+  <div class="desktop" id="desktop">
+    <div class="desktop-scroll" id="desktopScroll">
 
-        <!-- Search & Filters -->
-        <div class="mb-8 fade-in">
-            <div class="relative max-w-xl">
-                <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#484f58]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                </svg>
-                <input type="text" id="searchInput" onkeyup="filterModules()" placeholder="Buscar módulo por nome ou descrição..." class="search-input w-full pl-12 pr-4 py-3.5 rounded-xl text-sm font-medium outline-none">
-            </div>
-            <div class="flex flex-wrap gap-2 mt-4" id="filterButtons">
-                <button onclick="setFilter('todas')" class="filter-btn active px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all" style="background: rgba(2,114,126,0.15); color: #06b6d4; border: 1px solid rgba(2,114,126,0.3);">Todas</button>
-                <button onclick="setFilter('fiscal')" class="filter-btn px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all" style="background: rgba(255,255,255,0.03); color: #484f58; border: 1px solid rgba(255,255,255,0.06);">Fiscal</button>
-                <button onclick="setFilter('ferramenta')" class="filter-btn px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all" style="background: rgba(255,255,255,0.03); color: #484f58; border: 1px solid rgba(255,255,255,0.06);">Ferramenta</button>
-                <button onclick="setFilter('consultor')" class="filter-btn px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all" style="background: rgba(255,255,255,0.03); color: #484f58; border: 1px solid rgba(255,255,255,0.06);">Consultor</button>
-                <button onclick="setFilter('suporte')" class="filter-btn px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all" style="background: rgba(255,255,255,0.03); color: #484f58; border: 1px solid rgba(255,255,255,0.06);">Suporte</button>
-            </div>
+      <div class="brand-mark">
+        <div class="logo">TT</div>
+        <span class="name">Aplicações Thômas Edson</span>
+      </div>
+
+      <div class="ambient">
+        <div class="ambient-clock">
+          <span class="h" id="clockTime">--:--</span><span class="s" id="clockSeconds">--</span>
         </div>
-
-        <!-- Modules Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="modulesGrid">
-            <!-- Module 1 -->
-            <a href="ap1.html" class="module-card rounded-xl p-5 fade-in flex flex-col" data-category="ferramenta" data-name="Calculadora de Salário Líquido 2026">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="icon-box w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0">🧮</div>
-                    <div class="flex-1 min-w-0">
-                        <span class="badge-cat ferramenta">Ferramenta</span>
-                        <h3 class="text-sm font-bold text-[#e1e7ef] mt-2 leading-tight">Calculadora de Salário Líquido 2026</h3>
-                    </div>
-                </div>
-                <p class="text-xs text-[#484f58] font-medium leading-relaxed flex-1">Cálculo completo de INSS e IRRF com a nova tabela 2026 e faixa de isenção de R$ 5k.</p>
-                <div class="flex items-center gap-2 mt-4 pt-4 border-t border-[#21262d]">
-                    <span class="text-[10px] font-bold text-[#06b6d4]">Módulo 1</span>
-                    <span class="ml-auto text-[#21262d] group-hover:text-[#02727e] transition-colors text-sm">➔</span>
-                </div>
-            </a>
-
-            <!-- Module 2 -->
-            <a href="ap2.html" class="module-card rounded-xl p-5 fade-in flex flex-col" data-category="fiscal" data-name="Ajuste Erro SPED PIS/COFINS">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="icon-box w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0">🧾</div>
-                    <div class="flex-1 min-w-0">
-                        <span class="badge-cat fiscal">Fiscal</span>
-                        <h3 class="text-sm font-bold text-[#e1e7ef] mt-2 leading-tight">Ajuste Erro de Cálculo SPED PIS/COFINS</h3>
-                    </div>
-                </div>
-                <p class="text-xs text-[#484f58] font-medium leading-relaxed flex-1">Correção de divergências no SPED com cálculo automático de novo valor esperado e natureza de receita.</p>
-                <div class="flex items-center gap-2 mt-4 pt-4 border-t border-[#21262d]">
-                    <span class="text-[10px] font-bold text-[#06b6d4]">Módulo 2</span>
-                    <span class="ml-auto text-[#21262d] group-hover:text-[#02727e] transition-colors text-sm">➔</span>
-                </div>
-            </a>
-
-            <!-- Module 3 -->
-            <a href="ap3.html" class="module-card rounded-xl p-5 fade-in flex flex-col" data-category="consultor" data-name="Gerenciador de Ordens N2">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="icon-box w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0">🛠️</div>
-                    <div class="flex-1 min-w-0">
-                        <span class="badge-cat consultor">Consultor</span>
-                        <h3 class="text-sm font-bold text-[#e1e7ef] mt-2 leading-tight">Gerenciador de Ordens N2</h3>
-                    </div>
-                </div>
-                <p class="text-xs text-[#484f58] font-medium leading-relaxed flex-1">Sistema completo com Firebase para gestão de chamados N3, dúvidas e ordens de serviço.</p>
-                <div class="flex items-center gap-2 mt-4 pt-4 border-t border-[#21262d]">
-                    <span class="text-[10px] font-bold text-[#06b6d4]">Módulo 3</span>
-                    <span class="ml-auto text-[#21262d] group-hover:text-[#02727e] transition-colors text-sm">➔</span>
-                </div>
-            </a>
-
-            <!-- Module 4 -->
-            <a href="ap4.html" class="module-card rounded-xl p-5 fade-in flex flex-col" data-category="fiscal" data-name="Conciliação SEFAZ x Sistema">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="icon-box w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0">⚖️</div>
-                    <div class="flex-1 min-w-0">
-                        <span class="badge-cat fiscal">Fiscal</span>
-                        <h3 class="text-sm font-bold text-[#e1e7ef] mt-2 leading-tight">Conciliação SEFAZ x Sistema</h3>
-                    </div>
-                </div>
-                <p class="text-xs text-[#484f58] font-medium leading-relaxed flex-1">Comparativo de notas fiscais entre base SEFAZ e sistema com detecção de divergências.</p>
-                <div class="flex items-center gap-2 mt-4 pt-4 border-t border-[#21262d]">
-                    <span class="text-[10px] font-bold text-[#06b6d4]">Módulo 4</span>
-                    <span class="ml-auto text-[#21262d] group-hover:text-[#02727e] transition-colors text-sm">➔</span>
-                </div>
-            </a>
-
-            <!-- Module 5 -->
-            <a href="ap5.html" class="module-card rounded-xl p-5 fade-in flex flex-col" data-category="consultor" data-name="Checklist de Transição Tributária">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="icon-box w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0">📝</div>
-                    <div class="flex-1 min-w-0">
-                        <span class="badge-cat consultor">Consultor</span>
-                        <h3 class="text-sm font-bold text-[#e1e7ef] mt-2 leading-tight">Checklist de Transição Tributária</h3>
-                    </div>
-                </div>
-                <p class="text-xs text-[#484f58] font-medium leading-relaxed flex-1">Acompanhamento de mudanças de regime tributário com 11 etapas e progresso em tempo real.</p>
-                <div class="flex items-center gap-2 mt-4 pt-4 border-t border-[#21262d]">
-                    <span class="text-[10px] font-bold text-[#06b6d4]">Módulo 5</span>
-                    <span class="ml-auto text-[#21262d] group-hover:text-[#02727e] transition-colors text-sm">➔</span>
-                </div>
-            </a>
-
-            <!-- Module 6 -->
-            <a href="ap6.html" class="module-card rounded-xl p-5 fade-in flex flex-col" data-category="consultor" data-name="Consulta Inteligente CNPJ/IE">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="icon-box w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0">🔍</div>
-                    <div class="flex-1 min-w-0">
-                        <span class="badge-cat consultor">Consultor</span>
-                        <h3 class="text-sm font-bold text-[#e1e7ef] mt-2 leading-tight">Consulta Inteligente CNPJ/IE</h3>
-                    </div>
-                </div>
-                <p class="text-xs text-[#484f58] font-medium leading-relaxed flex-1">Consultas simultâneas a APIs públicas (CNPJ.ws, BrasilAPI, ViaCEP) com resumo para WhatsApp.</p>
-                <div class="flex items-center gap-2 mt-4 pt-4 border-t border-[#21262d]">
-                    <span class="text-[10px] font-bold text-[#06b6d4]">Módulo 6</span>
-                    <span class="ml-auto text-[#21262d] group-hover:text-[#02727e] transition-colors text-sm">➔</span>
-                </div>
-            </a>
-
-            <!-- Module 7 -->
-            <a href="ap7.html" class="module-card rounded-xl p-5 fade-in flex flex-col" data-category="ferramenta" data-name="Gerador de QR Code Stor">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="icon-box w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0">📱</div>
-                    <div class="flex-1 min-w-0">
-                        <span class="badge-cat ferramenta">Ferramenta</span>
-                        <h3 class="text-sm font-bold text-[#e1e7ef] mt-2 leading-tight">Gerador de QR Code Stor</h3>
-                    </div>
-                </div>
-                <p class="text-xs text-[#484f58] font-medium leading-relaxed flex-1">Geração de QR Codes personalizados para download e cópia. Ideal para compartilhar links.</p>
-                <div class="flex items-center gap-2 mt-4 pt-4 border-t border-[#21262d]">
-                    <span class="text-[10px] font-bold text-[#06b6d4]">Módulo 7</span>
-                    <span class="ml-auto text-[#21262d] group-hover:text-[#02727e] transition-colors text-sm">➔</span>
-                </div>
-            </a>
-
-            <!-- Module 8 -->
-            <a href="ap8.html" class="module-card rounded-xl p-5 fade-in flex flex-col" data-category="fiscal" data-name="Ajuste de Valor de Inventário">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="icon-box w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0">📦</div>
-                    <div class="flex-1 min-w-0">
-                        <span class="badge-cat fiscal">Fiscal</span>
-                        <h3 class="text-sm font-bold text-[#e1e7ef] mt-2 leading-tight">Ajuste de Valor de Inventário</h3>
-                    </div>
-                </div>
-                <p class="text-xs text-[#484f58] font-medium leading-relaxed flex-1">Cálculo de diferença percentual com 10 casas decimais para ajuste de estoque e inventário.</p>
-                <div class="flex items-center gap-2 mt-4 pt-4 border-t border-[#21262d]">
-                    <span class="text-[10px] font-bold text-[#06b6d4]">Módulo 8</span>
-                    <span class="ml-auto text-[#21262d] group-hover:text-[#02727e] transition-colors text-sm">➔</span>
-                </div>
-            </a>
-
-            <!-- Module 9 -->
-            <a href="suporte.html" class="module-card rounded-xl p-5 fade-in flex flex-col" data-category="suporte" data-name="Suporte STOR Sistemas">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="icon-box w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0">💻</div>
-                    <div class="flex-1 min-w-0">
-                        <span class="badge-cat suporte">Suporte</span>
-                        <h3 class="text-sm font-bold text-[#e1e7ef] mt-2 leading-tight">Suporte STOR Sistemas</h3>
-                    </div>
-                </div>
-                <p class="text-xs text-[#484f58] font-medium leading-relaxed flex-1">Central de ferramentas integrada para suporte técnico N2 da STOR Sistemas.</p>
-                <div class="flex items-center gap-2 mt-4 pt-4 border-t border-[#21262d]">
-                    <span class="text-[10px] font-bold text-[#06b6d4]">Módulo 9</span>
-                    <span class="ml-auto text-[#21262d] group-hover:text-[#02727e] transition-colors text-sm">➔</span>
-                </div>
-            </a>
-
-            <!-- Module 11 -->
-            <a href="Validador de LCDPR.html" class="module-card rounded-xl p-5 fade-in flex flex-col" data-category="fiscal" data-name="Validador LCDPR">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="icon-box w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0">📄</div>
-                    <div class="flex-1 min-w-0">
-                        <span class="badge-cat fiscal">Fiscal</span>
-                        <h3 class="text-sm font-bold text-[#e1e7ef] mt-2 leading-tight">Validador LCDPR</h3>
-                    </div>
-                </div>
-                <p class="text-xs text-[#484f58] font-medium leading-relaxed flex-1">Validação completa de arquivos TXT do LCDPR da Receita Federal com detecção de erros em todos os registros.</p>
-                <div class="flex items-center gap-2 mt-4 pt-4 border-t border-[#21262d]">
-                    <span class="text-[10px] font-bold text-[#06b6d4]">Módulo 11</span>
-                    <span class="ml-auto text-[#21262d] group-hover:text-[#02727e] transition-colors text-sm">➔</span>
-                </div>
-            </a>
-
-            <!-- Module 12 -->
-            <a href="COMPARAR TEXTO2.html" class="module-card rounded-xl p-5 fade-in flex flex-col" data-category="ferramenta" data-name="Comparador de Texto">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="icon-box w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0">🔎</div>
-                    <div class="flex-1 min-w-0">
-                        <span class="badge-cat ferramenta">Ferramenta</span>
-                        <h3 class="text-sm font-bold text-[#e1e7ef] mt-2 leading-tight">Comparador Caracter por Caracter</h3>
-                    </div>
-                </div>
-                <p class="text-xs text-[#484f58] font-medium leading-relaxed flex-1">Comparação caractere a caractere entre dois textos com destaque visual de diferenças e omissões.</p>
-                <div class="flex items-center gap-2 mt-4 pt-4 border-t border-[#21262d]">
-                    <span class="text-[10px] font-bold text-[#06b6d4]">Módulo 12</span>
-                    <span class="ml-auto text-[#21262d] group-hover:text-[#02727e] transition-colors text-sm">➔</span>
-                </div>
-            </a>
-
-            <!-- Module 13 -->
-            <a href="CONVERSOR DE IMAGEM PARA PDF E WORD.html" class="module-card rounded-xl p-5 fade-in flex flex-col" data-category="ferramenta" data-name="Conversor de Imagens para PDF/Word">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="icon-box w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0">🖼️</div>
-                    <div class="flex-1 min-w-0">
-                        <span class="badge-cat ferramenta">Ferramenta</span>
-                        <h3 class="text-sm font-bold text-[#e1e7ef] mt-2 leading-tight">Conversor Imagens → PDF / Word</h3>
-                    </div>
-                </div>
-                <p class="text-xs text-[#484f58] font-medium leading-relaxed flex-1">Converta imagens para PDF ou Word (A4) com arrastar e soltar para reordenar páginas.</p>
-                <div class="flex items-center gap-2 mt-4 pt-4 border-t border-[#21262d]">
-                    <span class="text-[10px] font-bold text-[#06b6d4]">Módulo 13</span>
-                    <span class="ml-auto text-[#21262d] group-hover:text-[#02727e] transition-colors text-sm">➔</span>
-                </div>
-            </a>
-
-            <!-- Module 14 -->
-            <a href="CALCULADORA XML.html" class="module-card rounded-xl p-5 fade-in flex flex-col" data-category="ferramenta" data-name="Calculadora de XML">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="icon-box w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0">📄</div>
-                    <div class="flex-1 min-w-0">
-                        <span class="badge-cat ferramenta">Ferramenta</span>
-                        <h3 class="text-sm font-bold text-[#e1e7ef] mt-2 leading-tight">Calculadora de XML</h3>
-                    </div>
-                </div>
-                <p class="text-xs text-[#484f58] font-medium leading-relaxed flex-1">Leitor de XML fiscal com duas versões: GPT (clássica) e Gemini (dashboard moderno). Exportação XLSX.</p>
-                <div class="flex items-center gap-2 mt-4 pt-4 border-t border-[#21262d]">
-                    <span class="text-[10px] font-bold text-[#06b6d4]">Módulo 14</span>
-                    <span class="ml-auto text-[#21262d] group-hover:text-[#02727e] transition-colors text-sm">➔</span>
-                </div>
-            </a>
-
-            <!-- Module 15 -->
-            <a href="VERSOES SISTEMAS STOR.html" class="module-card rounded-xl p-5 fade-in flex flex-col" data-category="ferramenta" data-name="Versões STOR">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="icon-box w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0">🖥️</div>
-                    <div class="flex-1 min-w-0">
-                        <span class="badge-cat ferramenta">Ferramenta</span>
-                        <h3 class="text-sm font-bold text-[#e1e7ef] mt-2 leading-tight">Versões STOR</h3>
-                    </div>
-                </div>
-                <p class="text-xs text-[#484f58] font-medium leading-relaxed flex-1">Consulta de servidores STOR com duas versões: GPT (clássica) e Claude (moderna). Importação XLSX, filtros e busca textual.</p>
-                <div class="flex items-center gap-2 mt-4 pt-4 border-t border-[#21262d]">
-                    <span class="text-[10px] font-bold text-[#06b6d4]">Módulo 15</span>
-                    <span class="ml-auto text-[#21262d] group-hover:text-[#02727e] transition-colors text-sm">➔</span>
-                </div>
-            </a>
-
-            <!-- Module 16 -->
-            <a href="Gerenciador N2.html" class="module-card rounded-xl p-5 fade-in flex flex-col" data-category="suporte" data-name="Gerenciador N2">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="icon-box w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0">⚡</div>
-                    <div class="flex-1 min-w-0">
-                        <span class="badge-cat suporte">Suporte</span>
-                        <h3 class="text-sm font-bold text-[#e1e7ef] mt-2 leading-tight">Gerenciador N2</h3>
-                    </div>
-                </div>
-                <p class="text-xs text-[#484f58] font-medium leading-relaxed flex-1">Gerenciador de ordens N2 — abrir ordens e consultar.</p>
-                <div class="flex items-center gap-2 mt-4 pt-4 border-t border-[#21262d]">
-                    <span class="text-[10px] font-bold text-[#06b6d4]">Módulo 16</span>
-                    <span class="ml-auto text-[#21262d] group-hover:text-[#02727e] transition-colors text-sm">➔</span>
-                </div>
-            </a>
-
-            <!-- Module 17 -->
-            <a href="saneamento-fiscal.html" class="module-card rounded-xl p-5 fade-in flex flex-col" data-category="fiscal" data-name="Saneamento Fiscal">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="icon-box w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0">🧹</div>
-                    <div class="flex-1 min-w-0">
-                        <span class="badge-cat fiscal">Fiscal</span>
-                        <h3 class="text-sm font-bold text-[#e1e7ef] mt-2 leading-tight">Saneamento Fiscal</h3>
-                    </div>
-                </div>
-                <p class="text-xs text-[#484f58] font-medium leading-relaxed flex-1">Portal de saneamento fiscal com cadastro de clientes, controle de licenças e planilha de itens por regime tributário.</p>
-                <div class="flex items-center gap-2 mt-4 pt-4 border-t border-[#21262d]">
-                    <span class="text-[10px] font-bold text-[#06b6d4]">Módulo 17</span>
-                    <span class="ml-auto text-[#21262d] group-hover:text-[#02727e] transition-colors text-sm">➔</span>
-                </div>
-            </a>
-
-            <!-- Module 10 -->
-            <a href="Comparativo%20de%20planilha%20TROCA%20DE%20REGIME%20TRIBUTARIO%20sistema%20x%20contabilidade.html" class="module-card rounded-xl p-5 fade-in flex flex-col" data-category="fiscal" data-name="Comparativo Tributário Contabilidade x Sistema">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="icon-box w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0">📊</div>
-                    <div class="flex-1 min-w-0">
-                        <span class="badge-cat fiscal">Fiscal</span>
-                        <h3 class="text-sm font-bold text-[#e1e7ef] mt-2 leading-tight">Comparativo Contabilidade × Sistema</h3>
-                    </div>
-                </div>
-                <p class="text-xs text-[#484f58] font-medium leading-relaxed flex-1">Comparação coluna a coluna de NCM, CST, alíquotas e CFOP entre planilhas da contabilidade e do sistema.</p>
-                <div class="flex items-center gap-2 mt-4 pt-4 border-t border-[#21262d]">
-                    <span class="text-[10px] font-bold text-[#06b6d4]">Módulo 10</span>
-                    <span class="ml-auto text-[#21262d] group-hover:text-[#02727e] transition-colors text-sm">➔</span>
-                </div>
-            </a>
+        <div class="ambient-date" id="clockDate">&nbsp;</div>
+        <div class="ambient-weather is-hidden" id="weatherWidget">
+          <span id="weatherIcon">🌡️</span><span id="weatherTemp">--°C</span><span id="weatherDesc" style="color:var(--muted); font-weight:600;"></span>
         </div>
+      </div>
 
-        <!-- Empty state -->
-        <div id="emptyState" class="hidden text-center py-20">
-            <div class="text-5xl mb-4 opacity-30">🔍</div>
-            <p class="text-[#484f58] font-bold text-lg">Nenhum módulo encontrado</p>
-            <p class="text-[#484f58] text-sm mt-1">Tente alterar os filtros ou buscar por outro termo.</p>
-        </div>
-
-        <!-- Footer -->
-        <footer class="mt-10 pt-6 border-t border-[#21262d] flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="text-xs font-bold text-[#484f58]">Thomas Tech &copy; 2026</div>
-            <div class="flex items-center gap-3">
-                <span class="text-xs font-semibold text-[#484f58]">Suporte N2 Especializado</span>
-                <span class="w-1 h-1 rounded-full bg-[#484f58]"></span>
-                <span class="text-xs font-semibold text-[#06b6d4]">Stor Sistemas</span>
-            </div>
-        </footer>
+      <div class="icon-grid" id="iconGrid"></div>
     </div>
 
-    <script>
-        function filterModules() {
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            const activeFilter = document.querySelector('.filter-btn.active')?.textContent.trim().toLowerCase() || 'todas';
-            const cards = document.querySelectorAll('.module-card');
-            let visibleCount = 0;
+    <div id="windowsLayer"></div>
+  </div>
 
-            cards.forEach(card => {
-                const name = card.getAttribute('data-name').toLowerCase();
-                const category = card.getAttribute('data-category');
-                const matchSearch = name.includes(search);
-                const matchFilter = activeFilter === 'todas' || category === activeFilter;
+  <!-- Launcher / Menu -->
+  <div class="launcher is-hidden" id="launcher">
+    <div class="launcher-header">
+      <div class="launcher-title-row">
+        <div class="logo">TT</div>
+        <div>
+          <div style="font-size:14px;font-weight:800;color:var(--text);">Todas as aplicações</div>
+          <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;">Portal de Ferramentas N2</div>
+        </div>
+      </div>
+      <div class="search-wrap">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="text" id="launcherSearch" class="launcher-search" placeholder="Buscar módulo por nome...">
+      </div>
+      <div class="launcher-filters" id="launcherFilters">
+        <button class="launcher-filter active" data-cat="todas">Todas</button>
+        <button class="launcher-filter" data-cat="fiscal">Fiscal</button>
+        <button class="launcher-filter" data-cat="ferramenta">Ferramenta</button>
+        <button class="launcher-filter" data-cat="consultor">Consultor</button>
+        <button class="launcher-filter" data-cat="suporte">Suporte</button>
+      </div>
+    </div>
+    <div class="launcher-body">
+      <div class="launcher-grid" id="launcherGrid"></div>
+      <div class="launcher-empty is-hidden" id="launcherEmpty">
+        <div style="font-size:34px;opacity:.4;margin-bottom:10px;">🔍</div>
+        <div style="font-weight:700;">Nenhum módulo encontrado</div>
+        <div style="font-size:12px;margin-top:4px;">Tente alterar os filtros ou buscar por outro termo.</div>
+      </div>
+      <div class="launcher-footer">
+        <span>Thomas Tech &copy; 2026</span>
+        <span>Suporte N2 Especializado &middot; Stor Sistemas</span>
+      </div>
+    </div>
+  </div>
 
-                if (matchSearch && matchFilter) {
-                    card.style.display = 'flex';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+  <!-- Taskbar -->
+  <div class="taskbar">
+    <button type="button" class="start-btn" id="startBtn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="9" height="9" rx="1.5"/><rect x="13" y="2" width="9" height="9" rx="1.5"/><rect x="2" y="13" width="9" height="9" rx="1.5"/><rect x="13" y="13" width="9" height="9" rx="1.5"/></svg>
+      Menu
+    </button>
+    <div class="taskbar-apps" id="taskbarApps"></div>
+    <div class="taskbar-right">
+      <span class="online-pill"><span class="online-dot"></span>ONLINE</span>
+      <button type="button" class="theme-btn" id="themeBtn">☀️</button>
+      <div class="taskbar-clock" id="taskbarClock">--:--</div>
+    </div>
+  </div>
 
-            document.getElementById('emptyState').classList.toggle('hidden', visibleCount > 0);
-        }
-
-        function setFilter(category) {
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                const isActive = btn.textContent.trim().toLowerCase() === category;
-                btn.classList.toggle('active', isActive);
-                if (isActive) {
-                    btn.style.background = 'rgba(2,114,126,0.15)';
-                    btn.style.color = '#06b6d4';
-                    btn.style.borderColor = 'rgba(2,114,126,0.3)';
-                } else {
-                    btn.style.background = 'rgba(255,255,255,0.03)';
-                    btn.style.color = '#484f58';
-                    btn.style.borderColor = 'rgba(255,255,255,0.06)';
-                }
-            });
-            filterModules();
-        }
-    </script>
 <script>
-(function(){var t=localStorage.getItem('theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');function toggle(){var h=document.documentElement;if(h.getAttribute('data-theme')==='light'){h.removeAttribute('data-theme');localStorage.setItem('theme','dark');}else{h.setAttribute('data-theme','light');localStorage.setItem('theme','light');}}var nav=document.querySelector('nav')||document.querySelector('.nav-bar');if(nav){var btn=document.createElement('button');btn.innerHTML=document.documentElement.getAttribute('data-theme')==='light'?'🌙':'☀️';btn.style.cssText='background:none;border:none;cursor:pointer;font-size:18px;padding:2px 8px;margin-left:auto;line-height:1';btn.title='Alternar tema claro/escuro';btn.onclick=toggle;nav.appendChild(btn);}
-})();
+  /* ============ DADOS DOS MÓDULOS ============ */
+  const apps = [
+    { id:1,  href:'ap1.html', icon:'🧮', name:'Calculadora de Salário Líquido 2026', category:'ferramenta', desc:'Cálculo completo de INSS e IRRF com a nova tabela 2026 e faixa de isenção de R$ 5k.' },
+    { id:2,  href:'ap2.html', icon:'🧾', name:'Ajuste Erro de Cálculo SPED PIS/COFINS', category:'fiscal', desc:'Correção de divergências no SPED com cálculo automático de novo valor esperado e natureza de receita.' },
+    { id:3,  href:'ap3.html', icon:'🛠️', name:'Gerenciador de Ordens N2', category:'consultor', desc:'Sistema completo com Firebase para gestão de chamados N3, dúvidas e ordens de serviço.' },
+    { id:4,  href:'ap4.html', icon:'⚖️', name:'Conciliação SEFAZ x Sistema', category:'fiscal', desc:'Comparativo de notas fiscais entre base SEFAZ e sistema com detecção de divergências.' },
+    { id:5,  href:'ap5.html', icon:'📝', name:'Checklist de Transição Tributária', category:'consultor', desc:'Acompanhamento de mudanças de regime tributário com 11 etapas e progresso em tempo real.' },
+    { id:6,  href:'ap6.html', icon:'🔍', name:'Consulta Inteligente CNPJ/IE', category:'consultor', desc:'Consultas simultâneas a APIs públicas (CNPJ.ws, BrasilAPI, ViaCEP) com resumo para WhatsApp.' },
+    { id:7,  href:'ap7.html', icon:'📱', name:'Gerador de QR Code Stor', category:'ferramenta', desc:'Geração de QR Codes personalizados para download e cópia. Ideal para compartilhar links.' },
+    { id:8,  href:'ap8.html', icon:'📦', name:'Ajuste de Valor de Inventário', category:'fiscal', desc:'Cálculo de diferença percentual com 10 casas decimais para ajuste de estoque e inventário.' },
+    { id:9,  href:'suporte.html', icon:'💻', name:'Suporte STOR Sistemas', category:'suporte', desc:'Central de ferramentas integrada para suporte técnico N2 da STOR Sistemas.' },
+    { id:10, href:'Comparativo%20de%20planilha%20TROCA%20DE%20REGIME%20TRIBUTARIO%20sistema%20x%20contabilidade.html', icon:'📊', name:'Comparativo Contabilidade × Sistema', category:'fiscal', desc:'Comparação coluna a coluna de NCM, CST, alíquotas e CFOP entre planilhas da contabilidade e do sistema.' },
+    { id:11, href:'Validador de LCDPR.html', icon:'📄', name:'Validador LCDPR', category:'fiscal', desc:'Validação completa de arquivos TXT do LCDPR da Receita Federal com detecção de erros em todos os registros.' },
+    { id:12, href:'COMPARAR TEXTO2.html', icon:'🔎', name:'Comparador Caracter por Caracter', category:'ferramenta', desc:'Comparação caractere a caractere entre dois textos com destaque visual de diferenças e omissões.' },
+    { id:13, href:'CONVERSOR DE IMAGEM PARA PDF E WORD.html', icon:'🖼️', name:'Conversor Imagens → PDF / Word', category:'ferramenta', desc:'Converta imagens para PDF ou Word (A4) com arrastar e soltar para reordenar páginas.' },
+    { id:14, href:'CALCULADORA XML.html', icon:'📄', name:'Calculadora de XML', category:'ferramenta', desc:'Leitor de XML fiscal com duas versões: GPT (clássica) e Gemini (dashboard moderno). Exportação XLSX.' },
+    { id:15, href:'VERSOES SISTEMAS STOR.html', icon:'🖥️', name:'Versões STOR', category:'ferramenta', desc:'Consulta de servidores STOR com duas versões: GPT (clássica) e Claude (moderna). Importação XLSX, filtros e busca textual.' },
+    { id:16, href:'Gerenciador N2.html', icon:'⚡', name:'Gerenciador N2', category:'suporte', desc:'Gerenciador de ordens N2 — abrir ordens e consultar.' },
+    { id:17, href:'saneamento-fiscal.html', icon:'🧹', name:'Saneamento Fiscal', category:'fiscal', desc:'Portal de saneamento fiscal com cadastro de clientes, controle de licenças e planilha de itens por regime tributário.' },
+  ];
+
+  const CAT_LABEL = { fiscal:'Fiscal', ferramenta:'Ferramenta', consultor:'Consultor', suporte:'Suporte' };
+
+  const ICONS = {
+    min: `<svg viewBox="0 0 10 10" fill="none"><line x1="1" y1="8.2" x2="9" y2="8.2" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>`,
+    max: `<svg viewBox="0 0 10 10" fill="none"><rect x="1.3" y="1.3" width="7.4" height="7.4" rx="1" stroke="currentColor" stroke-width="1.1"/></svg>`,
+    restore: `<svg viewBox="0 0 10 10" fill="none"><rect x="2.7" y="1" width="6.3" height="6.3" rx="1" stroke="currentColor" stroke-width="1"/><rect x="1" y="2.7" width="6.3" height="6.3" rx="1" stroke="currentColor" stroke-width="1" fill="var(--surface)"/></svg>`,
+    close: `<svg viewBox="0 0 10 10" fill="none"><line x1="1.2" y1="1.2" x2="8.8" y2="8.8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="8.8" y1="1.2" x2="1.2" y2="8.8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>`
+  };
+
+  /* ============ RELÓGIO ============ */
+  function pad(n){ return n.toString().padStart(2,'0'); }
+  function tickClock(){
+    const now = new Date();
+    const h = pad(now.getHours()), m = pad(now.getMinutes()), s = pad(now.getSeconds());
+    document.getElementById('clockTime').textContent = `${h}:${m}`;
+    document.getElementById('clockSeconds').textContent = s;
+    document.getElementById('taskbarClock').textContent = `${h}:${m}`;
+    let dateStr = now.toLocaleDateString('pt-BR', { weekday:'long', day:'numeric', month:'long' });
+    dateStr = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+    document.getElementById('clockDate').textContent = dateStr;
+  }
+
+  /* ============ CLIMA (Open-Meteo, sem chave de API) ============ */
+  function weatherCodeInfo(code){
+    const map = {
+      0:['☀️','Céu limpo'], 1:['🌤️','Poucas nuvens'], 2:['⛅','Parcialmente nublado'], 3:['☁️','Nublado'],
+      45:['🌫️','Neblina'], 48:['🌫️','Neblina'],
+      51:['🌦️','Garoa fraca'], 53:['🌦️','Garoa'], 55:['🌧️','Garoa forte'],
+      56:['🌧️','Garoa congelante'], 57:['🌧️','Garoa congelante'],
+      61:['🌧️','Chuva fraca'], 63:['🌧️','Chuva'], 65:['🌧️','Chuva forte'],
+      66:['🌧️','Chuva congelante'], 67:['🌧️','Chuva congelante'],
+      71:['❄️','Neve fraca'], 73:['❄️','Neve'], 75:['❄️','Neve forte'], 77:['🌨️','Grãos de neve'],
+      80:['🌦️','Aguaceiros'], 81:['🌧️','Aguaceiros'], 82:['⛈️','Aguaceiros fortes'],
+      85:['🌨️','Aguaceiros de neve'], 86:['🌨️','Aguaceiros de neve'],
+      95:['⛈️','Trovoada'], 96:['⛈️','Trovoada c/ granizo'], 99:['⛈️','Trovoada forte']
+    };
+    return map[code] || ['🌡️','—'];
+  }
+  function initWeather(){
+    const widget = document.getElementById('weatherWidget');
+    if(!('geolocation' in navigator)){ return; }
+    navigator.geolocation.getCurrentPosition(async pos => {
+      try{
+        const { latitude, longitude } = pos.coords;
+        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`);
+        const data = await res.json();
+        const temp = Math.round(data.current_weather.temperature);
+        const [icon, label] = weatherCodeInfo(data.current_weather.weathercode);
+        document.getElementById('weatherIcon').textContent = icon;
+        document.getElementById('weatherTemp').textContent = temp + '°C';
+        document.getElementById('weatherDesc').textContent = label;
+        widget.classList.remove('is-hidden');
+      }catch(e){ /* mantém oculto em caso de falha */ }
+    }, () => { /* permissão negada: mantém oculto */ }, { timeout:8000, maximumAge:600000 });
+  }
+
+  /* ============ ÍCONES DA ÁREA DE TRABALHO ============ */
+  function renderDesktopIcons(){
+    const grid = document.getElementById('iconGrid');
+    grid.innerHTML = apps.map((app, idx) => `
+      <button type="button" class="icon-tile" data-id="${app.id}" title="${app.name}" style="animation-delay:${(idx * 0.025).toFixed(3)}s">
+        <span class="icon-glyph cat-${app.category}">${app.icon}</span>
+        <span class="icon-label">${app.name}</span>
+      </button>`).join('');
+    grid.querySelectorAll('.icon-tile').forEach(btn => {
+      btn.addEventListener('click', () => openApp(Number(btn.dataset.id)));
+    });
+  }
+
+  /* ============ MENU / LAUNCHER ============ */
+  function cardHTML(app){
+    return `<button type="button" class="launcher-card" data-id="${app.id}" data-cat="${app.category}" data-name="${app.name.toLowerCase()}">
+      <span class="launcher-card-icon">${app.icon}</span>
+      <span class="badge-cat ${app.category}" style="margin-top:10px;width:fit-content;">${CAT_LABEL[app.category]}</span>
+      <span class="launcher-card-title">${app.name}</span>
+      <span class="launcher-card-desc">${app.desc}</span>
+      <span class="launcher-card-foot"><span class="launcher-mod">Módulo ${app.id}</span><span style="margin-left:auto;color:var(--muted);">➔</span></span>
+    </button>`;
+  }
+  function renderLauncherGrid(){
+    const grid = document.getElementById('launcherGrid');
+    grid.innerHTML = apps.map(cardHTML).join('');
+    grid.querySelectorAll('.launcher-card').forEach(btn => {
+      btn.addEventListener('click', () => openApp(Number(btn.dataset.id)));
+    });
+  }
+  let activeCat = 'todas';
+  function filterLauncher(){
+    const q = document.getElementById('launcherSearch').value.toLowerCase();
+    let visible = 0;
+    document.querySelectorAll('.launcher-card').forEach(card => {
+      const matchQ = card.dataset.name.includes(q);
+      const matchCat = activeCat === 'todas' || card.dataset.cat === activeCat;
+      const show = matchQ && matchCat;
+      card.style.display = show ? '' : 'none';
+      if(show) visible++;
+    });
+    document.getElementById('launcherEmpty').classList.toggle('is-hidden', visible > 0);
+  }
+  function openLauncher(){ document.getElementById('launcher').classList.remove('is-hidden'); }
+  function closeLauncher(){ document.getElementById('launcher').classList.add('is-hidden'); }
+
+  /* ============ GERENCIADOR DE JANELAS ============ */
+  const openWins = {};
+  let zCounter = 100;
+  let cascadeIndex = 0;
+
+  function isSmallScreen(){ return window.innerWidth < 760; }
+
+  function openApp(appId){
+    const app = apps.find(a => a.id === appId);
+    if(!app) return;
+
+    if(openWins[appId]){
+      if(openWins[appId].minimized) restoreWindow(appId);
+      focusWindow(appId);
+      closeLauncher();
+      return;
+    }
+
+    const small = isSmallScreen();
+    const w = small ? window.innerWidth : Math.min(760, Math.round(window.innerWidth * 0.68));
+    const h = small ? window.innerHeight - 60 : Math.min(600, Math.round(window.innerHeight * 0.76));
+    const offset = (cascadeIndex % 6) * 26;
+    cascadeIndex++;
+    const left = small ? 0 : 50 + offset;
+    const top = small ? 0 : 36 + offset;
+
+    const el = document.createElement('div');
+    el.className = 'os-window opening';
+    el.style.width = w + 'px';
+    el.style.height = h + 'px';
+    el.style.left = left + 'px';
+    el.style.top = top + 'px';
+    el.style.zIndex = ++zCounter;
+    el.innerHTML = `
+      <div class="os-titlebar">
+        <span class="os-title-icon">${app.icon}</span>
+        <span class="os-title-text">${app.name}</span>
+        <div class="os-controls">
+          <button type="button" class="os-btn os-min" title="Minimizar">${ICONS.min}</button>
+          <button type="button" class="os-btn os-max" title="Maximizar">${ICONS.max}</button>
+          <button type="button" class="os-btn os-close" title="Fechar">${ICONS.close}</button>
+        </div>
+      </div>
+      <div class="os-body"><iframe src="${app.href}"></iframe></div>
+      <div class="os-resize"></div>`;
+    document.getElementById('windowsLayer').appendChild(el);
+
+    const winObj = { appId, el, minimized:false, maximized:false, prevRect:null };
+    openWins[appId] = winObj;
+
+    requestAnimationFrame(() => el.classList.remove('opening'));
+    setupWindowInteractions(winObj);
+    if(small) toggleMaximize(appId, true);
+
+    renderTaskbar();
+    focusWindow(appId);
+    closeLauncher();
+  }
+
+  function setupWindowInteractions(winObj){
+    const { el, appId } = winObj;
+    const titlebar = el.querySelector('.os-titlebar');
+    const minBtn = el.querySelector('.os-min');
+    const maxBtn = el.querySelector('.os-max');
+    const closeBtn = el.querySelector('.os-close');
+    const resizeHandle = el.querySelector('.os-resize');
+
+    el.addEventListener('pointerdown', () => focusWindow(appId));
+    minBtn.addEventListener('click', e => { e.stopPropagation(); minimizeWindow(appId); });
+    maxBtn.addEventListener('click', e => { e.stopPropagation(); toggleMaximize(appId); });
+    closeBtn.addEventListener('click', e => { e.stopPropagation(); closeWindow(appId); });
+    titlebar.addEventListener('dblclick', e => { if(!e.target.closest('.os-btn')) toggleMaximize(appId); });
+
+    let dragging = false, startX = 0, startY = 0, startLeft = 0, startTop = 0;
+    titlebar.addEventListener('pointerdown', e => {
+      if(e.target.closest('.os-btn') || winObj.maximized) return;
+      dragging = true;
+      startX = e.clientX; startY = e.clientY;
+      startLeft = el.offsetLeft; startTop = el.offsetTop;
+      titlebar.setPointerCapture(e.pointerId);
+      focusWindow(appId);
+    });
+    titlebar.addEventListener('pointermove', e => {
+      if(!dragging) return;
+      const dx = e.clientX - startX, dy = e.clientY - startY;
+      el.style.left = (startLeft + dx) + 'px';
+      el.style.top = Math.max(0, startTop + dy) + 'px';
+    });
+    titlebar.addEventListener('pointerup', () => dragging = false);
+    titlebar.addEventListener('pointercancel', () => dragging = false);
+
+    let resizing = false, rStartX = 0, rStartY = 0, rStartW = 0, rStartH = 0;
+    resizeHandle.addEventListener('pointerdown', e => {
+      if(winObj.maximized) return;
+      resizing = true;
+      rStartX = e.clientX; rStartY = e.clientY;
+      rStartW = el.offsetWidth; rStartH = el.offsetHeight;
+      resizeHandle.setPointerCapture(e.pointerId);
+      e.stopPropagation();
+    });
+    resizeHandle.addEventListener('pointermove', e => {
+      if(!resizing) return;
+      const dx = e.clientX - rStartX, dy = e.clientY - rStartY;
+      el.style.width = Math.max(300, rStartW + dx) + 'px';
+      el.style.height = Math.max(220, rStartH + dy) + 'px';
+    });
+    resizeHandle.addEventListener('pointerup', () => resizing = false);
+    resizeHandle.addEventListener('pointercancel', () => resizing = false);
+  }
+
+  function focusWindow(appId){
+    Object.values(openWins).forEach(w => w.el.classList.remove('focused'));
+    const w = openWins[appId];
+    if(!w) return;
+    w.el.style.zIndex = ++zCounter;
+    w.el.classList.add('focused');
+    renderTaskbar();
+  }
+
+  function minimizeWindow(appId){
+    const w = openWins[appId];
+    if(!w) return;
+    w.minimized = true;
+    w.el.classList.add('minimized');
+    w.el.classList.remove('focused');
+    renderTaskbar();
+  }
+
+  function restoreWindow(appId){
+    const w = openWins[appId];
+    if(!w) return;
+    w.minimized = false;
+    w.el.classList.remove('minimized');
+    focusWindow(appId);
+  }
+
+  function toggleMaximize(appId, force){
+    const w = openWins[appId];
+    if(!w) return;
+    const el = w.el;
+    if(!w.maximized){
+      w.prevRect = { left: el.style.left, top: el.style.top, width: el.style.width, height: el.style.height };
+      el.classList.add('maximized');
+      w.maximized = true;
+    } else if(!force){
+      el.classList.remove('maximized');
+      el.style.left = w.prevRect.left; el.style.top = w.prevRect.top;
+      el.style.width = w.prevRect.width; el.style.height = w.prevRect.height;
+      w.maximized = false;
+    }
+    const maxBtn = el.querySelector('.os-max');
+    maxBtn.innerHTML = w.maximized ? ICONS.restore : ICONS.max;
+    maxBtn.title = w.maximized ? 'Restaurar' : 'Maximizar';
+    focusWindow(appId);
+  }
+
+  function closeWindow(appId){
+    const w = openWins[appId];
+    if(!w) return;
+    w.el.classList.add('closing');
+    setTimeout(() => {
+      w.el.remove();
+      delete openWins[appId];
+      renderTaskbar();
+    }, 150);
+  }
+
+  function renderTaskbar(){
+    const wrap = document.getElementById('taskbarApps');
+    wrap.innerHTML = Object.values(openWins).map(w => {
+      const app = apps.find(a => a.id === w.appId);
+      const isFocused = w.el.classList.contains('focused');
+      return `<button type="button" class="taskbar-app ${isFocused ? 'active' : ''} ${w.minimized ? 'is-min' : ''}" data-id="${w.appId}">
+        <span>${app.icon}</span><span class="taskbar-app-label">${app.name}</span>
+      </button>`;
+    }).join('');
+    wrap.querySelectorAll('.taskbar-app').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = Number(btn.dataset.id);
+        const w = openWins[id];
+        if(!w) return;
+        if(w.minimized) restoreWindow(id);
+        else if(w.el.classList.contains('focused')) minimizeWindow(id);
+        else focusWindow(id);
+      });
+    });
+  }
+
+  /* ============ TEMA CLARO / ESCURO ============ */
+  function applyTheme(theme){
+    if(theme === 'light') document.documentElement.setAttribute('data-theme','light');
+    else document.documentElement.removeAttribute('data-theme');
+    document.getElementById('themeBtn').textContent = theme === 'light' ? '🌙' : '☀️';
+  }
+  function initTheme(){
+    applyTheme(localStorage.getItem('theme') || 'dark');
+  }
+
+  /* ============ EVENTOS GERAIS ============ */
+  document.getElementById('startBtn').addEventListener('click', () => {
+    document.getElementById('launcher').classList.toggle('is-hidden');
+  });
+  document.addEventListener('click', e => {
+    const launcher = document.getElementById('launcher');
+    if(launcher.classList.contains('is-hidden')) return;
+    if(e.target.closest('#launcher') || e.target.closest('#startBtn')) return;
+    closeLauncher();
+  });
+  document.getElementById('launcherSearch').addEventListener('input', filterLauncher);
+  document.querySelectorAll('.launcher-filter').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeCat = btn.dataset.cat;
+      document.querySelectorAll('.launcher-filter').forEach(b => b.classList.toggle('active', b === btn));
+      filterLauncher();
+    });
+  });
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    const next = isLight ? 'dark' : 'light';
+    localStorage.setItem('theme', next);
+    applyTheme(next);
+  });
+  window.addEventListener('resize', () => {
+    Object.values(openWins).forEach(w => {
+      if(w.maximized) return;
+      const maxLeft = Math.max(0, window.innerWidth - 120);
+      const maxTop = Math.max(0, window.innerHeight - 120);
+      if(w.el.offsetLeft > maxLeft) w.el.style.left = maxLeft + 'px';
+      if(w.el.offsetTop > maxTop) w.el.style.top = maxTop + 'px';
+    });
+  });
+
+  /* ============ INICIALIZAÇÃO ============ */
+  renderDesktopIcons();
+  renderLauncherGrid();
+  initTheme();
+  initWeather();
+  tickClock();
+  setInterval(tickClock, 1000);
 </script>
 </body>
 </html>
