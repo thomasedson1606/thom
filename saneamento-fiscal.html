@@ -59,6 +59,9 @@
             <button id="btnTabSaneamento" onclick="switchTab('saneamento')" class="px-6 py-4 text-[#8b949e] border-b-2 border-transparent hover:text-[#06b6d4] focus:outline-none font-medium transition-all">
                 SANEAMENTO
             </button>
+            <button id="btnTabDashboard" onclick="switchTab('dashboard')" class="px-6 py-4 text-[#8b949e] border-b-2 border-transparent hover:text-[#06b6d4] focus:outline-none font-medium transition-all">
+                DASHBOARD
+            </button>
         </div>
     </div>
 
@@ -133,6 +136,70 @@
                             </tr>
                         </thead>
                         <tbody id="gridSaneamentoBody" class="text-sm divide-y divide-[#21262d] text-[#e1e7ef]"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="sectionDashboard" class="hidden space-y-6">
+            <div class="bg-[#161b22] p-6 rounded-lg border border-[#21262d]">
+                <h2 class="text-lg font-semibold text-[#e1e7ef] mb-4 border-b border-[#21262d] pb-2">Filtros do Dashboard</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-[#484f58] uppercase mb-1">Cliente</label>
+                        <select id="dashCliente" onchange="renderDashboard()" class="w-full border border-[#21262d] rounded p-2 focus:outline-none focus:border-[#02727e] bg-[#0b0f14] text-[#e1e7ef]">
+                            <option value="">Todos os clientes</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-[#484f58] uppercase mb-1">Situação</label>
+                        <select id="dashSituacao" onchange="renderDashboard()" class="w-full border border-[#21262d] rounded p-2 focus:outline-none focus:border-[#02727e] bg-[#0b0f14] text-[#e1e7ef]">
+                            <option value="">Todas</option>
+                            <option value="SANEANDO">Saneando</option>
+                            <option value="SANEADO">Saneado</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-[#484f58] uppercase mb-1">Data Início</label>
+                        <input type="text" id="dashDataInicio" placeholder="DD/MM/AAAA" maxlength="10" oninput="mascaraData(this);renderDashboard()" class="w-full border border-[#21262d] rounded p-2 focus:outline-none focus:border-[#02727e] bg-[#0b0f14] text-[#e1e7ef]">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-[#484f58] uppercase mb-1">Data Fim</label>
+                        <input type="text" id="dashDataFim" placeholder="DD/MM/AAAA" maxlength="10" oninput="mascaraData(this);renderDashboard()" class="w-full border border-[#21262d] rounded p-2 focus:outline-none focus:border-[#02727e] bg-[#0b0f14] text-[#e1e7ef]">
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-[#161b22] rounded-lg border border-[#21262d] p-6 text-center">
+                    <div class="text-3xl font-black text-[#06b6d4]" id="dashTotalSaneados">0</div>
+                    <div class="text-xs font-semibold text-[#484f58] uppercase mt-2">Produtos Saneados</div>
+                </div>
+                <div class="bg-[#161b22] rounded-lg border border-[#21262d] p-6 text-center">
+                    <div class="text-3xl font-black text-[#f59e0b]" id="dashTotalPendentes">0</div>
+                    <div class="text-xs font-semibold text-[#484f58] uppercase mt-2">Produtos Pendentes</div>
+                </div>
+                <div class="bg-[#161b22] rounded-lg border border-[#21262d] p-6 text-center">
+                    <div class="text-3xl font-black text-[#e1e7ef]" id="dashTotalProcessos">0</div>
+                    <div class="text-xs font-semibold text-[#484f58] uppercase mt-2">Processos</div>
+                </div>
+            </div>
+
+            <div class="bg-[#161b22] rounded-lg border border-[#21262d] overflow-hidden">
+                <div class="p-4 bg-[#0b0f14] border-b border-[#21262d]"><h3 class="font-semibold text-[#e1e7ef]">Detalhamento por Processo</h3></div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-xs font-semibold text-[#8b949e] uppercase border-b border-[#21262d]" style="background:#161b22;">
+                                <th class="p-3">Data</th>
+                                <th class="p-3">Cliente</th>
+                                <th class="p-3">Situação</th>
+                                <th class="p-3 text-right">Itens</th>
+                                <th class="p-3 text-right">Saneados</th>
+                                <th class="p-3 text-right">Pendentes</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashDetalheBody" class="text-sm divide-y divide-[#21262d] text-[#e1e7ef]"></tbody>
                     </table>
                 </div>
             </div>
@@ -229,14 +296,21 @@
         function switchTab(tab) {
             document.getElementById('sectionClientes').classList.add('hidden');
             document.getElementById('sectionSaneamento').classList.add('hidden');
+            document.getElementById('sectionDashboard').classList.add('hidden');
             document.getElementById('btnTabClientes').classList.remove('tab-active');
             document.getElementById('btnTabSaneamento').classList.remove('tab-active');
+            document.getElementById('btnTabDashboard').classList.remove('tab-active');
             if (tab === 'clientes') {
                 document.getElementById('sectionClientes').classList.remove('hidden');
                 document.getElementById('btnTabClientes').classList.add('tab-active');
-            } else {
+            } else if (tab === 'saneamento') {
                 document.getElementById('sectionSaneamento').classList.remove('hidden');
                 document.getElementById('btnTabSaneamento').classList.add('tab-active');
+            } else if (tab === 'dashboard') {
+                document.getElementById('sectionDashboard').classList.remove('hidden');
+                document.getElementById('btnTabDashboard').classList.add('tab-active');
+                preencherFiltrosDashboard();
+                renderDashboard();
             }
         }
 
@@ -437,6 +511,79 @@
                         </tr>
                     `;
                 }).join('');
+        }
+
+        function preencherFiltrosDashboard() {
+            const sel = document.getElementById('dashCliente');
+            const atual = sel.value;
+            sel.innerHTML = '<option value="">Todos os clientes</option>';
+            const nomes = [...new Set(dbSaneamentos.map(s => s.cliente).filter(Boolean))].sort();
+            nomes.forEach(n => { const o = document.createElement('option'); o.value = n; o.textContent = n; sel.appendChild(o); });
+            sel.value = atual;
+        }
+
+        function renderDashboard() {
+            const cliente = document.getElementById('dashCliente').value;
+            const situacao = document.getElementById('dashSituacao').value;
+            const dtInicio = document.getElementById('dashDataInicio').value;
+            const dtFim = document.getElementById('dashDataFim').value;
+
+            let filtered = dbSaneamentos.filter(s => {
+                if (cliente && s.cliente !== cliente) return false;
+                if (situacao && s.status !== situacao) return false;
+                if (dtInicio && s.data < dtInicio) return false;
+                if (dtFim && s.data > dtFim) return false;
+                return true;
+            });
+
+            let totalSaneados = 0;
+            let totalPendentes = 0;
+            let totalItens = 0;
+
+            filtered.forEach(s => {
+                (s.itens || []).forEach(item => {
+                    const de = parseInt(item.de) || 0;
+                    const ate = parseInt(item.ate) || 0;
+                    const pend = parseInt(item.pendentes) || 0;
+                    const temValor = item.de && item.ate;
+                    if (temValor) {
+                        totalSaneados += (1000 - pend);
+                        totalPendentes += pend;
+                        totalItens++;
+                    }
+                });
+            });
+
+            document.getElementById('dashTotalSaneados').textContent = totalSaneados;
+            document.getElementById('dashTotalPendentes').textContent = totalPendentes;
+            document.getElementById('dashTotalProcessos').textContent = filtered.length;
+
+            const tbody = document.getElementById('dashDetalheBody');
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-[#484f58]">Nenhum processo encontrado.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = filtered.map(s => {
+                const itens = s.itens || [];
+                let sanea = 0, pend = 0;
+                itens.forEach(item => {
+                    const de = parseInt(item.de) || 0;
+                    const ate = parseInt(item.ate) || 0;
+                    const p = parseInt(item.pendentes) || 0;
+                    if (item.de && item.ate) { sanea += (1000 - p); pend += p; }
+                });
+                const badge = s.status === 'SANEANDO'
+                    ? `<span class="bg-amber-900/30 text-amber-400 text-xs font-semibold px-2.5 py-0.5 rounded border border-amber-700/50">Saneando</span>`
+                    : `<span class="bg-green-900/30 text-green-400 text-xs font-semibold px-2.5 py-0.5 rounded border border-green-700/50">Saneado</span>`;
+                return `<tr class="hover:bg-[rgba(255,255,255,0.03)]">
+                    <td class="p-3">${s.data}</td>
+                    <td class="p-3 font-medium">${s.cliente}</td>
+                    <td class="p-3">${badge}</td>
+                    <td class="p-3 text-right">${itens.length}</td>
+                    <td class="p-3 text-right text-[#06b6d4] font-semibold">${sanea}</td>
+                    <td class="p-3 text-right text-[#f59e0b] font-semibold">${pend}</td>
+                </tr>`;
+            }).join('');
         }
     </script>
 <script>
