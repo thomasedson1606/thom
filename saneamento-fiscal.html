@@ -5,48 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thomas Tech - Saneamento Fiscal</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        .tab-active { border-bottom-2xx: 2px solid #02727e; color: #02727e; font-weight: bold; }
+        * { font-family: 'Inter', sans-serif; }
+        .tab-active { border-bottom: 2px solid #02727e !important; color: #06b6d4 !important; }
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    /* Theme Toggle */
+    [data-theme="light"] body { background: #f5f7fa !important; }
+    [data-theme="light"] .nav-bar { background: rgba(255,255,255,0.95) !important; border-color: #d1d5db !important; }
+    [data-theme="light"] .nav-bar span, [data-theme="light"] .nav-bar a { color: #6b7280 !important; }
+    [data-theme="light"] .nav-bar .title { color: #1a1a2e !important; }
+    [data-theme="light"] .tab-bar { background: #ffffff !important; border-color: #d1d5db !important; }
+    [data-theme="light"] .tab-bar button { color: #6b7280 !important; }
+    [data-theme="light"] .bg-white, [data-theme="light"] .bg-gray-50, [data-theme="light"] .bg-gray-100 { background: #ffffff !important; }
+    [data-theme="light"] .text-gray-800, [data-theme="light"] .text-gray-900 { color: #1f2937 !important; }
+    [data-theme="light"] .text-gray-700 { color: #374151 !important; }
+    [data-theme="light"] .text-gray-600 { color: #4b5563 !important; }
+    [data-theme="light"] .text-gray-500 { color: #6b7280 !important; }
+    [data-theme="light"] .text-gray-400 { color: #9ca3af !important; }
+    [data-theme="light"] .border-gray-200, [data-theme="light"] .divide-gray-100, [data-theme="light"] .divide-gray-200 { border-color: #e5e7eb !important; }
+    [data-theme="light"] .border-gray-300 { border-color: #d1d5db !important; }
+    [data-theme="light"] input, [data-theme="light"] select { background: #ffffff !important; border-color: #d1d5db !important; color: #1f2937 !important; }
+    [data-theme="light"] .bg-\[\#02727e\] { background: #02727e !important; }
+    [data-theme="light"] .bg-amber-600 { background: #d97706 !important; }
+    [data-theme="light"] table thead tr { background: #f3f4f6 !important; }
+    [data-theme="light"] table thead th { color: #4b5563 !important; }
     </style>
 </head>
-<body class="bg-gray-100 font-sans min-h-screen flex flex-col">
+<body class="bg-[#0b0f14] text-[#e1e7ef] min-h-screen flex flex-col">
 
-    <header class="bg-[#02727e] text-white p-4 shadow-md flex justify-between items-center">
-        <h1 class="text-xl font-bold tracking-wide">Thomas Tech | Portal de Saneamento</h1>
-        <span class="text-sm bg-teal-800 px-3 py-1 rounded-full text-teal-100">Suporte N2 Especializado</span>
-    </header>
+    <div class="nav-bar" style="height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(22,27,34,0.95);border-bottom:1px solid #21262d;">
+        <div style="display:flex;align-items:center;gap:16px;">
+            <a href="index.html" style="display:flex;align-items:center;gap:4px;color:#484f58;text-decoration:none;transition:color 0.2s;flex-shrink:0;white-space:nowrap" onmouseover="this.style.color='#06b6d4'" onmouseout="this.style.color='#484f58'">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                <span style="font-size:10px;font-weight:700;letter-spacing:.05em;color:#06b6d4;margin-left:4px">← VOLTAR</span>
+            </a>
+            <span style="width:1px;height:20px;background:#21262d;flex-shrink:0"></span>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#484f58;flex-shrink:0">Módulo 17</span>
+            <span style="width:1px;height:20px;background:#21262d;flex-shrink:0"></span>
+            <span class="title" style="font-size:14px;font-weight:700;color:#e1e7ef;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">Saneamento Fiscal</span>
+        </div>
+        <span style="font-size:10px;font-weight:700;color:#484f58;flex-shrink:0">Thomas Tech</span>
+    </div>
 
-    <div class="bg-white shadow-sm border-b border-gray-200">
-        <div class="max-w-7xl mx-auto flex">
-            <button id="btnTabClientes" onclick="switchTab('clientes')" class="px-6 py-4 text-gray-600 border-b-2 border-transparent hover:text-[#02727e] focus:outline-none font-medium transition-all">
-                Aba CLIENTES
+    <div class="tab-bar" style="background:rgba(22,27,34,0.95);border-bottom:1px solid #21262d;">
+        <div style="max-width:1280px;margin:auto;display:flex;">
+            <button id="btnTabClientes" onclick="switchTab('clientes')" class="px-6 py-4 text-[#8b949e] border-b-2 border-transparent hover:text-[#06b6d4] focus:outline-none font-medium transition-all">
+                CLIENTES
             </button>
-            <button id="btnTabSaneamento" onclick="switchTab('saneamento')" class="px-6 py-4 text-gray-600 border-b-2 border-transparent hover:text-[#02727e] focus:outline-none font-medium transition-all">
-                Aba SANEAMENTO
+            <button id="btnTabSaneamento" onclick="switchTab('saneamento')" class="px-6 py-4 text-[#8b949e] border-b-2 border-transparent hover:text-[#06b6d4] focus:outline-none font-medium transition-all">
+                SANEAMENTO
             </button>
         </div>
     </div>
 
     <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6">
-        
+
         <section id="sectionClientes" class="hidden space-y-6">
-            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                <h2 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">Cadastrar Novo Cliente</h2>
+            <div class="bg-[#161b22] p-6 rounded-lg border border-[#21262d]">
+                <h2 class="text-lg font-semibold text-[#e1e7ef] mb-4 border-b border-[#21262d] pb-2">Cadastrar Novo Cliente</h2>
                 <form id="formCliente" onsubmit="salvarCliente(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                     <input type="hidden" id="clienteId">
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Licença</label>
-                        <input type="text" id="cliLicenca" required class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-[#02727e]">
+                        <label class="block text-xs font-semibold text-[#484f58] uppercase mb-1">Licença</label>
+                        <input type="text" id="cliLicenca" required class="w-full border border-[#21262d] rounded p-2 focus:outline-none focus:border-[#02727e] bg-[#0b0f14] text-[#e1e7ef]">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Cliente</label>
-                        <input type="text" id="cliNome" required class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-[#02727e]">
+                        <label class="block text-xs font-semibold text-[#484f58] uppercase mb-1">Cliente</label>
+                        <input type="text" id="cliNome" required class="w-full border border-[#21262d] rounded p-2 focus:outline-none focus:border-[#02727e] bg-[#0b0f14] text-[#e1e7ef]">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Regime Tributário</label>
-                        <select id="cliRegime" required class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-[#02727e]">
+                        <label class="block text-xs font-semibold text-[#484f58] uppercase mb-1">Regime Tributário</label>
+                        <select id="cliRegime" required class="w-full border border-[#21262d] rounded p-2 focus:outline-none focus:border-[#02727e] bg-[#0b0f14] text-[#e1e7ef]">
                             <option value="">Selecione...</option>
                             <option value="Simples Nacional">Simples Nacional</option>
                             <option value="Lucro Presumido">Lucro Presumido</option>
@@ -61,19 +92,19 @@
                 </form>
             </div>
 
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                <div class="p-4 bg-gray-50 border-b border-gray-200"><h3 class="font-semibold text-gray-700">Relação de Clientes</h3></div>
+            <div class="bg-[#161b22] rounded-lg border border-[#21262d] overflow-hidden">
+                <div class="p-4 bg-[#0b0f14] border-b border-[#21262d]"><h3 class="font-semibold text-[#e1e7ef]">Relação de Clientes</h3></div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-gray-100 text-xs font-semibold text-gray-600 uppercase border-b border-gray-200">
+                            <tr class="text-xs font-semibold text-[#8b949e] uppercase border-b border-[#21262d]" style="background:#161b22;">
                                 <th class="p-3">Licença</th>
                                 <th class="p-3">Cliente</th>
                                 <th class="p-3">Regime Tributário</th>
                                 <th class="p-3 text-center w-24">Ações</th>
                             </tr>
                         </thead>
-                        <tbody id="gridClientesBody" class="text-sm divide-y divide-gray-100 text-gray-700"></tbody>
+                        <tbody id="gridClientesBody" class="text-sm divide-y divide-[#21262d] text-[#e1e7ef]"></tbody>
                     </table>
                 </div>
             </div>
@@ -81,17 +112,17 @@
 
         <section id="sectionSaneamento" class="hidden space-y-4">
             <div class="flex justify-between items-center">
-                <h2 class="text-xl font-bold text-gray-800">Controle de Saneamento Fiscal</h2>
+                <h2 class="text-xl font-bold text-[#e1e7ef]">Controle de Saneamento Fiscal</h2>
                 <button onclick="abrirModalSaneamento()" class="bg-[#02727e] hover:bg-teal-700 text-white font-medium px-4 py-2 rounded shadow transition-colors">
                     + NOVO
                 </button>
             </div>
 
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-[#161b22] rounded-lg border border-[#21262d] overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-gray-100 text-xs font-semibold text-gray-600 uppercase border-b border-gray-200">
+                            <tr class="text-xs font-semibold text-[#8b949e] uppercase border-b border-[#21262d]" style="background:#161b22;">
                                 <th class="p-3">Data</th>
                                 <th class="p-3">Licença</th>
                                 <th class="p-3">Cliente</th>
@@ -99,64 +130,63 @@
                                 <th class="p-3 text-center w-24">Ações</th>
                             </tr>
                         </thead>
-                        <tbody id="gridSaneamentoBody" class="text-sm divide-y divide-gray-100 text-gray-700"></tbody>
+                        <tbody id="gridSaneamentoBody" class="text-sm divide-y divide-[#21262d] text-[#e1e7ef]"></tbody>
                     </table>
                 </div>
             </div>
         </section>
     </main>
 
-    <div id="modalSaneamento" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4 animate-fade-in">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-[90vh] flex flex-col overflow-hidden">
-            
-            <div class="bg-gray-50 p-4 border-b flex justify-between items-center">
-                <h3 id="modalTitle" class="text-lg font-bold text-gray-800">Novo Processo de Saneamento</h3>
-                <button onclick="fecharModalSaneamento()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+    <div id="modalSaneamento" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-[#161b22] rounded-lg w-full max-w-6xl max-h-[90vh] flex flex-col overflow-hidden border border-[#21262d]">
+
+            <div class="p-4 border-b border-[#21262d] flex justify-between items-center" style="background:#0b0f14;">
+                <h3 id="modalTitle" class="text-lg font-bold text-[#e1e7ef]">Novo Processo de Saneamento</h3>
+                <button onclick="fecharModalSaneamento()" class="text-[#484f58] hover:text-[#e1e7ef] text-xl font-bold">&times;</button>
             </div>
 
             <div class="p-6 overflow-y-auto flex-1 space-y-4">
                 <input type="hidden" id="saneamentoId">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Data</label>
-                        <input type="text" id="sanData" placeholder="DD/MM/AAAA" maxlength="10" oninput="mascaraData(this)" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-[#02727e]">
+                        <label class="block text-xs font-semibold text-[#484f58] uppercase mb-1">Data</label>
+                        <input type="text" id="sanData" placeholder="DD/MM/AAAA" maxlength="10" oninput="mascaraData(this)" class="w-full border border-[#21262d] rounded p-2 focus:outline-none focus:border-[#02727e] bg-[#0b0f14] text-[#e1e7ef]">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Licença</label>
-                        <select id="sanLicenca" onchange="vincularClientePorLicenca(this.value)" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-[#02727e]">
+                        <label class="block text-xs font-semibold text-[#484f58] uppercase mb-1">Licença</label>
+                        <select id="sanLicenca" onchange="vincularClientePorLicenca(this.value)" class="w-full border border-[#21262d] rounded p-2 focus:outline-none focus:border-[#02727e] bg-[#0b0f14] text-[#e1e7ef]">
                             <option value="">Selecione uma licença...</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 uppercase mb-1">Cliente</label>
-                        <input type="text" id="sanClienteNome" readonly class="w-full border border-gray-300 bg-gray-50 rounded p-2 text-gray-500 focus:outline-none">
+                        <label class="block text-xs font-semibold text-[#484f58] uppercase mb-1">Cliente</label>
+                        <input type="text" id="sanClienteNome" readonly class="w-full border border-[#21262d] rounded p-2 text-[#8b949e] bg-[#0b0f14]">
                     </div>
                 </div>
 
-                <div class="border border-gray-200 rounded overflow-x-auto max-h-[50vh]">
+                <div class="border border-[#21262d] rounded overflow-x-auto max-h-[50vh]">
                     <table class="w-full text-left border-collapse min-w-[1000px]">
-                        <thead class="bg-gray-50 sticky top-0 border-b border-gray-200 z-10 text-xs font-semibold text-gray-600 uppercase">
+                        <thead class="sticky top-0 border-b border-[#21262d] z-10 text-xs font-semibold text-[#8b949e] uppercase" style="background:#161b22;">
                             <tr>
-                                <th class="p-2 border-r text-center w-12">Item</th>
-                                <th class="p-2 border-r w-28">DE</th>
-                                <th class="p-2 border-r w-28">ATÉ</th>
-                                <th class="p-2 border-r text-center w-32">Não Contrib.</th>
-                                <th class="p-2 border-r text-center w-24">Validado</th>
-                                <th class="p-2 border-r text-center w-30">Contribuinte</th>
-                                <th class="p-2 border-r text-center w-24">Validado</th>
-                                <th class="p-2 border-r w-36">Qtd Pendentes</th>
-                                <th class="p-2 border-r bg-gray-100 w-32">Qtd Selec.</th>
-                                <th class="p-2 bg-gray-100 w-32">Dif. Selec.</th>
+                                <th class="p-2 border-r border-[#21262d] text-center w-12">Item</th>
+                                <th class="p-2 border-r border-[#21262d] w-28">DE</th>
+                                <th class="p-2 border-r border-[#21262d] w-28">ATÉ</th>
+                                <th class="p-2 border-r border-[#21262d] text-center w-32">Não Contrib.</th>
+                                <th class="p-2 border-r border-[#21262d] text-center w-24">Validado</th>
+                                <th class="p-2 border-r border-[#21262d] text-center w-30">Contribuinte</th>
+                                <th class="p-2 border-r border-[#21262d] text-center w-24">Validado</th>
+                                <th class="p-2 border-r border-[#21262d] w-36">Qtd Pendentes</th>
+                                <th class="p-2 border-r border-[#21262d] w-32" style="background:#0b0f14;">Qtd Selec.</th>
+                                <th class="p-2 w-32" style="background:#0b0f14;">Dif. Selec.</th>
                             </tr>
                         </thead>
-                        <tbody id="excelGridBody" class="divide-y divide-gray-200 text-sm">
-                            </tbody>
+                        <tbody id="excelGridBody" class="divide-y divide-[#21262d] text-sm"></tbody>
                     </table>
                 </div>
             </div>
 
-            <div class="bg-gray-50 p-4 border-t flex flex-col sm:flex-row justify-end gap-3">
-                <button onclick="fecharModalSaneamento()" class="border border-gray-300 hover:bg-gray-100 text-gray-700 px-4 py-2 rounded font-medium transition-colors">
+            <div class="p-4 border-t border-[#21262d] flex flex-col sm:flex-row justify-end gap-3" style="background:#0b0f14;">
+                <button onclick="fecharModalSaneamento()" class="border border-[#21262d] hover:bg-[#161b22] text-[#e1e7ef] px-4 py-2 rounded font-medium transition-colors">
                     Cancelar
                 </button>
                 <button onclick="salvarSaneamento('SANEANDO')" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded font-medium transition-colors shadow-sm">
@@ -174,7 +204,6 @@
         let dbClientes = JSON.parse(localStorage.getItem('thomas_tech_clientes')) || [];
         let dbSaneamentos = JSON.parse(localStorage.getItem('thomas_tech_saneamentos')) || [];
 
-        // Inicializador
         window.onload = function() {
             switchTab('clientes');
             renderClientes();
@@ -182,39 +211,32 @@
             gerarLinhasExcel();
         };
 
-        // Alternador de Abas
         function switchTab(tab) {
             document.getElementById('sectionClientes').classList.add('hidden');
             document.getElementById('sectionSaneamento').classList.add('hidden');
             document.getElementById('btnTabClientes').classList.remove('tab-active');
             document.getElementById('btnTabSaneamento').classList.remove('tab-active');
-
             if (tab === 'clientes') {
                 document.getElementById('sectionClientes').classList.remove('hidden');
                 document.getElementById('btnTabClientes').classList.add('tab-active');
-            } else if (tab === 'saneamento') {
+            } else {
                 document.getElementById('sectionSaneamento').classList.remove('hidden');
                 document.getElementById('btnTabSaneamento').classList.add('tab-active');
             }
         }
 
-        // ================= OPERAÇÕES DE CLIENTES =================
         function salvarCliente(e) {
             e.preventDefault();
             const id = document.getElementById('clienteId').value;
             const licenca = document.getElementById('cliLicenca').value.trim();
             const nome = document.getElementById('cliNome').value.trim();
             const regime = document.getElementById('cliRegime').value;
-
             if(id) {
-                // Edição
                 const index = dbClientes.findIndex(c => c.id == id);
                 if(index !== -1) dbClientes[index] = { id: Number(id), licenca, nome, regime };
             } else {
-                // Novo Registro
                 dbClientes.push({ id: Date.now(), licenca, nome, regime });
             }
-
             localStorage.setItem('thomas_tech_clientes', JSON.stringify(dbClientes));
             document.getElementById('formCliente').reset();
             document.getElementById('clienteId').value = '';
@@ -234,43 +256,34 @@
 
         function renderClientes() {
             const tbody = document.getElementById('gridClientesBody');
-            tbody.innerHTML = dbClientes.length === 0 
-                ? `<tr><td colspan="4" class="p-4 text-center text-gray-400">Nenhum cliente cadastrado.</td></tr>`
+            tbody.innerHTML = dbClientes.length === 0
+                ? `<tr><td colspan="4" class="p-4 text-center text-[#484f58]">Nenhum cliente cadastrado.</td></tr>`
                 : dbClientes.map(c => `
-                    <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="p-3 font-medium text-gray-900">${c.licenca}</td>
+                    <tr class="hover:bg-[rgba(255,255,255,0.03)] transition-colors">
+                        <td class="p-3 font-medium text-[#e1e7ef]">${c.licenca}</td>
                         <td class="p-3">${c.nome}</td>
-                        <td class="p-3"><span class="px-2 py-1 text-xs font-semibold bg-gray-100 rounded text-gray-600">${c.regime}</span></td>
+                        <td class="p-3"><span class="px-2 py-1 text-xs font-semibold bg-[#0b0f14] rounded text-[#8b949e] border border-[#21262d]">${c.regime}</span></td>
                         <td class="p-3 text-center">
-                            <button onclick="editarCliente(${c.id})" class="text-[#02727e] hover:text-teal-800 font-semibold text-xs border border-[#02727e] hover:bg-teal-50 px-2 py-1 rounded">EDITAR</button>
+                            <button onclick="editarCliente(${c.id})" class="text-[#06b6d4] hover:text-[#02727e] font-semibold text-xs border border-[#06b6d4] hover:bg-[rgba(6,182,212,0.1)] px-2 py-1 rounded">EDITAR</button>
                         </td>
                     </tr>
                 `).join('');
-            
-            // Atualiza combo de licenças no modal de Saneamento
             const selectLicenca = document.getElementById('sanLicenca');
-            selectLicenca.innerHTML = '<option value="">Selecione uma licença...</option>' + 
+            selectLicenca.innerHTML = '<option value="">Selecione uma licença...</option>' +
                 dbClientes.map(c => `<option value="${c.licenca}">${c.licenca} - ${c.nome}</option>`).join('');
         }
 
-        // ================= OPERAÇÕES DE SANEAMENTO =================
         function mascaraData(input) {
             let v = input.value.replace(/\D/g, '');
             if (v.length > 8) v = v.slice(0, 8);
-            if (v.length >= 5) {
-                v = v.replace(/^(\d{2})(\d{2})(\d{0,4})$/, '$1/$2/$3');
-            } else if (v.length >= 3) {
-                v = v.replace(/^(\d{2})(\d{0,2})$/, '$1/$2');
-            }
+            if (v.length >= 5) { v = v.replace(/^(\d{2})(\d{2})(\d{0,4})$/, '$1/$2/$3'); }
+            else if (v.length >= 3) { v = v.replace(/^(\d{2})(\d{0,2})$/, '$1/$2'); }
             input.value = v;
         }
 
         function obterDataAtualFormatada() {
             const hoje = new Date();
-            const dd = String(hoje.getDate()).padStart(2, '0');
-            const mm = String(hoje.getMonth() + 1).padStart(2, '0');
-            const yyyy = hoje.getFullYear();
-            return `${dd}/${mm}/${yyyy}`;
+            return `${String(hoje.getDate()).padStart(2,'0')}/${String(hoje.getMonth()+1).padStart(2,'0')}/${hoje.getFullYear()}`;
         }
 
         function vincularClientePorLicenca(licenca) {
@@ -284,16 +297,16 @@
             for (let i = 1; i <= 35; i++) {
                 tbody.innerHTML += `
                     <tr data-row="${i}">
-                        <td class="p-2 border-r text-center bg-gray-50 text-gray-400 font-bold text-xs">${i}</td>
-                        <td class="p-1 border-r"><input type="number" class="w-full p-1 border rounded input-de text-right" oninput="calcularLinha(${i})"></td>
-                        <td class="p-1 border-r"><input type="number" class="w-full p-1 border rounded input-ate text-right" oninput="calcularLinha(${i})"></td>
-                        <td class="p-1 border-r text-center"><input type="checkbox" class="w-4 h-4 check-nao-contrib text-[#02727e]"></td>
-                        <td class="p-1 border-r text-center"><input type="checkbox" class="w-4 h-4 check-val1 text-[#02727e]"></td>
-                        <td class="p-1 border-r text-center"><input type="checkbox" class="w-4 h-4 check-contrib text-[#02727e]"></td>
-                        <td class="p-1 border-r text-center"><input type="checkbox" class="w-4 h-4 check-val2 text-[#02727e]"></td>
-                        <td class="p-1 border-r"><input type="number" class="w-full p-1 border rounded input-pendentes text-right"></td>
-                        <td class="p-2 border-r bg-gray-50 font-semibold text-right text-gray-700 res-qtd-selecionada">0</td>
-                        <td class="p-2 bg-gray-50 font-semibold text-right text-red-600 res-dif-selecionada">-1000</td>
+                        <td class="p-2 border-r border-[#21262d] text-center font-bold text-xs" style="background:#0b0f14;color:#484f58;">${i}</td>
+                        <td class="p-1 border-r border-[#21262d]"><input type="number" class="w-full p-1 border border-[#21262d] rounded input-de text-right bg-[#0b0f14] text-[#e1e7ef]"></td>
+                        <td class="p-1 border-r border-[#21262d]"><input type="number" class="w-full p-1 border border-[#21262d] rounded input-ate text-right bg-[#0b0f14] text-[#e1e7ef]"></td>
+                        <td class="p-1 border-r border-[#21262d] text-center"><input type="checkbox" class="w-4 h-4 check-nao-contrib"></td>
+                        <td class="p-1 border-r border-[#21262d] text-center"><input type="checkbox" class="w-4 h-4 check-val1"></td>
+                        <td class="p-1 border-r border-[#21262d] text-center"><input type="checkbox" class="w-4 h-4 check-contrib"></td>
+                        <td class="p-1 border-r border-[#21262d] text-center"><input type="checkbox" class="w-4 h-4 check-val2"></td>
+                        <td class="p-1 border-r border-[#21262d]"><input type="number" class="w-full p-1 border border-[#21262d] rounded input-pendentes text-right bg-[#0b0f14] text-[#e1e7ef]"></td>
+                        <td class="p-2 border-r border-[#21262d] font-semibold text-right text-[#e1e7ef] res-qtd-selecionada" style="background:#0b0f14;">0</td>
+                        <td class="p-2 font-semibold text-right text-red-400 res-dif-selecionada" style="background:#0b0f14;">-1000</td>
                     </tr>
                 `;
             }
@@ -303,11 +316,8 @@
             const tr = document.querySelector(`tr[data-row="${rowId}"]`);
             const deVal = parseInt(tr.querySelector('.input-de').value) || 0;
             const ateVal = parseInt(tr.querySelector('.input-ate').value) || 0;
-            
-            // Cálculos
             const qtdSelecionada = (tr.querySelector('.input-de').value && tr.querySelector('.input-ate').value) ? (ateVal - deVal) : 0;
             const difSelecionada = (tr.querySelector('.input-de').value && tr.querySelector('.input-ate').value) ? (qtdSelecionada - 1000) : -1000;
-
             tr.querySelector('.res-qtd-selecionada').innerText = qtdSelecionada;
             tr.querySelector('.res-dif-selecionada').innerText = difSelecionada;
         }
@@ -365,25 +375,14 @@
             const data = document.getElementById('sanData').value;
             const licenca = document.getElementById('sanLicenca').value;
             const cliente = document.getElementById('sanClienteNome').value;
-
-            if(!data || !licenca || !cliente) {
-                alert('Por favor, preencha a Data e selecione uma Licença válida.');
-                return;
-            }
-
+            if(!data || !licenca || !cliente) { alert('Preencha a Data e selecione uma Licença.'); return; }
             const planilhaData = obterDadosPlanilha();
-
             if(id) {
-                // Atualizar Existente
                 const index = dbSaneamentos.findIndex(s => s.id == id);
-                if(index !== -1) {
-                    dbSaneamentos[index] = { id: Number(id), data, licenca, cliente, status: statusFinal, itens: planilhaData };
-                }
+                if(index !== -1) dbSaneamentos[index] = { id: Number(id), data, licenca, cliente, status: statusFinal, itens: planilhaData };
             } else {
-                // Inserir Novo
                 dbSaneamentos.push({ id: Date.now(), data, licenca, cliente, status: statusFinal, itens: planilhaData });
             }
-
             localStorage.setItem('thomas_tech_saneamentos', JSON.stringify(dbSaneamentos));
             fecharModalSaneamento();
             renderSaneamentoGrid();
@@ -392,15 +391,13 @@
         function editarSaneamento(id) {
             const san = dbSaneamentos.find(s => s.id == id);
             if(san) {
-                document.getElementById('modalTitle').innerText = `Editar Progresso - Licença: ${san.licenca}`;
+                document.getElementById('modalTitle').innerText = `Editar - ${san.licenca}`;
                 document.getElementById('saneamentoId').value = san.id;
                 document.getElementById('sanData').value = san.data;
                 document.getElementById('sanLicenca').value = san.licenca;
                 document.getElementById('sanClienteNome').value = san.cliente;
-                
                 gerarLinhasExcel();
                 preencherDadosPlanilha(san.itens);
-                
                 document.getElementById('modalSaneamento').classList.remove('hidden');
             }
         }
@@ -408,25 +405,28 @@
         function renderSaneamentoGrid() {
             const tbody = document.getElementById('gridSaneamentoBody');
             tbody.innerHTML = dbSaneamentos.length === 0
-                ? `<tr><td colspan="5" class="p-4 text-center text-gray-400">Nenhum saneamento registrado.</td></tr>`
+                ? `<tr><td colspan="5" class="p-4 text-center text-[#484f58]">Nenhum saneamento registrado.</td></tr>`
                 : dbSaneamentos.map(s => {
-                    const statusBadge = s.status === 'SANEANDO' 
-                        ? `<span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-0.5 rounded border border-amber-200">Saneando</span>`
-                        : `<span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded border border-green-200">Saneado</span>`;
-                    
+                    const badge = s.status === 'SANEANDO'
+                        ? `<span class="bg-amber-900/30 text-amber-400 text-xs font-semibold px-2.5 py-0.5 rounded border border-amber-700/50">Saneando</span>`
+                        : `<span class="bg-green-900/30 text-green-400 text-xs font-semibold px-2.5 py-0.5 rounded border border-green-700/50">Saneado</span>`;
                     return `
-                        <tr class="hover:bg-gray-50 transition-colors">
+                        <tr class="hover:bg-[rgba(255,255,255,0.03)] transition-colors">
                             <td class="p-3">${s.data}</td>
-                            <td class="p-3 font-medium text-gray-900">${s.licenca}</td>
+                            <td class="p-3 font-medium text-[#e1e7ef]">${s.licenca}</td>
                             <td class="p-3">${s.cliente}</td>
-                            <td class="p-3">${statusBadge}</td>
+                            <td class="p-3">${badge}</td>
                             <td class="p-3 text-center">
-                                <button onclick="editarSaneamento(${s.id})" class="text-[#02727e] hover:text-teal-800 font-semibold text-xs border border-[#02727e] hover:bg-teal-50 px-2 py-1 rounded">EDITAR</button>
+                                <button onclick="editarSaneamento(${s.id})" class="text-[#06b6d4] hover:text-[#02727e] font-semibold text-xs border border-[#06b6d4] hover:bg-[rgba(6,182,212,0.1)] px-2 py-1 rounded">EDITAR</button>
                             </td>
                         </tr>
                     `;
                 }).join('');
         }
     </script>
+<script>
+(function(){var t=localStorage.getItem('theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');function toggle(){var h=document.documentElement;if(h.getAttribute('data-theme')==='light'){h.removeAttribute('data-theme');localStorage.setItem('theme','dark');}else{h.setAttribute('data-theme','light');localStorage.setItem('theme','light');}}var nav=document.querySelector('nav')||document.querySelector('.nav-bar')||document.querySelector('.header')||document.querySelector('.topbar');if(nav){var btn=document.createElement('button');btn.innerHTML=document.documentElement.getAttribute('data-theme')==='light'?'🌙':'☀️';btn.style.cssText='background:none;border:none;cursor:pointer;font-size:18px;padding:2px 8px;margin-left:auto;line-height:1';btn.title='Alternar tema claro/escuro';btn.onclick=toggle;nav.appendChild(btn);}
+})();
+</script>
 </body>
 </html>
