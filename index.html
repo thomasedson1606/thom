@@ -108,6 +108,8 @@
   /* ---------- taskbar ---------- */
   .taskbar{ position:fixed; left:0; right:0; bottom:0; z-index:40; height:60px; display:flex; align-items:center; gap:10px; padding:0 12px; background:var(--surface); border-top:1px solid var(--border); backdrop-filter:blur(18px); }
   .start-btn{ display:flex; align-items:center; gap:8px; height:42px; padding:0 16px; border-radius:10px; border:none; background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#fff; font-weight:800; font-size:13px; cursor:pointer; flex-shrink:0; box-shadow:0 8px 22px -8px var(--shadow); }
+  .show-desktop-btn{ width:34px; height:34px; border-radius:8px; border:1px solid var(--border); background:var(--border-soft); color:var(--muted); cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background .12s,color .12s; }
+  .show-desktop-btn:hover{ background:var(--border); color:var(--text); }
   .taskbar-apps{ flex:1; display:flex; gap:6px; overflow-x:auto; height:100%; align-items:center; scrollbar-width:none; min-width:0; }
   .taskbar-apps::-webkit-scrollbar{ display:none; }
   .taskbar-app{ flex-shrink:0; display:flex; align-items:center; gap:6px; height:42px; padding:0 12px; border-radius:9px; border:1px solid transparent; background:var(--border-soft); color:var(--text); font-size:12px; font-weight:700; cursor:pointer; max-width:180px; }
@@ -240,6 +242,9 @@
     <button type="button" class="start-btn" id="startBtn">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="9" height="9" rx="1.5"/><rect x="13" y="2" width="9" height="9" rx="1.5"/><rect x="2" y="13" width="9" height="9" rx="1.5"/><rect x="13" y="13" width="9" height="9" rx="1.5"/></svg>
       Menu
+    </button>
+    <button type="button" class="show-desktop-btn" id="showDesktopBtn" title="Mostrar área de trabalho">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
     </button>
     <div class="taskbar-apps" id="taskbarApps"></div>
     <div class="taskbar-right">
@@ -541,6 +546,18 @@
     }, 150);
   }
 
+  function showDesktop(){
+    const wins = Object.values(openWins);
+    const anyVisible = wins.some(w => !w.minimized);
+    if(anyVisible){
+      wins.forEach(w => { if(!w.minimized){ w.minimized = true; w.el.classList.add('minimized'); w.el.classList.remove('focused'); } });
+    } else {
+      wins.forEach(w => { w.minimized = false; w.el.classList.remove('minimized'); });
+      if(wins.length) focusWindow(wins[wins.length-1].appId);
+    }
+    renderTaskbar();
+  }
+
   function renderTaskbar(){
     const wrap = document.getElementById('taskbarApps');
     wrap.innerHTML = Object.values(openWins).map(w => {
@@ -590,6 +607,7 @@
       filterLauncher();
     });
   });
+  document.getElementById('showDesktopBtn').addEventListener('click', showDesktop);
   document.getElementById('themeBtn').addEventListener('click', () => {
     const isLight = document.documentElement.getAttribute('data-theme') === 'light';
     const next = isLight ? 'dark' : 'light';
