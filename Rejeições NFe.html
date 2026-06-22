@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -59,13 +59,2520 @@
         lucide.createIcons();
 
         const rejeicoesDados = [
-            { codigo: "106", resultado: "Rejeição: Lote não localizado", linkSolucao: "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4421365750167-Lista-de-Rejei%C3%A7%C3%B5es-NF-e" },
-            { codigo: "108", resultado: "Rejeição: Serviço paralisado momentaneamente", linkSolucao: "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4421365750167-Lista-de-Rejei%C3%A7%C3%B5es-NF-e" },
-            { codigo: "204", resultado: "Rejeição: Duplicidade de NF-e", linkSolucao: "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4421365750167-Lista-de-Rejei%C3%A7%C3%B5es-NF-e" },
-            { codigo: "210", resultado: "Rejeição: IE do destinatário inválida", linkSolucao: "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4421365750167-Lista-de-Rejei%C3%A7%C3%B5es-NF-e" },
-            { codigo: "225", resultado: "Rejeição: Falha no Schema XML do lote de NFe", linkSolucao: "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4421365750167-Lista-de-Rejei%C3%A7%C3%B5es-NF-e" },
-            { codigo: "321", resultado: "Rejeição: NF-e de devolução de mercadoria não possui documento fiscal referenciado", linkSolucao: "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4421365750167-Lista-de-Rejei%C3%A7%C3%B5es-NF-e" }
-        ];
+  {
+    "codigo": "106",
+    "resultado": "Rejeição: Lote não localizado",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360022610634-Rejei%C3%A7%C3%A3o-106-Lote-n%C3%A3o-localizado"
+  },
+  {
+    "codigo": "108",
+    "resultado": "Rejeição: Serviço paralisado momentaneamente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010219834-Rejei%C3%A7%C3%A3o-108-Servi%C3%A7o-paralisado-momentaneamente"
+  },
+  {
+    "codigo": "110",
+    "resultado": "Rejeição: Uso denegado",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010220574-Rejei%C3%A7%C3%A3o-210-IE-do-destinat%C3%A1rio-inv%C3%A1lida"
+  },
+  {
+    "codigo": "114",
+    "resultado": "Rejeição: SVC desabilitada pelo SEFAZ origem",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360061715194-Rejei%C3%A7%C3%A3o-114-SVC-desabilitada-pela-SEFAZ-Origem"
+  },
+  {
+    "codigo": "201",
+    "resultado": "Rejeição: Rejeição: Número máximo de numeração a inutilizar ultrapassou o limite"
+  },
+  {
+    "codigo": "202",
+    "resultado": "Rejeição: Falha no reconhecimento da autoria ou integridade do arquivo digital",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010189493-Rejei%C3%A7%C3%A3o-202-Falha-no-reconhecimento-da-autoria-ou-integridade-do-arquivo-digital"
+  },
+  {
+    "codigo": "203",
+    "resultado": "Rejeição: Emissor não habilitado para emissão de NF-e",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360009998434-Rejei%C3%A7%C3%A3o-203-Emitente-n%C3%A3o-habilitado-para-emiss%C3%A3o-de-NF-e"
+  },
+  {
+    "codigo": "204",
+    "resultado": "Rejeição: Duplicidade de NF-e",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360009746354-Rejei%C3%A7%C3%A3o-204-Duplicidade-de-NF-e-nRec-999999999999999-"
+  },
+  {
+    "codigo": "205",
+    "resultado": "Rejeição: NF-e está denegada na base de dados da SEFAZ",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360009862633-Rejei%C3%A7%C3%A3o-205-NF-e-est%C3%A1-denegada-na-base-de-dados-da-SEFAZ"
+  },
+  {
+    "codigo": "206",
+    "resultado": "Rejeição: NF-e já está inutilizada na Base de dados da SEFAZ",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010877414-Rejei%C3%A7%C3%A3o-206-NF-e-j%C3%A1-est%C3%A1-inutilizada-na-Base-de-dados-da-SEFAZ"
+  },
+  {
+    "codigo": "207",
+    "resultado": "Rejeição: CNPJ do emitente inválido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360009754514-Rejei%C3%A7%C3%A3o-207-CNPJ-do-emitente-inv%C3%A1lido"
+  },
+  {
+    "codigo": "208",
+    "resultado": "Rejeição: CNPJ do destinatário inválido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360009870793-Rejei%C3%A7%C3%A3o-208-CNPJ-do-destinat%C3%A1rio-inv%C3%A1lido"
+  },
+  {
+    "codigo": "209",
+    "resultado": "Rejeição: IE do emitente inválida",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016168874-Rejei%C3%A7%C3%A3o-209-IE-do-emitente-inv%C3%A1lida"
+  },
+  {
+    "codigo": "210",
+    "resultado": "Rejeição: IE do destinatário inválida",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010220574-Rejei%C3%A7%C3%A3o-210-IE-do-destinat%C3%A1rio-inv%C3%A1lida"
+  },
+  {
+    "codigo": "211",
+    "resultado": "Rejeição: IE do substituto inválida",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360012280174-Rejei%C3%A7%C3%A3o-211-IE-do-substituto-inv%C3%A1lida-"
+  },
+  {
+    "codigo": "212",
+    "resultado": "Rejeição: Data de emissão NF-e posterior a data de recebimento"
+  },
+  {
+    "codigo": "213",
+    "resultado": "Rejeição: CNPJ-Base do Autor difere do CNPJ-Base do Certificado Digital",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010925334-Rejei%C3%A7%C3%A3o-213-CNPJ-Base-do-Autor-difere-do-CNPJ-Base-do-Certificado-Digital"
+  },
+  {
+    "codigo": "214",
+    "resultado": "Rejeição: Tamanho da mensagem excedeu o limite estabelecido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360019961773-Rejei%C3%A7%C3%A3o-214-Tamanho-da-mensagem-excedeu-o-limite-estabelecido"
+  },
+  {
+    "codigo": "215",
+    "resultado": "Rejeição: Tamanho da mensagem excedeu o limite estabelecido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360012345453-Rejei%C3%A7%C3%A3o-215-Falha-no-Schema-XML"
+  },
+  {
+    "codigo": "216",
+    "resultado": "Rejeição: Chave de Acesso difere da cadastrada"
+  },
+  {
+    "codigo": "217",
+    "resultado": "Rejeição: NF-e não consta na base de dados da SEFAZ",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360014552413-Rejei%C3%A7%C3%A3o-217-NF-e-n%C3%A3o-consta-na-base-de-dados-da-SEFAZ"
+  },
+  {
+    "codigo": "218",
+    "resultado": "NF-e já está cancelada na base de dados da SEFAZ",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360009870853-Rejei%C3%A7%C3%A3o-218-NF-e-j%C3%A1-est%C3%A1-cancelada-na-base-de-dados-da-Sefaz"
+  },
+  {
+    "codigo": "219",
+    "resultado": "Rejeição: Circulação da NF-e verificada",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015171754-Rejei%C3%A7%C3%A3o-219-Circula%C3%A7%C3%A3o-da-NF-e-verificada"
+  },
+  {
+    "codigo": "220",
+    "resultado": "Rejeição: Prazo de Cancelamento superior ao previsto na Legislação"
+  },
+  {
+    "codigo": "221",
+    "resultado": "Rejeição: Confirmado o recebimento da NF-e pelo destinatário",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/18728650810007-Como-resolver-a-Rejei%C3%A7%C3%A3o-221-Confirmado-o-recebimento-da-NF-e-pelo-destinat%C3%A1rio"
+  },
+  {
+    "codigo": "222",
+    "resultado": "Rejeição: Protocolo de Autorização de Uso difere do cadastrado",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016422974-Rejei%C3%A7%C3%A3o-222-Protocolo-de-Autoriza%C3%A7%C3%A3o-de-Uso-difere-do-cadastrado"
+  },
+  {
+    "codigo": "223",
+    "resultado": "Rejeição: CNPJ do transmissor do lote difere do CNPJ do transmissor da consulta"
+  },
+  {
+    "codigo": "224",
+    "resultado": "Rejeição: A faixa inicial é maior que a faixa final"
+  },
+  {
+    "codigo": "225",
+    "resultado": "Rejeição: Falha no Schema XML do lote de NFe"
+  },
+  {
+    "codigo": "226",
+    "resultado": "Rejeição: Código da UF do Emitente diverge da UF autorizadora"
+  },
+  {
+    "codigo": "227",
+    "resultado": "Rejeição: Erro na Chave de Acesso - Campo Id – falta a literal NFe"
+  },
+  {
+    "codigo": "228",
+    "resultado": "Rejeição: Data de Emissão muito atrasada",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010923614-Rejei%C3%A7%C3%A3o-228-Data-de-Emiss%C3%A3o-muito-atrasada"
+  },
+  {
+    "codigo": "229",
+    "resultado": "Rejeição: IE do emitente não informada"
+  },
+  {
+    "codigo": "230",
+    "resultado": "Rejeição: IE do emitente não cadastrada",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360009873133-Rejei%C3%A7%C3%A3o-230-IE-do-emitente-n%C3%A3o-cadastrada"
+  },
+  {
+    "codigo": "231",
+    "resultado": "Rejeição: IE do emitente não vinculada ao CNPJ",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360009756814-Rejei%C3%A7%C3%A3o-231-IE-do-emitente-n%C3%A3o-vinculada-ao-CNPJ-CPF"
+  },
+  {
+    "codigo": "232",
+    "resultado": "Rejeição: IE do destinatário não informada",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010333853-Rejei%C3%A7%C3%A3o-232-IE-do-destinat%C3%A1rio-n%C3%A3o-informada"
+  },
+  {
+    "codigo": "233",
+    "resultado": "Rejeição: IE do destinatário não cadastrada",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010235354-Rejei%C3%A7%C3%A3o-233-IE-do-destinat%C3%A1rio-n%C3%A3o-cadastrada"
+  },
+  {
+    "codigo": "234",
+    "resultado": "Rejeição: IE do destinatário não vinculada ao CNPJ",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010235274-Rejei%C3%A7%C3%A3o-234-IE-do-destinat%C3%A1rio-n%C3%A3o-vinculada-ao-CNPJ"
+  },
+  {
+    "codigo": "235",
+    "resultado": "Rejeição: Inscrição SUFRAMA inválida"
+  },
+  {
+    "codigo": "236",
+    "resultado": "Rejeição: Chave de Acesso com dígito verificador inválido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015902693-Rejei%C3%A7%C3%A3o-236-Chave-de-Acesso-com-d%C3%ADgito-verificador-inv%C3%A1lido"
+  },
+  {
+    "codigo": "237",
+    "resultado": "Rejeição: CPF do destinatário inválido"
+  },
+  {
+    "codigo": "238",
+    "resultado": "Rejeição: Cabeçalho - Versão do arquivo XML superior a Versão vigente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016357814-Rejei%C3%A7%C3%A3o-238-Cabe%C3%A7alho-Vers%C3%A3o-do-arquivo-XML-superior-a-Vers%C3%A3o-vigente"
+  },
+  {
+    "codigo": "239",
+    "resultado": "Rejeição: Cabeçalho - Versão do arquivo XML não suportada",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360007684313-Rejei%C3%A7%C3%A3o-239-Cabe%C3%A7alho-Vers%C3%A3o-do-arquivo-XML-n%C3%A3o-suportada"
+  },
+  {
+    "codigo": "240",
+    "resultado": "Rejeição: Cancelamento/Inutilização - Irregularidade Fiscal do Emitente"
+  },
+  {
+    "codigo": "241",
+    "resultado": "Rejeição: Um número da faixa já foi utilizado",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015738793-Rejei%C3%A7%C3%A3o-241-Um-n%C3%BAmero-da-faixa-j%C3%A1-foi-utilizado"
+  },
+  {
+    "codigo": "242",
+    "resultado": "Rejeição: Cabeçalho - Falha no Schema XML",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015695193-Rejei%C3%A7%C3%A3o-242-Cabe%C3%A7alho-Falha-no-Schema-XML"
+  },
+  {
+    "codigo": "243",
+    "resultado": "Rejeição: XML Mal Formado",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015741253-Rejei%C3%A7%C3%A3o-243-XML-Mal-Formado"
+  },
+  {
+    "codigo": "244",
+    "resultado": "Rejeição: CNPJ do Certificado Digital difere do CNPJ da Matriz e do CNPJ do Emitente"
+  },
+  {
+    "codigo": "245",
+    "resultado": "Rejeição: CNPJ Emitente não cadastrado",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360009900293-Rejei%C3%A7%C3%A3o-245-CNPJ-Emitente-n%C3%A3o-cadastrado"
+  },
+  {
+    "codigo": "246",
+    "resultado": "Rejeição: CNPJ Destinatário não cadastrado"
+  },
+  {
+    "codigo": "247",
+    "resultado": "Rejeição: Sigla da UF do Emitente diverge da UF autorizadora"
+  },
+  {
+    "codigo": "248",
+    "resultado": "Rejeição: UF do Recibo diverge da UF autorizadora"
+  },
+  {
+    "codigo": "249",
+    "resultado": "Rejeição: UF da Chave de Acesso diverge da UF autorizadora"
+  },
+  {
+    "codigo": "250",
+    "resultado": "Rejeição: UF diverge da UF autorizadora"
+  },
+  {
+    "codigo": "251",
+    "resultado": "Rejeição: UF/Município destinatário não pertence a SUFRAMA",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016535153-Rejei%C3%A7%C3%A3o-251-UF-Munic%C3%ADpio-destinat%C3%A1rio-n%C3%A3o-pertence-a-Suframa"
+  },
+  {
+    "codigo": "252",
+    "resultado": "Rejeição: Ambiente informado diverge do Ambiente de recebimento"
+  },
+  {
+    "codigo": "253",
+    "resultado": "Rejeição: Digito Verificador da chave de acesso composta inválida",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010007273-Rejei%C3%A7%C3%A3o-253-Digito-Verificador-da-chave-de-acesso-composta-inv%C3%A1lida"
+  },
+  {
+    "codigo": "254",
+    "resultado": "Rejeição: NF-e complementar não possui NF referenciada",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360019833354-Rejei%C3%A7%C3%A3o-254-NF-e-complementar-n%C3%A3o-possui-NF-referenciada"
+  },
+  {
+    "codigo": "255",
+    "resultado": "Rejeição: NF-e complementar possui mais de uma NF referenciada",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360007196614-Rejei%C3%A7%C3%A3o-255-NF-e-complementar-possui-mais-de-uma-NF-referenciada"
+  },
+  {
+    "codigo": "256",
+    "resultado": "Rejeição: Uma NF-e da faixa já está inutilizada na Base de dados da SEFAZ",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016300113-Rejei%C3%A7%C3%A3o-257-Solicitante-n%C3%A3o-habilitado-para-emiss%C3%A3o-da-NF-e"
+  },
+  {
+    "codigo": "257",
+    "resultado": "Rejeição: Solicitante não habilitado para emissão da NF-e",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016300113-Rejei%C3%A7%C3%A3o-257-Solicitante-n%C3%A3o-habilitado-para-emiss%C3%A3o-da-NF-e"
+  },
+  {
+    "codigo": "258",
+    "resultado": "Rejeição: CNPJ da consulta inválido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015655654-Rejei%C3%A7%C3%A3o-258-CNPJ-da-consulta-inv%C3%A1lido"
+  },
+  {
+    "codigo": "259",
+    "resultado": "Rejeição: CNPJ da consulta não cadastrado como contribuinte na UF",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360019773833-Rejei%C3%A7%C3%A3o-259-CNPJ-da-consulta-n%C3%A3o-cadastrado-como-contribuinte-na-UF"
+  },
+  {
+    "codigo": "260",
+    "resultado": "Rejeição: IE da consulta inválida"
+  },
+  {
+    "codigo": "261",
+    "resultado": "Rejeição: IE da consulta não cadastrada como contribuinte na UF"
+  },
+  {
+    "codigo": "262",
+    "resultado": "Rejeição: CPF da consulta inválido"
+  },
+  {
+    "codigo": "263",
+    "resultado": "Rejeição: CPF da consulta não cadastrado como contribuinte na UF"
+  },
+  {
+    "codigo": "264",
+    "resultado": "Rejeição: Sigla da UF da consulta difere da UF do Web Service"
+  },
+  {
+    "codigo": "265",
+    "resultado": "Rejeição: Série utilizada não permitida no Web Service",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016074294-Rejei%C3%A7%C3%A3o-265-Sigla-da-UF-da-consulta-difere-da-UF-do-Web-Service"
+  },
+  {
+    "codigo": "267",
+    "resultado": "Rejeição: Chave de Acesso referenciada inexistente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015990454-Rejei%C3%A7%C3%A3o-267-NF-Complementar-referencia-uma-NF-e-inexistente"
+  },
+  {
+    "codigo": "268",
+    "resultado": "Rejeição: NF Complementar referencia outra NF-e Complementar"
+  },
+  {
+    "codigo": "269",
+    "resultado": "Rejeição: CNPJ Emitente da NF Complementar difere do CNPJ da NF Referenciada"
+  },
+  {
+    "codigo": "270",
+    "resultado": "Rejeição: Código Município do Fato Gerador de ICMS inexistente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360009902813-Rejei%C3%A7%C3%A3o-270-C%C3%B3digo-Munic%C3%ADpio-do-Fato-Gerador-de-ICMS-inexistente"
+  },
+  {
+    "codigo": "271",
+    "resultado": "Rejeição: Código Município do Fato Gerador: difere da UF do emitente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360009904273-Rejei%C3%A7%C3%A3o-271-C%C3%B3digo-Munic%C3%ADpio-do-Fato-Gerador-difere-da-UF-do-emitente"
+  },
+  {
+    "codigo": "272",
+    "resultado": "Rejeição: Código Município do Emitente inexistente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360009788114-Rejei%C3%A7%C3%A3o-272-C%C3%B3digo-Munic%C3%ADpio-do-Emitente-inexistente"
+  },
+  {
+    "codigo": "273",
+    "resultado": "Rejeição: Código Município do Emitente: difere da UF do emitente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360009912493-Rejei%C3%A7%C3%A3o-273-C%C3%B3digo-Munic%C3%ADpio-do-Emitente-difere-da-UF-do-emitente"
+  },
+  {
+    "codigo": "274",
+    "resultado": "Rejeição: Código Município do Destinatário inexistente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360009793154-Rejei%C3%A7%C3%A3o-274-C%C3%B3digo-Munic%C3%ADpio-do-Destinat%C3%A1rio-inexistente"
+  },
+  {
+    "codigo": "275",
+    "resultado": "Rejeição: Código Município do Destinatário: difere da UF do Destinatário",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010227333-Rejei%C3%A7%C3%A3o-275-C%C3%B3digo-Munic%C3%ADpio-do-Destinat%C3%A1rio-difere-da-UF-do-Destinat%C3%A1rio"
+  },
+  {
+    "codigo": "276",
+    "resultado": "Rejeição: Código Município do Local de Retirada inexistente"
+  },
+  {
+    "codigo": "277",
+    "resultado": "Rejeição: Código Município do Local de Retirada: difere da UF do Local de Retirada"
+  },
+  {
+    "codigo": "278",
+    "resultado": "Rejeição: Código Município do Local de Retirada inexistente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010105874-Rejei%C3%A7%C3%A3o-278-C%C3%B3digo-Munic%C3%ADpio-do-Local-de-Retirada-inexistente"
+  },
+  {
+    "codigo": "279",
+    "resultado": "Rejeição: Código Município do Local de Entrega: difere da UF do Local de Entrega",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010227873-Rejei%C3%A7%C3%A3o-279-C%C3%B3digo-Munic%C3%ADpio-do-Local-de-Entrega-difere-da-UF-do-Local-de-Entrega"
+  },
+  {
+    "codigo": "280",
+    "resultado": "Rejeição: Certificado Transmissor inválido"
+  },
+  {
+    "codigo": "281",
+    "resultado": "Rejeição: Certificado Transmissor Data Validade",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016449733-Rejei%C3%A7%C3%A3o-281-Certificado-Transmissor-Data-Validade"
+  },
+  {
+    "codigo": "282",
+    "resultado": "Rejeição: Certificado Transmissor sem CNPJ",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015271633-Rejei%C3%A7%C3%A3o-282-Certificado-Transmissor-sem-CNPJ"
+  },
+  {
+    "codigo": "283",
+    "resultado": "Rejeição: Certificado Transmissor - erro Cadeia de Certificação"
+  },
+  {
+    "codigo": "284",
+    "resultado": "Rejeição: Certificado Transmissor revogado",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360022020014-Rejei%C3%A7%C3%A3o-284-Certificado-Transmissor-revogado"
+  },
+  {
+    "codigo": "285",
+    "resultado": "Rejeição: Certificado Transmissor difere ICP-Brasil",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015441213-Rejei%C3%A7%C3%A3o-285-Certificado-Transmissor-difere-ICP-Brasil"
+  },
+  {
+    "codigo": "286",
+    "resultado": "Rejeição: Certificado Transmissor erro no acesso a LCR",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360019644454-Rejei%C3%A7%C3%A3o-286-Certificado-Transmissor-erro-no-acesso-a-LCR"
+  },
+  {
+    "codigo": "287",
+    "resultado": "Rejeição: Código Município do Fato Gerador de ISSQN inexistente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010106794-Rejei%C3%A7%C3%A3o-287-C%C3%B3digo-Munic%C3%ADpio-do-Fato-Gerador-de-ISSQN-inexistente"
+  },
+  {
+    "codigo": "288",
+    "resultado": "Rejeição: Código Município do Fato Gerador do Transporte inexistente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360019639074-Rejei%C3%A7%C3%A3o-288-C%C3%B3digo-Munic%C3%ADpio-do-Fato-Gerador-do-Transporte-inexistente"
+  },
+  {
+    "codigo": "289",
+    "resultado": "Rejeição: Código da UF informada diverge da UF solicitada"
+  },
+  {
+    "codigo": "290",
+    "resultado": "Rejeição: Certificado Assinatura inválido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015159254-Rejei%C3%A7%C3%A3o-290-Certificado-Assinatura-inv%C3%A1lido"
+  },
+  {
+    "codigo": "291",
+    "resultado": "Rejeição: Certificado Assinatura Data Validade",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360020031513-Rejei%C3%A7%C3%A3o-292-Certificado-Assinatura-sem-CNPJ"
+  },
+  {
+    "codigo": "292",
+    "resultado": "Rejeição: Certificado Assinatura sem CNPJ",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360020031513-Rejei%C3%A7%C3%A3o-292-Certificado-Assinatura-sem-CNPJ"
+  },
+  {
+    "codigo": "293",
+    "resultado": "Rejeição: Certificado Assinatura - erro Cadeia de Certificação",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010879254-Rejei%C3%A7%C3%A3o-293-Certificado-Assinatura-erro-Cadeia-de-Certifica%C3%A7%C3%A3o"
+  },
+  {
+    "codigo": "294",
+    "resultado": "Rejeição: Certificado Assinatura revogado"
+  },
+  {
+    "codigo": "295",
+    "resultado": "Rejeição: Certificado Assinatura difere ICP-Brasil",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015439753-Rejei%C3%A7%C3%A3o-295-Certificado-Assinatura-difere-ICP-Brasil"
+  },
+  {
+    "codigo": "296",
+    "resultado": "Rejeição: Certificado Assinatura erro no acesso a LCR",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016228973-Rejei%C3%A7%C3%A3o-296-Certificado-Assinatura-erro-no-acesso-a-LCR"
+  },
+  {
+    "codigo": "297",
+    "resultado": "Rejeição: Assinatura difere do calculado"
+  },
+  {
+    "codigo": "298",
+    "resultado": "Rejeição: Assinatura difere do padrão do Sistema",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015165414-Rejei%C3%A7%C3%A3o-298-Assinatura-difere-do-padr%C3%A3o-do-Sistema"
+  },
+  {
+    "codigo": "299",
+    "resultado": "Rejeição: XML da área de cabeçalho com codificação diferente de UTF-8"
+  },
+  {
+    "codigo": "301",
+    "resultado": "Uso Denegado: Irregularidade fiscal do emitente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010123893-Rejei%C3%A7%C3%A3o-301-Uso-Denegado-Irregularidade-fiscal-do-emitente"
+  },
+  {
+    "codigo": "302",
+    "resultado": "Rejeição: Irregularidade fiscal do destinatário",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010270514-Rejei%C3%A7%C3%A3o-302-Uso-Denegado-Irregularidade-fiscal-do-destinat%C3%A1rio"
+  },
+  {
+    "codigo": "303",
+    "resultado": "Uso Denegado: Destinatário não habilitado a operar na UF",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360014494154-Rejei%C3%A7%C3%A3o-303-Destinat%C3%A1rio-n%C3%A3o-habilitado-a-operar-na-UF"
+  },
+  {
+    "codigo": "304",
+    "resultado": "Rejeição: Pedido de Cancelamento para NF-e com evento da Suframa"
+  },
+  {
+    "codigo": "305",
+    "resultado": "Rejeição: Destinatário bloqueado na UF",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/11289612518551-Como-resolver-a-Rejei%C3%A7%C3%A3o-305-Destinat%C3%A1rio-bloqueado-na-UF-NFe"
+  },
+  {
+    "codigo": "306",
+    "resultado": "Rejeição: IE do destinatário não está ativa na UF",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010388173-Rejei%C3%A7%C3%A3o-306-IE-do-destinat%C3%A1rio-n%C3%A3o-est%C3%A1-ativa-na-UF"
+  },
+  {
+    "codigo": "307",
+    "resultado": "Rejeição: Emitente bloqueado pela UF de destino, em operação com consumidor final",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4408970120343-Rejei%C3%A7%C3%A3o-307-Emitente-bloqueado-pela-UF-de-destino-em-opera%C3%A7%C3%A3o-com-consumidor-final"
+  },
+  {
+    "codigo": "315",
+    "resultado": "Rejeição: Data de Emissão anterior ao início da autorização de Nota Fiscal na UF",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010182194-Rejei%C3%A7%C3%A3o-315-Data-de-Emiss%C3%A3o-anterior-ao-in%C3%ADcio-da-autoriza%C3%A7%C3%A3o-de-Nota-Fiscal-na-UF"
+  },
+  {
+    "codigo": "316",
+    "resultado": "Rejeição: Chave de Acesso referenciada com a mesma Chave de Acesso da Nota Fiscal atual",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010923474-Rejei%C3%A7%C3%A3o-316-Nota-Fiscal-referenciada-com-a-mesma-Chave-de-Acesso-da-Nota-Fiscal-atual"
+  },
+  {
+    "codigo": "317",
+    "resultado": "Rejeição: NF modelo 1 referenciada com data de emissão inválida"
+  },
+  {
+    "codigo": "318",
+    "resultado": "Rejeição: Contranota de Produtor sem Nota Fiscal referenciada",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015169574-Rejei%C3%A7%C3%A3o-318-Contranota-de-Produtor-sem-Nota-Fiscal-referenciada"
+  },
+  {
+    "codigo": "319",
+    "resultado": "Rejeição: Contranota de Produtor não pode referenciar somente Nota Fiscal de entrada"
+  },
+  {
+    "codigo": "320",
+    "resultado": "Rejeição: Contranota de Produtor referencia somente NF de outro emitente"
+  },
+  {
+    "codigo": "321",
+    "resultado": "Rejeição: NF-e de devolução de mercadoria não possui documento fiscal referenciado",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010190894-Rejei%C3%A7%C3%A3o-321-NF-e-de-devolu%C3%A7%C3%A3o-de-mercadoria-n%C3%A3o-possui-documento-fiscal-referenciado"
+  },
+  {
+    "codigo": "322",
+    "resultado": "Rejeição: NF de produtor referenciada com data de emissão inválida"
+  },
+  {
+    "codigo": "323",
+    "resultado": "Rejeição: CNPJ autorizado para download inválido"
+  },
+  {
+    "codigo": "324",
+    "resultado": "Rejeição: CNPJ do destinatário já autorizado para download",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010185314-Rejei%C3%A7%C3%A3o-324-CNPJ-do-destinat%C3%A1rio-j%C3%A1-autorizado-para-download"
+  },
+  {
+    "codigo": "325",
+    "resultado": "Rejeição: CPF autorizado para download inválido"
+  },
+  {
+    "codigo": "326",
+    "resultado": "Rejeição: CPF do destinatário já autorizado para download"
+  },
+  {
+    "codigo": "327",
+    "resultado": "Rejeição: CFOP inválido para Nota Fiscal com finalidade de devolução de mercadoria",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360014042394-Rejei%C3%A7%C3%A3o-327-CFOP-inv%C3%A1lido-para-Nota-Fiscal-com-finalidade-de-devolu%C3%A7%C3%A3o-de-mercadoria"
+  },
+  {
+    "codigo": "328",
+    "resultado": "Rejeição: CFOP de devolução de mercadoria para NF e que não tem finalidade de devolução de mercadoria",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360011018693-Rejei%C3%A7%C3%A3o-328-CFOP-de-devolu%C3%A7%C3%A3o-de-mercadoria-para-NFe-que-n%C3%A3o-tem-finalidade-de-devolu%C3%A7%C3%A3o-de-mercadoria"
+  },
+  {
+    "codigo": "329",
+    "resultado": "Rejeição: Número da DI /DSI inválido"
+  },
+  {
+    "codigo": "330",
+    "resultado": "Rejeição: Informar o Valor da AFRMM na importação por via marítima"
+  },
+  {
+    "codigo": "331",
+    "resultado": "Rejeição: Informar o CNPJ do adquirente ou do encomendante nesta forma de importação"
+  },
+  {
+    "codigo": "332",
+    "resultado": "Rejeição: CNPJ do adquirente ou do encomendante da importação inválido"
+  },
+  {
+    "codigo": "333",
+    "resultado": "Rejeição: Informar a UF do adquirente ou do encomendante nesta forma de importação"
+  },
+  {
+    "codigo": "334",
+    "resultado": "Rejeição: Número do processo de drawback não informado na importação"
+  },
+  {
+    "codigo": "335",
+    "resultado": "Rejeição: Número do processo de drawback na importação inválido"
+  },
+  {
+    "codigo": "336",
+    "resultado": "Rejeição: Informado o grupo de exportação no item em operação que não é com exterior"
+  },
+  {
+    "codigo": "337",
+    "resultado": "Rejeição: Não informado o grupo de exportação no item"
+  },
+  {
+    "codigo": "338",
+    "resultado": "Rejeição: Número do processo de drawback não informado na exportação"
+  },
+  {
+    "codigo": "339",
+    "resultado": "Rejeição: Número do processo de drawback na exportação inválido"
+  },
+  {
+    "codigo": "340",
+    "resultado": "Rejeição: Não informado o grupo de exportação indireta no item"
+  },
+  {
+    "codigo": "341",
+    "resultado": "Rejeição: Número do registro de exportação inválido"
+  },
+  {
+    "codigo": "342",
+    "resultado": "Rejeição: Chave de Acesso informada na Exportação Indireta com DV inválido"
+  },
+  {
+    "codigo": "343",
+    "resultado": "Rejeição: Modelo da NF-e informada na Exportação Indireta diferente de 55"
+  },
+  {
+    "codigo": "344",
+    "resultado": "Rejeição: Duplicidade de NF-e informada na Exportação Indireta (Chave de Acesso informada mais de uma vez)"
+  },
+  {
+    "codigo": "345",
+    "resultado": "Rejeição: Chave de Acesso informada na Exportação Indireta não consta como NF-e referenciada"
+  },
+  {
+    "codigo": "346",
+    "resultado": "Rejeição: Somatório das quantidades informadas na Exportação Indireta não corresponde a quantidade total do item"
+  },
+  {
+    "codigo": "347",
+    "resultado": "Rejeição: Informada IE do substituto tributário em operação com Exterior",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360012391973-Rejei%C3%A7%C3%A3o-347-Informada-IE-do-substituto-tribut%C3%A1rio-em-opera%C3%A7%C3%A3o-com-Exterior"
+  },
+  {
+    "codigo": "349",
+    "resultado": "Rejeição: Número RECOPI não informado"
+  },
+  {
+    "codigo": "350",
+    "resultado": "Rejeição: Número RECOPI inválido"
+  },
+  {
+    "codigo": "351",
+    "resultado": "Rejeição: Valor do ICMS da Operação no CST=51 difere do produto BC e Alíquota",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/6575789750039"
+  },
+  {
+    "codigo": "352",
+    "resultado": "Rejeição: Valor do ICMS Diferido no CST=51 difere do produto Valor ICMS Operação e percentual diferimento"
+  },
+  {
+    "codigo": "353",
+    "resultado": "Rejeição: Valor do ICMS no CST=51 não corresponde a diferença do ICMS operação e ICMS diferido"
+  },
+  {
+    "codigo": "354",
+    "resultado": "Rejeição: Informado grupo de devolução de tributos para NF-e que não tem finalidade de devolução de mercadoria",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360007366414-Rejei%C3%A7%C3%A3o-354-Informado-grupo-de-devolu%C3%A7%C3%A3o-de-tributos-para-NF-e-que-n%C3%A3o-tem-finalidade-de-devolu%C3%A7%C3%A3o-de-mercadoria-"
+  },
+  {
+    "codigo": "355",
+    "resultado": "Rejeição: Informar o local de saída do Pais no caso da exportação"
+  },
+  {
+    "codigo": "356",
+    "resultado": "Rejeição: Informar o local de saída do Pais somente no caso da exportação",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016177133-Rejei%C3%A7%C3%A3o-356-Informar-o-local-de-sa%C3%ADda-do-Pais-somente-no-caso-da-exporta%C3%A7%C3%A3o"
+  },
+  {
+    "codigo": "357",
+    "resultado": "Rejeição: Chave de Acesso do grupo de Exportação Indireta inexistente"
+  },
+  {
+    "codigo": "358",
+    "resultado": "Rejeição: Chave de Acesso do grupo de Exportação Indireta cancelada ou denegada"
+  },
+  {
+    "codigo": "359",
+    "resultado": "Rejeição: NF-e de venda a Órgão Público sem informar a Nota de Empenho"
+  },
+  {
+    "codigo": "360",
+    "resultado": "Rejeição: NF-e com Nota de Empenho inválida para a UF."
+  },
+  {
+    "codigo": "361",
+    "resultado": "Rejeição: NF-e com Nota de Empenho inexistente na UF."
+  },
+  {
+    "codigo": "362",
+    "resultado": "Rejeição: Venda de combustível sem informação do Transportador",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360019926274-Rejei%C3%A7%C3%A3o-362-Venda-de-combust%C3%ADvel-sem-informa%C3%A7%C3%A3o-do-Transportador"
+  },
+  {
+    "codigo": "363",
+    "resultado": "Rejeição: IE do substituto tributário idêntica à IE do emitente ou do destinatário",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360012400393-Rejei%C3%A7%C3%A3o-363-IE-do-substituto-tribut%C3%A1rio-id%C3%AAntica-%C3%A0-IE-do-emitente-ou-do-destinat%C3%A1rio"
+  },
+  {
+    "codigo": "364",
+    "resultado": "Rejeição: Total do valor da dedução do ISS difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360019923014-Rejei%C3%A7%C3%A3o-364-Total-do-valor-da-dedu%C3%A7%C3%A3o-do-ISS-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "365",
+    "resultado": "Rejeição: Total de outras retenções difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360020117913-Rejei%C3%A7%C3%A3o-365-Total-de-outras-reten%C3%A7%C3%B5es-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "366",
+    "resultado": "Rejeição: Total do desconto incondicionado ISS difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360020116273-Rejei%C3%A7%C3%A3o-366-Total-do-desconto-incondicionado-ISS-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "367",
+    "resultado": "Rejeição: Total do desconto condicionado ISS difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360019907694-Rejei%C3%A7%C3%A3o-367-Total-do-desconto-condicionado-ISS-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "368",
+    "resultado": "Rejeição: Total de ISS retido difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360019897974-Rejei%C3%A7%C3%A3o-368-Total-de-ISS-retido-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "369",
+    "resultado": "Rejeição: Não informado o grupo avulsa na emissão pelo Fisco",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360019891554-Rejei%C3%A7%C3%A3o-369-N%C3%A3o-informado-o-grupo-avulsa-na-emiss%C3%A3o-pelo-Fisco"
+  },
+  {
+    "codigo": "370",
+    "resultado": "Rejeição: Nota Fiscal Avulsa com tipo de emissão inválido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360019859154-Rejei%C3%A7%C3%A3o-370-Nota-Fiscal-Avulsa-com-tipo-de-emiss%C3%A3o-inv%C3%A1lido"
+  },
+  {
+    "codigo": "372",
+    "resultado": "Rejeição: Destinatário com identificação de estrangeiro com caracteres inválidos",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010301313-Rejei%C3%A7%C3%A3o-372-Destinat%C3%A1rio-com-identifica%C3%A7%C3%A3o-de-estrangeiro-com-caracteres-inv%C3%A1lidos"
+  },
+  {
+    "codigo": "373",
+    "resultado": "Rejeição: Descrição do primeiro item diferente de NOTA FISCAL EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010301653-Rejei%C3%A7%C3%A3o-373-Descri%C3%A7%C3%A3o-do-primeiro-item-diferente-de-NOTA-FISCAL-EMITIDA-EM-AMBIENTE-DE-HOMOLOGACAO-SEM-VALOR-FISCAL"
+  },
+  {
+    "codigo": "375",
+    "resultado": "Rejeição: NF-e com lançamento relativo a Cupom Fiscal referencia uma NFC-e",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360017800373-Rejei%C3%A7%C3%A3o-375-NF-e-com-lan%C3%A7amento-relativo-a-Cupom-Fiscal-referencia-uma-NFC-e"
+  },
+  {
+    "codigo": "376",
+    "resultado": "Rejeição: Data do Desembaraço Aduaneiro inválida"
+  },
+  {
+    "codigo": "377",
+    "resultado": "Rejeição: Código de País do destinatário Inexistente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010188494-Rejei%C3%A7%C3%A3o-377-C%C3%B3digo-de-Pa%C3%ADs-do-destinat%C3%A1rio-Inexistente"
+  },
+  {
+    "codigo": "379",
+    "resultado": "Rejeição: Grupo de Encerrante na NF-e (modelo 55) para CFOP diferente de venda de combustível para consumidor final"
+  },
+  {
+    "codigo": "380",
+    "resultado": "Rejeição: Valor do Encerrante final não é superior ao Encerrante inicial",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010343833-Rejei%C3%A7%C3%A3o-380-Valor-do-Encerrante-final-n%C3%A3o-%C3%A9-superior-ao-Encerrante-inicial-"
+  },
+  {
+    "codigo": "387",
+    "resultado": "Rejeição: Código de Enquadramento Legal do IPI inválido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010798193-Rejei%C3%A7%C3%A3o-387-C%C3%B3digo-de-Enquadramento-Legal-do-IPI-inv%C3%A1lido"
+  },
+  {
+    "codigo": "388",
+    "resultado": "Rejeição: Código de Situação Tributária do IPI incompatível com o Código de Enquadramento Legaldo IPI",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360014578633-Rejei%C3%A7%C3%A3o-388-C%C3%B3digo-de-Situa%C3%A7%C3%A3o-Tribut%C3%A1ria-do-IPI-incompat%C3%ADvel-com-o-C%C3%B3digo-de-Enquadramento-Legal-do-IPI"
+  },
+  {
+    "codigo": "389",
+    "resultado": "Rejeição: Código Município ISSQN inexistente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010349073-Rejei%C3%A7%C3%A3o-389-C%C3%B3digo-Munic%C3%ADpio-ISSQN-inexistente"
+  },
+  {
+    "codigo": "393",
+    "resultado": "Rejeição: NF-e com o grupo de Informações Suplementares",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016532773-Rejei%C3%A7%C3%A3o-393-NF-e-com-o-grupo-de-Informa%C3%A7%C3%B5es-Suplementares"
+  },
+  {
+    "codigo": "401",
+    "resultado": "Rejeição: CPF do remetente inválido"
+  },
+  {
+    "codigo": "401",
+    "resultado": "Rejeição: CPF do emitente inválido"
+  },
+  {
+    "codigo": "402",
+    "resultado": "Rejeição: XML da área de dados com codificação diferente de UTF-8",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/10503267706263"
+  },
+  {
+    "codigo": "403",
+    "resultado": "Rejeição: O grupo de informações da NF-e avulsa é de uso exclusivo do Fisco",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016129594-Rejei%C3%A7%C3%A3o-403-O-grupo-de-informa%C3%A7%C3%B5es-da-NF-e-avulsa-%C3%A9-de-uso-exclusivo-do-Fisco"
+  },
+  {
+    "codigo": "404",
+    "resultado": "Rejeição: Uso de prefixo de namespace não permitido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016486473-Rejei%C3%A7%C3%A3o-404-Uso-de-prefixo-de-namespace-n%C3%A3o-permitido"
+  },
+  {
+    "codigo": "405",
+    "resultado": "Rejeição: Código do país do emitente: dígito inválido"
+  },
+  {
+    "codigo": "406",
+    "resultado": "Rejeição: Código do país do destinatário: dígito inválido"
+  },
+  {
+    "codigo": "407",
+    "resultado": "Rejeição: O CPF só pode ser informado no campo emitente para a NF-e avulsa"
+  },
+  {
+    "codigo": "408",
+    "resultado": "Rejeição: Evento não disponível para Autor pessoa física"
+  },
+  {
+    "codigo": "409",
+    "resultado": "Rejeição: Campo cUF inexistente no elemento nfeCabecMsg do SOAP Header",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016226253-Rejei%C3%A7%C3%A3o-409-Campo-cUF-inexistente-no-elemento-nfeCabecMsg-do-SOAP-Header"
+  },
+  {
+    "codigo": "410",
+    "resultado": "Rejeição: UF informada no campo cUF não é atendida pelo Web Service",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360013658873-Rejei%C3%A7%C3%A3o-410-UF-informada-no-campo-cUF-n%C3%A3o-%C3%A9-atendida-pelo-webservice"
+  },
+  {
+    "codigo": "411",
+    "resultado": "Rejeição: Campo versaoDados inexistente no elemento nfeCabecMsg do SOAP Header"
+  },
+  {
+    "codigo": "416",
+    "resultado": "Rejeição: Falha na descompactação da área de dados"
+  },
+  {
+    "codigo": "417",
+    "resultado": "Rejeição: Total do ICMS superior ao valor limite estabelecido"
+  },
+  {
+    "codigo": "418",
+    "resultado": "Rejeição: Total do ICMS ST superior ao valor limite estabelecido"
+  },
+  {
+    "codigo": "420",
+    "resultado": "Rejeição: Cancelamento para NF-e já cancelada",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360049112473-Rejei%C3%A7%C3%A3o-420-Cancelamento-para-NF-e-j%C3%A1-cancelada"
+  },
+  {
+    "codigo": "434",
+    "resultado": "Rejeição: NF-e nem indicativo intermediador",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/1500008005022-Rejei%C3%A7%C3%A3o-434-NF-e-sem-indicativo-do-intermediador"
+  },
+  {
+    "codigo": "435",
+    "resultado": "Rejeição: NF-e não pode ter o indicativo do intermediador",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4403359417111-Rejei%C3%A7%C3%A3o-435-NF-e-n%C3%A3o-pode-ter-o-indicativo-do-intermediador"
+  },
+  {
+    "codigo": "436",
+    "resultado": "Rejeição: Código do meio de pagamento inexistente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4403351676695-Rejei%C3%A7%C3%A3o-436-C%C3%B3digo-do-meio-de-pagamento-inexistente"
+  },
+  {
+    "codigo": "438",
+    "resultado": "Rejeição: Obrigatória as informações do intermediador da transação para operação por site de terceiros",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/1500008002582-Rejei%C3%A7%C3%A3o-438-Obrigat%C3%B3ria-as-informa%C3%A7%C3%B5es-do-intermediador-da-transa%C3%A7%C3%A3o-para-opera%C3%A7%C3%A3o-por-site-de-terceiros"
+  },
+  {
+    "codigo": "441",
+    "resultado": "Rejeição: Descrição do pagamento obrigatória para meio de pagamento 99 - outros",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/1500011502541-Rejei%C3%A7%C3%A3o-441-Descri%C3%A7%C3%A3o-do-pagamento-obrigat%C3%B3ria-para-meio-de-pagamento-99-outros"
+  },
+  {
+    "codigo": "442",
+    "resultado": "Rejeição: Descrição do pagamento não permitida",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/1500011507241-Rejei%C3%A7%C3%A3o-442-Descri%C3%A7%C3%A3o-do-pagamento-n%C3%A3o-permitida"
+  },
+  {
+    "codigo": "446",
+    "resultado": "Rejeição: Informado CEST Inexistente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4408977115927-Rejei%C3%A7%C3%A3o-446-Informado-CEST-Inexistente"
+  },
+  {
+    "codigo": "450",
+    "resultado": "Rejeição: Modelo da NF-e diferente de 55",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015596494-Rejei%C3%A7%C3%A3o-450-Modelo-da-NF-e-difere-de-55"
+  },
+  {
+    "codigo": "451",
+    "resultado": "Rejeição: Processo de emissão informado inválido"
+  },
+  {
+    "codigo": "452",
+    "resultado": "Rejeição: Tipo Autorizador do Recibo diverge do Órgão Autorizador"
+  },
+  {
+    "codigo": "453",
+    "resultado": "Rejeição: Ano de inutilização não pode ser superior ao Ano atual"
+  },
+  {
+    "codigo": "454",
+    "resultado": "Rejeição: Ano de inutilização não pode ser inferior a 2006"
+  },
+  {
+    "codigo": "455",
+    "resultado": "Rejeição: Órgão Autor do evento diferente da UF da Chave de Acesso"
+  },
+  {
+    "codigo": "462",
+    "resultado": "Rejeição: Rejeição: Informado campos de percentual de GLP e/ou GLGNn e/ou GLGNi para produto diferente de GLP"
+  },
+  {
+    "codigo": "465",
+    "resultado": "Rejeição: Número de Controle da FCI inexistente"
+  },
+  {
+    "codigo": "466",
+    "resultado": "Rejeição: Evento com Tipo de Autor incompatível"
+  },
+  {
+    "codigo": "467",
+    "resultado": "Rejeição: Dados da NF-e divergentes do EPEC"
+  },
+  {
+    "codigo": "468",
+    "resultado": "Rejeição: NF-e com Tipo Emissão = 4, sem EPEC correspondente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360047810473-Rejei%C3%A7%C3%A3o-468-NF-e-com-Tipo-Emiss%C3%A3o-4-sem-EPEC-correspondente"
+  },
+  {
+    "codigo": "471",
+    "resultado": "Rejeição: Informado NCM=00 indevidamente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010442073-Rejei%C3%A7%C3%A3o-471-Informado-NCM-00-indevidamente"
+  },
+  {
+    "codigo": "476",
+    "resultado": "Rejeição: Código da UF diverge da UF da primeira NF-e do Lote"
+  },
+  {
+    "codigo": "477",
+    "resultado": "Rejeição: Código do órgão diverge do órgão do primeiro evento do Lote"
+  },
+  {
+    "codigo": "478",
+    "resultado": "Rejeição: Local da entrega não informado para faturamento direto de veículos novos",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360019854114-Rejei%C3%A7%C3%A3o-478-Local-da-entrega-n%C3%A3o-informado-para-faturamento-direto-de-ve%C3%ADculos-novos"
+  },
+  {
+    "codigo": "479",
+    "resultado": "Rejeição: Data de Emissão anterior a data de credenciamento ou anterior a Data de Abertura do estabelecimento",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010341334-Rejei%C3%A7%C3%A3o-479-Data-de-Emiss%C3%A3o-anterior-a-data-de-credenciamento-ou-anterior-a-Data-de-Abertura-do-estabelecimento"
+  },
+  {
+    "codigo": "480",
+    "resultado": "Rejeição: Código Município do Emitente diverge do cadastrado na UF",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010609273-Rejei%C3%A7%C3%A3o-480-C%C3%B3digo-Munic%C3%ADpio-do-Emitente-diverge-do-cadastrado-na-UF"
+  },
+  {
+    "codigo": "481",
+    "resultado": "Rejeição: Código Regime Tributário do emitente diverge do cadastro na SEFAZ",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010563894-Rejei%C3%A7%C3%A3o-481-C%C3%B3digo-Regime-Tribut%C3%A1rio-do-emitente-diverge-do-cadastro-na-SEFAZ"
+  },
+  {
+    "codigo": "482",
+    "resultado": "Rejeição: Código do Município do Destinatário diverge do cadastrado na UF",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010644293-Rejei%C3%A7%C3%A3o-482-C%C3%B3digo-do-Munic%C3%ADpio-do-Destinat%C3%A1rio-diverge-do-cadastrado-na-UF"
+  },
+  {
+    "codigo": "483",
+    "resultado": "Rejeição: Valor do desconto maior que valor do produto",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010644553-Rejei%C3%A7%C3%A3o-483-Valor-do-desconto-maior-que-valor-do-produto-"
+  },
+  {
+    "codigo": "484",
+    "resultado": "Rejeição: Chave de Acesso com tipo de emissão diferente de 4 (posição 35 da Chave de Acesso)"
+  },
+  {
+    "codigo": "485",
+    "resultado": "Rejeição: Duplicidade de numeração do EPEC (Modelo, CNPJ, Série e Número)"
+  },
+  {
+    "codigo": "486",
+    "resultado": "Rejeição: Não informado o Grupo de Autorização para UF que exige a identificação do Escritório de Contabilidade na Nota Fiscal",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360018393493-Rejei%C3%A7%C3%A3o-486-N%C3%A3o-informado-o-Grupo-de-Autoriza%C3%A7%C3%A3o-para-UF-que-exige-a-identifica%C3%A7%C3%A3o-do-Escrit%C3%B3rio-de-Contabilidade-na-Nota-Fiscal"
+  },
+  {
+    "codigo": "487",
+    "resultado": "Rejeição: Escritório de Contabilidade não cadastrado na SEFAZ"
+  },
+  {
+    "codigo": "488",
+    "resultado": "Rejeição: Vendas do Emitente incompatíveis com o Porte da Empresa"
+  },
+  {
+    "codigo": "489",
+    "resultado": "Rejeição: CNPJ informado inválido (DV ou zeros)",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016037253-Rejei%C3%A7%C3%A3o-489-CNPJ-informado-inv%C3%A1lido-DV-ou-zeros-"
+  },
+  {
+    "codigo": "490",
+    "resultado": "Rejeição: CPF informado inválido (DV ou zeros)",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360014843094-Rejei%C3%A7%C3%A3o-490-CPF-informado-inv%C3%A1lido-DV-ou-zeros-"
+  },
+  {
+    "codigo": "491",
+    "resultado": "Rejeição: O tpEvento informado inválido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360014146074-Rejei%C3%A7%C3%A3o-491-O-tpEvento-informado-inv%C3%A1lido"
+  },
+  {
+    "codigo": "492",
+    "resultado": "Rejeição: O verEvento informado inválido"
+  },
+  {
+    "codigo": "493",
+    "resultado": "Rejeição: Evento não atende o Schema XML específico",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360012486114-Rejei%C3%A7%C3%A3o-493-Evento-n%C3%A3o-atende-o-Schema-XML-espec%C3%ADfico"
+  },
+  {
+    "codigo": "494",
+    "resultado": "Rejeição: Chave de Acesso inexistente"
+  },
+  {
+    "codigo": "501",
+    "resultado": "Rejeição: Pedido de Cancelamento intempestivo (NF-e autorizada a mais de 7 dias)"
+  },
+  {
+    "codigo": "502",
+    "resultado": "Rejeição: Erro na Chave de Acesso - Campo Id não corresponde à concatenação dos campos correspondentes",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010126753-Rejei%C3%A7%C3%A3o-502-Erro-na-Chave-de-Acesso-Campo-Id-n%C3%A3o-corresponde-%C3%A0-concatena%C3%A7%C3%A3o-dos-campos-correspondentes-"
+  },
+  {
+    "codigo": "503",
+    "resultado": "Rejeição: Série utilizada fora da faixa permitida no SCAN (900-999)"
+  },
+  {
+    "codigo": "504",
+    "resultado": "Rejeição: Data de Entrada/Saída posterior ao permitido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015258293-Rejei%C3%A7%C3%A3o-504-Data-de-Entrada-Sa%C3%ADda-posterior-ao-permitido"
+  },
+  {
+    "codigo": "505",
+    "resultado": "Rejeição: Data de Entrada/Saída anterior ao permitido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016082673-Rejei%C3%A7%C3%A3o-505-Data-de-Entrada-Sa%C3%ADda-anterior-ao-permitido"
+  },
+  {
+    "codigo": "506",
+    "resultado": "Rejeição: Data de Saída menor que a Data de Emissão"
+  },
+  {
+    "codigo": "507",
+    "resultado": "Rejeição: O CNPJ do destinatário/remetente não deve ser informado em operação com o exterior"
+  },
+  {
+    "codigo": "508",
+    "resultado": "Rejeição: CST incompatível na operação com Não Contribuinte",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360012239654-Rejei%C3%A7%C3%A3o-508-CST-incompat%C3%ADvel-na-opera%C3%A7%C3%A3o-com-N%C3%A3o-Contribuinte"
+  },
+  {
+    "codigo": "509",
+    "resultado": "Rejeição: Informado código de município diferente de “9999999” para operação com o exterior"
+  },
+  {
+    "codigo": "510",
+    "resultado": "Rejeição: Operação com Exterior e Código País destinatário é 1058 (Brasil) ou não informado",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015778913-Rejei%C3%A7%C3%A3o-510-Opera%C3%A7%C3%A3o-com-Exterior-e-C%C3%B3digo-Pa%C3%ADs-destinat%C3%A1rio-%C3%A9-1058-Brasil-ou-n%C3%A3o-informado"
+  },
+  {
+    "codigo": "511",
+    "resultado": "Rejeição: Não é de Operação com Exterior e Código País destinatário difere de 1058 (Brasil)",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010566294-Rejei%C3%A7%C3%A3o-511-N%C3%A3o-%C3%A9-de-Opera%C3%A7%C3%A3o-com-Exterior-e-C%C3%B3digo-Pa%C3%ADs-destinat%C3%A1rio-difere-de-1058-Brasil-"
+  },
+  {
+    "codigo": "512",
+    "resultado": "Rejeição: CNPJ do Local de Retirada inválido"
+  },
+  {
+    "codigo": "513",
+    "resultado": "Rejeição: Código Município do Local de Retirada deve ser 9999999 para UF retirada = EX"
+  },
+  {
+    "codigo": "514",
+    "resultado": "Rejeição: CNPJ do Local de Entrega inválido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016552973-Rejei%C3%A7%C3%A3o-514-CNPJ-do-Local-de-Entrega-inv%C3%A1lido"
+  },
+  {
+    "codigo": "515",
+    "resultado": "Rejeição: Código Município do Local de Entrega deve ser 9999999 para UF entrega = EX"
+  },
+  {
+    "codigo": "516",
+    "resultado": "Rejeição: Falha no schema XML – inexiste a tag raiz esperada para a mensagem"
+  },
+  {
+    "codigo": "517",
+    "resultado": "Rejeição: Falha no schema XML – inexiste atributo versao na tag raiz da mensagem"
+  },
+  {
+    "codigo": "518",
+    "resultado": "Rejeição: CFOP de entrada para NF-e de saída",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015935814-Rejei%C3%A7%C3%A3o-518-CFOP-de-entrada-para-NF-e-de-sa%C3%ADda"
+  },
+  {
+    "codigo": "519",
+    "resultado": "Rejeição: CFOP de saída para NF-e de entrada",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016290033-Rejei%C3%A7%C3%A3o-519-CFOP-de-sa%C3%ADda-para-NF-e-de-entrada"
+  },
+  {
+    "codigo": "520",
+    "resultado": "Rejeição: CFOP de Operação com Exterior e UF destinatário difere de EX"
+  },
+  {
+    "codigo": "521",
+    "resultado": "Rejeição: Operação Interna e UF do emitente difere da UF do destinatário/remetente contribuinte do ICMS"
+  },
+  {
+    "codigo": "522",
+    "resultado": "Rejeição: Chave de Acesso referenciada com UF inválida"
+  },
+  {
+    "codigo": "523",
+    "resultado": "Rejeição: CFOP não é de Operação Estadual e UF emitente igual a UF destinatário.",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015329733-Rejei%C3%A7%C3%A3o-523-CFOP-n%C3%A3o-%C3%A9-de-Opera%C3%A7%C3%A3o-Estadual-e-UF-emitente-igual-%C3%A0-UF-destinat%C3%A1rio"
+  },
+  {
+    "codigo": "524",
+    "resultado": "Rejeição: Chave de Acesso referenciada com Ano-Mês inválido"
+  },
+  {
+    "codigo": "525",
+    "resultado": "Rejeição: CFOP de Importação e não informado dados da DI",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015902233-Rejei%C3%A7%C3%A3o-525-CFOP-de-Importa%C3%A7%C3%A3o-e-n%C3%A3o-informado-dados-da-DI"
+  },
+  {
+    "codigo": "526",
+    "resultado": "Rejeição: Ano-Mês da Chave de Acesso com atraso superior a 6 meses em relação ao Ano-Mês atual",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010386773-Rejei%C3%A7%C3%A3o-526-Ano-M%C3%AAs-da-Chave-de-Acesso-com-atraso-superior-a-6-meses-em-rela%C3%A7%C3%A3o-ao-Ano-M%C3%AAs-atual"
+  },
+  {
+    "codigo": "527",
+    "resultado": "Rejeição: Operação de Exportação com informação de ICMS incompatível",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015273233-Rejei%C3%A7%C3%A3o-527-Opera%C3%A7%C3%A3o-de-exporta%C3%A7%C3%A3o-com-informa%C3%A7%C3%A3o-de-ICMS-incompat%C3%ADvel"
+  },
+  {
+    "codigo": "528",
+    "resultado": "Rejeição: Valor do ICMS difere do produto BC e Alíquota",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010567014-Rejei%C3%A7%C3%A3o-528-Valor-do-ICMS-difere-do-produto-BC-e-Al%C3%ADquota"
+  },
+  {
+    "codigo": "529",
+    "resultado": "Rejeição: CST incompatível na operação com Contribuinte Isento de Inscrição Estadual",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360012270174-Rejei%C3%A7%C3%A3o-529-CST-incompat%C3%ADvel-na-opera%C3%A7%C3%A3o-com-Contribuinte-Isento-de-Inscri%C3%A7%C3%A3o-Estadual"
+  },
+  {
+    "codigo": "530",
+    "resultado": "Rejeição: Operação com tributação de ISSQN sem informar a Inscrição Municipal"
+  },
+  {
+    "codigo": "531",
+    "resultado": "Rejeição 528: Valor do ICMS difere do produto BC e Alíquota",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010008434-Rejei%C3%A7%C3%A3o-531-Total-da-BC-ICMS-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "532",
+    "resultado": "Rejeição: Total do ICMS difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360011017053-Rejei%C3%A7%C3%A3o-532-Total-do-ICMS-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "533",
+    "resultado": "Rejeição: Total da BC ICMS-ST difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010567714-Rejei%C3%A7%C3%A3o-533-Total-da-BC-ICMS-ST-difere-do-somat%C3%B3rio-dos-itens-"
+  },
+  {
+    "codigo": "534",
+    "resultado": "Rejeição: Total do ICMS-ST difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010648433-Rejei%C3%A7%C3%A3o-534-Total-do-ICMS-ST-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "535",
+    "resultado": "Rejeição: Total do Frete difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016177134-Rejei%C3%A7%C3%A3o-535-Total-do-Frete-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "536",
+    "resultado": "Rejeição: Total do Seguro difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010648793-Rejei%C3%A7%C3%A3o-536-Total-do-Seguro-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "537",
+    "resultado": "Rejeição: Total do Desconto difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010923174-Rejei%C3%A7%C3%A3o-537-Total-do-Desconto-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "538",
+    "resultado": "Rejeição: Total do IPI difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015552134-Rejei%C3%A7%C3%A3o-538-Total-do-IPI-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "539",
+    "resultado": "Duplicidade de NF-e com diferença na Chave de Acesso",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010572074-Rejei%C3%A7%C3%A3o-539-Duplicidade-de-NF-e-com-diferen%C3%A7a-na-Chave-de-Acesso"
+  },
+  {
+    "codigo": "540",
+    "resultado": "Rejeição: CPF do Local de Retirada inválido"
+  },
+  {
+    "codigo": "541",
+    "resultado": "Rejeição: CPF do Local de Entrega inválido"
+  },
+  {
+    "codigo": "542",
+    "resultado": "Rejeição: CNPJ do Transportador inválido"
+  },
+  {
+    "codigo": "543",
+    "resultado": "Rejeição: CPF do Transportador inválido"
+  },
+  {
+    "codigo": "544",
+    "resultado": "Rejeição: IE do Transportador inválida",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015306333-Rejei%C3%A7%C3%A3o-544-IE-do-transportador-inv%C3%A1lida"
+  },
+  {
+    "codigo": "545",
+    "resultado": "Rejeição: Falha no schema XML – versão informada na versaoDados do SOAPHeader diverge da versão da mensagem",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016444013-Rejei%C3%A7%C3%A3o-545-Falha-no-schema-XML-vers%C3%A3o-informada-na-versaoDados-do-SOAPHeader-diverge-da-vers%C3%A3o-da-mensagem"
+  },
+  {
+    "codigo": "546",
+    "resultado": "Rejeição: NF-e de devolução com valor do ICMS superior a NF-e devolvida",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/17834130226839"
+  },
+  {
+    "codigo": "547",
+    "resultado": "Rejeição: Dígito Verificador da Chave de Acesso da NF-e Referenciada inválido"
+  },
+  {
+    "codigo": "548",
+    "resultado": "Rejeição: Chave de Acesso referenciada com Dígito Verificador inválido"
+  },
+  {
+    "codigo": "549",
+    "resultado": "Rejeição: CNPJ da NF referenciada inválido.",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016305674-Rejei%C3%A7%C3%A3o-549-CNPJ-da-NF-referenciada-de-produtor-inv%C3%A1lido"
+  },
+  {
+    "codigo": "550",
+    "resultado": "Rejeição: CNPJ da NF referenciada de produtor inválido."
+  },
+  {
+    "codigo": "551",
+    "resultado": "Rejeição: CPF da NF referenciada de produtor inválido.",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016237774-Rejei%C3%A7%C3%A3o-551-IE-da-NF-referenciada-de-produtor-inv%C3%A1lido"
+  },
+  {
+    "codigo": "552",
+    "resultado": "Rejeição: IE da NF referenciada de produtor inválido."
+  },
+  {
+    "codigo": "553",
+    "resultado": "Rejeição: Dígito Verificador da Chave de Acesso do CT-e Referenciado inválido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015680413-Rejei%C3%A7%C3%A3o-553-Tipo-autorizador-do-recibo-diverge-do-%C3%93rg%C3%A3o-Autorizador"
+  },
+  {
+    "codigo": "554",
+    "resultado": "Rejeição: Chave de Acesso referenciada com CNPJ inválido"
+  },
+  {
+    "codigo": "555",
+    "resultado": "Rejeição: Tipo autorizador do recibo diverge do Órgão Autorizador."
+  },
+  {
+    "codigo": "556",
+    "resultado": "Rejeição: Justificativa de entrada em contingência não deve ser informada para tipo de emissão normal.",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016437293-Rejei%C3%A7%C3%A3o-556-Justificativa-de-entrada-em-conting%C3%AAncia-n%C3%A3o-deve-ser-informada-para-tipo-de-emiss%C3%A3o-normal"
+  },
+  {
+    "codigo": "557",
+    "resultado": "Rejeição: A Justificativa de entrada em contingência deve ser informada."
+  },
+  {
+    "codigo": "558",
+    "resultado": "Rejeição: Data de entrada em contingência posterior a data de recebimento.",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016322694-Rejei%C3%A7%C3%A3o-558-Data-de-entrada-em-conting%C3%AAncia-posterior-a-data-de-recebimento"
+  },
+  {
+    "codigo": "559",
+    "resultado": "Rejeição: UF do Transportador não informada"
+  },
+  {
+    "codigo": "560",
+    "resultado": "Rejeição: CNPJ base do emitente difere do CNPJ base da primeira NF-e do lote recebido"
+  },
+  {
+    "codigo": "561",
+    "resultado": "Rejeição: Mês de Emissão informado na Chave de Acesso difere do Mês de Emissão da NF-e",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015239174-Rejei%C3%A7%C3%A3o-561-M%C3%AAs-de-Emiss%C3%A3o-informado-na-Chave-de-Acesso-difere-do-M%C3%AAs-de-Emiss%C3%A3o-da-NF-e"
+  },
+  {
+    "codigo": "562",
+    "resultado": "Rejeição: Código Numérico informado na Chave de Acesso difere do Código Numérico da NF-e",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360013192674-Rejei%C3%A7%C3%A3o-562-C%C3%B3digo-Num%C3%A9rico-informado-na-Chave-de-Acesso-difere-do-C%C3%B3digo-Num%C3%A9rico-da-NF-e"
+  },
+  {
+    "codigo": "563",
+    "resultado": "Rejeição: Já existe pedido de Inutilização com a mesma faixa de inutilização",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015306833-Rejei%C3%A7%C3%A3o-563-J%C3%A1-existe-pedido-de-Inutiliza%C3%A7%C3%A3o-com-a-mesma-faixa-de-inutiliza%C3%A7%C3%A3o"
+  },
+  {
+    "codigo": "564",
+    "resultado": "Rejeição: Total do Produto / Serviço difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010572834-Rejei%C3%A7%C3%A3o-564-Total-do-Produto-Servi%C3%A7o-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "565",
+    "resultado": "Rejeição: Falha no schema XML – inexiste a tag raiz esperada para o lote de NF-e"
+  },
+  {
+    "codigo": "567",
+    "resultado": "Rejeição: Falha no schema XML – versão informada na versaoDados do SOAPHeader diverge da versão do lote de NF-e"
+  },
+  {
+    "codigo": "568",
+    "resultado": "Rejeição: Falha no schema XML – inexiste atributo versao na tag raiz do lote de NF-e"
+  },
+  {
+    "codigo": "569",
+    "resultado": "Rejeição: Data de entrada em contingência muito atrasada",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010573294-Rejei%C3%A7%C3%A3o-569-Data-de-entrada-em-conting%C3%AAncia-muito-atrasada"
+  },
+  {
+    "codigo": "570",
+    "resultado": "Rejeição: Tipo de Emissão 3, 6 ou 7 só é válido nas contingências SCAN/SVC"
+  },
+  {
+    "codigo": "571",
+    "resultado": "Rejeição: O tpEmis informado diferente de 3 para contingência SCAN",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015638834-Rejei%C3%A7%C3%A3o-571-O-tpEmis-informado-diferente-de-3-para-conting%C3%AAncia-SCAN"
+  },
+  {
+    "codigo": "572",
+    "resultado": "Rejeição: Erro Atributo ID do evento não corresponde a concatenação dos campos (“ID” + tpEvento + chNFe + nSeqEvento)",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016582313-Rejei%C3%A7%C3%A3o-572-Erro-Atributo-ID-do-evento-n%C3%A3o-corresponde-a-concatena%C3%A7%C3%A3o-dos-campos-ID-tpEvento-chNFe-nSeqEvento-"
+  },
+  {
+    "codigo": "573",
+    "resultado": "Rejeição: Duplicidade de Evento",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010573794-Rejei%C3%A7%C3%A3o-573-Duplicidade-de-Evento"
+  },
+  {
+    "codigo": "574",
+    "resultado": "Rejeição: O autor do evento diverge do emissor da NF-e",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016043973-Rejei%C3%A7%C3%A3o-574-O-autor-do-evento-diverge-do-emissor-da-NF-e"
+  },
+  {
+    "codigo": "575",
+    "resultado": "Rejeição: O autor do evento diverge do destinatário da NF-e",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015783133-Rejei%C3%A7%C3%A3o-575-O-autor-do-evento-diverge-do-destinat%C3%A1rio-da-NF-e"
+  },
+  {
+    "codigo": "576",
+    "resultado": "Rejeição: O autor do evento não é um órgão autorizado a gerar o evento",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015123334-Rejei%C3%A7%C3%A3o-577-A-data-do-evento-n%C3%A3o-pode-ser-menor-que-a-data-de-emiss%C3%A3o-da-NF-e"
+  },
+  {
+    "codigo": "577",
+    "resultado": "Rejeição: A data do evento não pode ser menor que a data de emissão da NF-e",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015591514-Rejei%C3%A7%C3%A3o-578-A-data-do-evento-n%C3%A3o-pode-ser-maior-que-a-data-do-processamento"
+  },
+  {
+    "codigo": "578",
+    "resultado": "Rejeição: A data do evento não pode ser maior que a data do processamento",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015591514-Rejei%C3%A7%C3%A3o-578-A-data-do-evento-n%C3%A3o-pode-ser-maior-que-a-data-do-processamento"
+  },
+  {
+    "codigo": "579",
+    "resultado": "Rejeição: A data do evento não pode ser menor que a data de autorização para NF-e não emitida em contingência",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360014107314-Rejei%C3%A7%C3%A3o-579-A-data-do-evento-n%C3%A3o-pode-ser-menor-que-a-data-de-autoriza%C3%A7%C3%A3o-para-NF-e-n%C3%A3o-emitida-em-conting%C3%AAncia"
+  },
+  {
+    "codigo": "580",
+    "resultado": "Rejeição: O evento exige uma NF-e autorizada",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360014586313-Rejei%C3%A7%C3%A3o-580-O-evento-exige-uma-NF-e-autorizada"
+  },
+  {
+    "codigo": "587",
+    "resultado": "Rejeição: Usar somente o namespace padrão da NF-e",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360014813694-Rejei%C3%A7%C3%A3o-587-Usar-somente-o-namespace-padr%C3%A3o-da-NF-e"
+  },
+  {
+    "codigo": "588",
+    "resultado": "Rejeição: Não é permitida a presença de caracteres de edição no início/fim da mensagem ou entre as tags da mensagem",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015725113-Rejei%C3%A7%C3%A3o-588-N%C3%A3o-%C3%A9-permitida-a-presen%C3%A7a-de-caracteres-de-edi%C3%A7%C3%A3o-no-in%C3%ADcio-fim-da-mensagem-ou-entre-as-tags-da-mensagem"
+  },
+  {
+    "codigo": "589",
+    "resultado": "Rejeição: Número do NSU informado superior ao maior NSU da base de dados da SEFAZ"
+  },
+  {
+    "codigo": "590",
+    "resultado": "Rejeição: Informado CST para emissor do Simples Nacional (CRT=1)",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010877214-Rejei%C3%A7%C3%A3o-590-Informado-CST-para-emissor-do-Simples-Nacional"
+  },
+  {
+    "codigo": "591",
+    "resultado": "Rejeição: Informado CSOSN para emissor que não é do Simples Nacional (CRT diferente de 1)",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360013914733-Rejei%C3%A7%C3%A3o-591-Informado-CSOSN-para-emissor-que-n%C3%A3o-%C3%A9-do-Simples-Nacional-CRT-diferente-de-1-"
+  },
+  {
+    "codigo": "592",
+    "resultado": "Rejeição: A NF-e deve ter pelo menos um item de produto sujeito ao ICMS"
+  },
+  {
+    "codigo": "593",
+    "resultado": "Rejeição: CNPJ-Base consultado difere do CNPJ-Base do Certificado Digital"
+  },
+  {
+    "codigo": "594",
+    "resultado": "Rejeição: O número de sequencia do evento informado é maior que o permitido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360014842554-Rejei%C3%A7%C3%A3o-594-O-n%C3%BAmero-de-sequ%C3%AAncia-do-evento-informado-%C3%A9-maior-que-o-permitido"
+  },
+  {
+    "codigo": "595",
+    "resultado": "Rejeição: Obrigatória a informação da justificativa do evento.",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360007684213-Rejei%C3%A7%C3%A3o-595-A-vers%C3%A3o-do-leiaute-da-NF-e-utilizada-n%C3%A3o-%C3%A9-mais-v%C3%A1lida"
+  },
+  {
+    "codigo": "596",
+    "resultado": "Rejeição: Evento apresentado fora do prazo: [prazo vigente]"
+  },
+  {
+    "codigo": "597",
+    "resultado": "Rejeição: CFOP de Importação e não informado dados de IPI"
+  },
+  {
+    "codigo": "598",
+    "resultado": "Rejeição: NF-e emitida em ambiente de homologação com Razão Social do destinatário diferente de NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360022438553-Rejei%C3%A7%C3%A3o-598-NF-e-emitida-em-ambiente-de-homologa%C3%A7%C3%A3o-com-Raz%C3%A3o-Social-do-destinat%C3%A1rio-diferente-de-NF-E-EMITIDA-EM-AMBIENTE-DE-HOMOLOGACAO-SEM-VALOR-FISCAL-"
+  },
+  {
+    "codigo": "599",
+    "resultado": "Rejeição: CFOP de Importação e não informado dados de II",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015828753-Rejei%C3%A7%C3%A3o-599-CFOP-de-Importa%C3%A7%C3%A3o-e-n%C3%A3o-informado-dados-de-II"
+  },
+  {
+    "codigo": "600",
+    "resultado": "Rejeição: CSOSN incompatível na operação com Não Contribuinte",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360012244494-Rejei%C3%A7%C3%A3o-600-CSOSN-incompat%C3%ADvel-na-opera%C3%A7%C3%A3o-com-N%C3%A3o-Contribuinte-"
+  },
+  {
+    "codigo": "601",
+    "resultado": "Rejeição: Total do II difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015679253-Rejei%C3%A7%C3%A3o-602-Total-do-PIS-difere-do-somat%C3%B3rio-dos-itens-sujeitos-ao-ICMS"
+  },
+  {
+    "codigo": "602",
+    "resultado": "Rejeição: Total do PIS difere do somatório dos itens sujeitos ao ICMS",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015679253-Rejei%C3%A7%C3%A3o-602-Total-do-PIS-difere-do-somat%C3%B3rio-dos-itens-sujeitos-ao-ICMS"
+  },
+  {
+    "codigo": "603",
+    "resultado": "Rejeição: Total do COFINS difere do somatório dos itens sujeitos ao ICMS",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010103673-Rejei%C3%A7%C3%A3o-603-Total-da-COFINS-difere-do-somat%C3%B3rio-dos-itens-sujeitos-ao-ICMS"
+  },
+  {
+    "codigo": "604",
+    "resultado": "Rejeição: Total do vOutro difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010782554-Rejei%C3%A7%C3%A3o-604-Total-do-vOutro-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "605",
+    "resultado": "Rejeição: Total do vISS difere do somatório do vProd dos itens sujeitos ao ISSQN",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010783874-Rejei%C3%A7%C3%A3o-605-Total-do-vServ-difere-do-somat%C3%B3rio-do-vProd-dos-itens-sujeitos-ao-ISSQN"
+  },
+  {
+    "codigo": "606",
+    "resultado": "Rejeição: Total do vBC do ISS difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010783994-Rejei%C3%A7%C3%A3o-606-Total-do-vBC-do-ISS-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "607",
+    "resultado": "Rejeição: Total do ISS difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010784614-Rejei%C3%A7%C3%A3o-607-Total-do-ISS-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "608",
+    "resultado": "Rejeição: Total do PIS difere do somatório dos itens sujeitos ao ISSQN",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010865853-Rejei%C3%A7%C3%A3o-608-Total-do-PIS-difere-do-somat%C3%B3rio-dos-itens-sujeitos-ao-ISSQN"
+  },
+  {
+    "codigo": "609",
+    "resultado": "Rejeição: Total do COFINS difere do somatório dos itens sujeitos ao ISSQN",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010785594-Rejei%C3%A7%C3%A3o-609-Total-da-COFINS-difere-do-somat%C3%B3rio-dos-itens-sujeitos-ao-ISSQN"
+  },
+  {
+    "codigo": "610",
+    "resultado": "Rejeição: Total da NF difere do somatório dos Valores compõe o valor Total da NF.",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360009040554-Rejei%C3%A7%C3%A3o-610-Total-da-NF-difere-do-somat%C3%B3rio-dos-Valores-comp%C3%B5e-o-valor-total-da-NF"
+  },
+  {
+    "codigo": "611",
+    "resultado": "Rejeição: cEAN inválido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016053733-Rejei%C3%A7%C3%A3o-613-Chave-de-Acesso-difere-da-existente-em-BD"
+  },
+  {
+    "codigo": "612",
+    "resultado": "Rejeição: GTIN da unidade tributável (cEANTrib) inválido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010784814-Rejei%C3%A7%C3%A3o-612-GTIN-da-unidade-tribut%C3%A1vel-cEANTrib-inv%C3%A1lido"
+  },
+  {
+    "codigo": "613",
+    "resultado": "Rejeição: Chave de Acesso difere da existente em BD",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360016053733-Rejei%C3%A7%C3%A3o-613-Chave-de-Acesso-difere-da-existente-em-BD"
+  },
+  {
+    "codigo": "614",
+    "resultado": "Rejeição: Chave de Acesso inválida (Código UF inválido)",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015747074-Rejei%C3%A7%C3%A3o-614-Chave-de-Acesso-inv%C3%A1lida-C%C3%B3digo-U-inv%C3%A1lido-"
+  },
+  {
+    "codigo": "615",
+    "resultado": "Rejeição: Chave de Acesso inválida (Ano menor que 06 ou Ano maior que Ano corrente)"
+  },
+  {
+    "codigo": "616",
+    "resultado": "Rejeição: Chave de Acesso inválida (Mês menor que 1 ou Mês maior que 12)"
+  },
+  {
+    "codigo": "617",
+    "resultado": "Rejeição: Chave de Acesso inválida (CNPJ zerado ou dígito inválido)"
+  },
+  {
+    "codigo": "618",
+    "resultado": "Rejeição: Chave de Acesso inválida (modelo diferente de 55 e 65)"
+  },
+  {
+    "codigo": "619",
+    "resultado": "Rejeição: Chave de Acesso inválida (número NF = 0)"
+  },
+  {
+    "codigo": "620",
+    "resultado": "Rejeição: Chave de Acesso difere da existente em BD"
+  },
+  {
+    "codigo": "621",
+    "resultado": "Rejeição: CPF Emitente não cadastrado"
+  },
+  {
+    "codigo": "622",
+    "resultado": "Rejeição: IE emitente não vinculada ao CPF"
+  },
+  {
+    "codigo": "623",
+    "resultado": "Rejeição: CPF Destinatário não cadastrado"
+  },
+  {
+    "codigo": "624",
+    "resultado": "Rejeição: IE Destinatário não vinculada ao CPF",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360019933593-Rejei%C3%A7%C3%A3o-623-CPF-Destinat%C3%A1rio-n%C3%A3o-cadastrado"
+  },
+  {
+    "codigo": "625",
+    "resultado": "Rejeição: Inscrição SUFRAMA deve ser informada na venda com isenção para ZFM"
+  },
+  {
+    "codigo": "626",
+    "resultado": "Rejeição: CFOP de operação isenta para ZFM diferente do previsto",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015744914-Rejei%C3%A7%C3%A3o-626-CFOP-de-opera%C3%A7%C3%A3o-isenta-para-ZFM-diferente-do-previsto"
+  },
+  {
+    "codigo": "627",
+    "resultado": "Rejeição: O valor do ICMS desonerado deve ser informado"
+  },
+  {
+    "codigo": "628",
+    "resultado": "Rejeição: Total da NF superior ao valor limite estabelecido pela SEFAZ",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015253653-Rejei%C3%A7%C3%A3o-628-Total-da-NF-superior-ao-valor-limite-estabelecido-pela-Sefaz-Limite-"
+  },
+  {
+    "codigo": "629",
+    "resultado": "Rejeição: Valor do Produto difere do produto Valor Unitário de Comercialização e Quantidade Comercial",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010451513-Rejei%C3%A7%C3%A3o-629-Valor-do-Produto-difere-do-produto-Valor-Unit%C3%A1rio-de-Comercializa%C3%A7%C3%A3o-e-Quantidade-Comercial"
+  },
+  {
+    "codigo": "630",
+    "resultado": "Rejeição: Valor do Produto difere do produto Valor Unitário de Tributação e Quantidade Tributável",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010786014-Rejei%C3%A7%C3%A3o-630-Valor-do-Produto-difere-do-produto-Valor-Unit%C3%A1rio-de-Tributa%C3%A7%C3%A3o-e-Quantidade-Tribut%C3%A1vel-"
+  },
+  {
+    "codigo": "631",
+    "resultado": "Rejeição: CNPJ-Base do Destinatário difere do CNPJ-Base do Certificado Digital"
+  },
+  {
+    "codigo": "632",
+    "resultado": "Rejeição: Solicitação fora de prazo, a NF-e não está mais disponível para download"
+  },
+  {
+    "codigo": "633",
+    "resultado": "Rejeição: NF-e indisponível para download devido a ausência de Manifestação do Destinatário"
+  },
+  {
+    "codigo": "634",
+    "resultado": "Rejeição: Destinatário da NF-e não tem o mesmo CNPJ raiz do solicitante do download"
+  },
+  {
+    "codigo": "635",
+    "resultado": "Rejeição: NF-e com mesmo número e série já transmitida e aguardando processamento",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010786334-Rejei%C3%A7%C3%A3o-635-NF-e-com-mesmo-n%C3%BAmero-e-s%C3%A9rie-j%C3%A1-transmitida-e-aguardando-processamento"
+  },
+  {
+    "codigo": "650",
+    "resultado": "Rejeição: Evento de \"Ciência da Emissão\" para NF-e Cancelada ou Denegada"
+  },
+  {
+    "codigo": "651",
+    "resultado": "Rejeição: Evento de \"Desconhecimento da Operação\" para NF-e Cancelada ou Denegada"
+  },
+  {
+    "codigo": "652",
+    "resultado": "Rejeição: informado indicador de desoneração inválido para a ZFM [nItem:999]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/22105634643223-Rejei%C3%A7%C3%A3o-652-informado-indicador-de-desonera%C3%A7%C3%A3o-inv%C3%A1lido-para-a-ZFM-nItem-999"
+  },
+  {
+    "codigo": "653",
+    "resultado": "Rejeição: NF-e Cancelada, arquivo indisponível para download"
+  },
+  {
+    "codigo": "654",
+    "resultado": "Rejeição: NF-e Denegada, arquivo indisponível para download"
+  },
+  {
+    "codigo": "655",
+    "resultado": "Rejeição: Evento de Ciência da Emissão informado após a manifestação final do destinatário"
+  },
+  {
+    "codigo": "656",
+    "resultado": "Rejeição: Consumo Indevido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015610154-Rejei%C3%A7%C3%A3o-656-Consumo-indevido"
+  },
+  {
+    "codigo": "657",
+    "resultado": "Rejeição: Data de Pagamento inválida [nOcor:999 [nOcor:999]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/22106208010519-Rejei%C3%A7%C3%A3o-657-Data-de-Pagamento-inv%C3%A1lida-nOcor-999-nOcor-999"
+  },
+  {
+    "codigo": "658",
+    "resultado": "Rejeição: UF do destinatário da Chave de Acesso diverge da UF autorizadora"
+  },
+  {
+    "codigo": "660",
+    "resultado": "Rejeição: CFOP de Combustível e não informado grupo de combustível",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010796194-Rejei%C3%A7%C3%A3o-660-CFOP-de-Combust%C3%ADvel-e-n%C3%A3o-informado-grupo-de-combust%C3%ADvel-da-NF-e"
+  },
+  {
+    "codigo": "661",
+    "resultado": "Rejeição: NF-e já existente para o número do EPEC informado"
+  },
+  {
+    "codigo": "662",
+    "resultado": "Rejeição: Numeração do EPEC está inutilizada na Base de Dados da SEFAZ"
+  },
+  {
+    "codigo": "663",
+    "resultado": "Rejeição: Alíquota do ICMS com valor superior a 4 por cento na operação de saída interestadual com produtos importados",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015940614-Rejei%C3%A7%C3%A3o-663-Al%C3%ADquota-do-ICMS-com-valor-superior-a-4-por-cento-na-opera%C3%A7%C3%A3o-de-sa%C3%ADda-interestadual-com-produtos-importados"
+  },
+  {
+    "codigo": "678",
+    "resultado": "Rejeição: NF referenciada com UF diferente da NF-e complementar"
+  },
+  {
+    "codigo": "679",
+    "resultado": "Rejeição: Modelo da NF-e referenciada diferente de 55/65",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360015680854-Rejei%C3%A7%C3%A3o-679-Chave-de-Acesso-referenciada-com-Modelo-inv%C3%A1lido-nOcor-nnn-"
+  },
+  {
+    "codigo": "680",
+    "resultado": "Rejeição: Chave de Acesso referenciada em duplicidade na NF-e"
+  },
+  {
+    "codigo": "681",
+    "resultado": "Rejeição: Duplicidade de NF Modelo 1 referenciada (CNPJ, Modelo, Série e Número)"
+  },
+  {
+    "codigo": "682",
+    "resultado": "Rejeição: Duplicidade de NF de Produtor referenciada (IE, Modelo, Série e Número)"
+  },
+  {
+    "codigo": "683",
+    "resultado": "Rejeição: Chave de Acesso referenciada com Número inválido"
+  },
+  {
+    "codigo": "684",
+    "resultado": "Rejeição: Duplicidade de Cupom Fiscal referenciado (Modelo, Número de Ordem e COO)"
+  },
+  {
+    "codigo": "685",
+    "resultado": "Rejeição: Total do Valor Aproximado dos Tributos difere do somatório dos itens"
+  },
+  {
+    "codigo": "686",
+    "resultado": "Rejeição: NF Complementar referencia uma NF-e cancelada"
+  },
+  {
+    "codigo": "687",
+    "resultado": "Rejeição: NF Complementar referencia uma NF-e denegada"
+  },
+  {
+    "codigo": "688",
+    "resultado": "Rejeição: NF referenciada de Produtor com IE inexistente"
+  },
+  {
+    "codigo": "689",
+    "resultado": "Rejeição: NF referenciada de Produtor com IE não vinculada ao CNPJ/CPF informado"
+  },
+  {
+    "codigo": "690",
+    "resultado": "Rejeição: Pedido de Cancelamento para NF-e com CT-e",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360020561233-Rejei%C3%A7%C3%A3o-690-Pedido-de-cancelamento-para-NF-e-com-CT-e-ou-MDF-e"
+  },
+  {
+    "codigo": "691",
+    "resultado": "Rejeição: Chave de Acesso da NF-e diverge da Chave de Acesso do EPEC"
+  },
+  {
+    "codigo": "693",
+    "resultado": "Rejeição: Alíquota de ICMS superior a definida para a operação interestadual",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360012406493-Rejei%C3%A7%C3%A3o-693-Al%C3%ADquota-de-ICMS-superior-a-definida-para-a-opera%C3%A7%C3%A3o-interestadual"
+  },
+  {
+    "codigo": "694",
+    "resultado": "",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360012311734-Rejei%C3%A7%C3%A3o-694-N%C3%A3o-informado-o-grupo-de-ICMS-para-a-UF-de-destino"
+  },
+  {
+    "codigo": "695",
+    "resultado": "Rejeição: Informado indevidamente o grupo de ICMS para a UF de destino",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360012451473-Rejei%C3%A7%C3%A3o-695-Informado-indevidamente-o-grupo-de-ICMS-para-a-UF-de-destino"
+  },
+  {
+    "codigo": "696",
+    "resultado": "Rejeição: Operação com não contribuinte deve indicar operação com consumidor final",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010348173-Rejei%C3%A7%C3%A3o-696-Opera%C3%A7%C3%A3o-com-n%C3%A3o-contribuinte-deve-indicar-opera%C3%A7%C3%A3o-com-consumidor-final"
+  },
+  {
+    "codigo": "697",
+    "resultado": "Rejeição: Alíquota interestadual do ICMS com origem diferente do previsto",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360012454753-Rejei%C3%A7%C3%A3o-697-Al%C3%ADquota-interestadual-do-ICMS-com-origem-diferente-do-previsto"
+  },
+  {
+    "codigo": "698",
+    "resultado": "Rejeição: Alíquota interestadual do ICMS incompatível com as UF envolvidas na operação",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360012479153-Rejei%C3%A7%C3%A3o-698-Al%C3%ADquota-interestadual-do-ICMS-incompat%C3%ADvel-com-as-UF-envolvidas-na-opera%C3%A7%C3%A3o"
+  },
+  {
+    "codigo": "699",
+    "resultado": "Rejeição: Percentual do ICMS Interestadual para a UF de destino difere do previsto para o ano da Data de Emissão"
+  },
+  {
+    "codigo": "700",
+    "resultado": "Rejeição: Total da quantidade tributada do ICMS monofásico próprio difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/24257683715863-Como-resolver-Rejei%C3%A7%C3%A3o-700-Total-da-quantidade-tributada-do-ICMS-monof%C3%A1sico-pr%C3%B3prio-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "701",
+    "resultado": "Rejeição: Não informado Nota Fiscal referenciada (Lançamento relativo a Cupom Fiscal)",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360013919294-Rejei%C3%A7%C3%A3o-701-N%C3%A3o-informado-Nota-Fiscal-referenciada"
+  },
+  {
+    "codigo": "703",
+    "resultado": "Rejeição: Data-Hora de Emissão posterior ao horário de recebimento",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010925574-Rejei%C3%A7%C3%A3o-703-Data-Hora-de-Emiss%C3%A3o-posterior-ao-hor%C3%A1rio-de-recebimento"
+  },
+  {
+    "codigo": "710",
+    "resultado": "Rejeição: NF-e com formato de DANFE inválido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360034664393-Rejei%C3%A7%C3%A3o-710-NF-e-com-formato-de-DANFE-inv%C3%A1lido"
+  },
+  {
+    "codigo": "711",
+    "resultado": "Rejeição: NF-e com contingência off-line"
+  },
+  {
+    "codigo": "713",
+    "resultado": "Rejeição: Tipo de Emissão diferente de 6 ou 7 para contingência da SVC acessada"
+  },
+  {
+    "codigo": "719",
+    "resultado": "Rejeição: NF-e sem a identificação do destinatário"
+  },
+  {
+    "codigo": "720",
+    "resultado": "Rejeição: Na operação com Exterior deve ser informada tag idEstrangeiro",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/8514523070103"
+  },
+  {
+    "codigo": "721",
+    "resultado": "Rejeição: Informado idEstrangeiro e Operação não é com consumidor final.",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360018657834-Rejei%C3%A7%C3%A3o-721-Informado-idEstrangeiro-e-Opera%C3%A7%C3%A3o-n%C3%A3o-%C3%A9-com-consumidor-final"
+  },
+  {
+    "codigo": "722",
+    "resultado": "Rejeição: CFOP de Transporte Inexistente"
+  },
+  {
+    "codigo": "723",
+    "resultado": "Rejeição: Total da quantidade tributada do ICMS monofásico sujeito a retenção difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/24260937958935-Como-resolver-Rejei%C3%A7%C3%A3o-723-Total-da-quantidade-tributada-do-ICMS-monof%C3%A1sico-sujeito-a-reten%C3%A7%C3%A3o-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "724",
+    "resultado": "Rejeição: NF-e sem o nome do destinatário"
+  },
+  {
+    "codigo": "726",
+    "resultado": "Rejeição: NF-e sem a informação de endereço do destinatário"
+  },
+  {
+    "codigo": "727",
+    "resultado": "Rejeição: Operação com Exterior e UF diferente de EX",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/8515476239127"
+  },
+  {
+    "codigo": "728",
+    "resultado": "Rejeição: NF-e sem informação da IE do destinatário",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010270714-Rejei%C3%A7%C3%A3o-728-NF-e-sem-informa%C3%A7%C3%A3o-da-IE-do-destinat%C3%A1rio"
+  },
+  {
+    "codigo": "731",
+    "resultado": "Rejeição: CFOP de operação com Exterior e idDest <> 3",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360018888833-Rejei%C3%A7%C3%A3o-731-CFOP-de-opera%C3%A7%C3%A3o-com-Exterior-e-idDest-diferente-de-3"
+  },
+  {
+    "codigo": "732",
+    "resultado": "Rejeição: CFOP de operação interestadual e idDest <> 2",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/6575293648407"
+  },
+  {
+    "codigo": "733",
+    "resultado": "Rejeição: CFOP de operação interna e idDest <> 1",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360013806594-Rejei%C3%A7%C3%A3o-733-CFOP-de-opera%C3%A7%C3%A3o-interna-e-idDest-1"
+  },
+  {
+    "codigo": "739",
+    "resultado": "Rejeição: Código de País do ISSQN Inexistente"
+  },
+  {
+    "codigo": "744",
+    "resultado": "Rejeição: Total da quantidade tributada do ICMS monofásico retido anteriormente difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/24259631367191-Como-resolver-Rejei%C3%A7%C3%A3o-744-Total-da-quantidade-tributada-do-ICMS-monof%C3%A1sico-retido-anteriormente-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "745",
+    "resultado": "Rejeição: NF-e sem grupo do PIS",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360017701654-Rejei%C3%A7%C3%A3o-745-NF-e-sem-grupo-do-PIS"
+  },
+  {
+    "codigo": "747",
+    "resultado": "Rejeição: Não permitido o preenchimento do grupo de UF de origem do combustível",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/24263205084311-Como-resolver-Rejei%C3%A7%C3%A3o-747-N%C3%A3o-permitido-o-preenchimento-do-grupo-de-UF-de-origem-do-combust%C3%ADvel"
+  },
+  {
+    "codigo": "748",
+    "resultado": "Rejeição: NF-e sem grupo da COFINS",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360017899833-Rejei%C3%A7%C3%A3o-748-NF-e-sem-grupo-da-COFINS"
+  },
+  {
+    "codigo": "761",
+    "resultado": "Rejeição: Código de Produto ANP inexistente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360011204794-Rejei%C3%A7%C3%A3o-761-C%C3%B3digo-de-Produto-ANP-inexistente"
+  },
+  {
+    "codigo": "764",
+    "resultado": "Rejeição: Solicitada resposta síncrona para Lote com mais de uma NF-e (indSinc=1)"
+  },
+  {
+    "codigo": "765",
+    "resultado": "Rejeição: Lote só poderá conter NF-e ou NFC-e"
+  },
+  {
+    "codigo": "768",
+    "resultado": "Rejeição: NF-e não deve possuir o grupo de Formas de Pagamento"
+  },
+  {
+    "codigo": "769",
+    "resultado": "Rejeição: Obrigatório o preenchimento da Quantidade tributada retida anteriormente [nItem:999]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/24261711303831-Como-resolver-a-Rejei%C3%A7%C3%A3o-769-Obrigat%C3%B3rio-o-preenchimento-da-Quantidade-tributada-retida-anteriormente-nItem-999"
+  },
+  {
+    "codigo": "770",
+    "resultado": "Rejeição: CFOP Inexistente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360011017793-Rejei%C3%A7%C3%A3o-770-CFOP-Inexistente"
+  },
+  {
+    "codigo": "771",
+    "resultado": "Rejeição: Informado idEstrangeiro em operação interestadual"
+  },
+  {
+    "codigo": "772",
+    "resultado": "Rejeição: Operação Interestadual e UF de destino igual à UF de origem"
+  },
+  {
+    "codigo": "773",
+    "resultado": "Rejeição: Operação Interna e UF de destino difere da UF do emitente"
+  },
+  {
+    "codigo": "776",
+    "resultado": "Rejeição: Solicitada resposta síncrona para UF que não disponibiliza este atendimento (indSinc=1)"
+  },
+  {
+    "codigo": "777",
+    "resultado": "Rejeição: Obrigatória a informação do NCM completo",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360011309453-Rejei%C3%A7%C3%A3o-777-Obrigat%C3%B3ria-a-informa%C3%A7%C3%A3o-do-NCM-completo"
+  },
+  {
+    "codigo": "778",
+    "resultado": "Rejeição: Informado NCM inexistente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360009985194-Rejei%C3%A7%C3%A3o-778-Informado-NCM-inexistente"
+  },
+  {
+    "codigo": "790",
+    "resultado": "Rejeição: Operação com Exterior para destinatário Contribuinte de ICMS",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/8515725250839"
+  },
+  {
+    "codigo": "791",
+    "resultado": "Rejeição: NF-e com indicação de destinatário isento de IE, com a informação da IE do destinatário",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010924654-Rejei%C3%A7%C3%A3o-791-NF-e-com-indica%C3%A7%C3%A3o-de-destinat%C3%A1rio-isento-de-IE-com-a-informa%C3%A7%C3%A3o-da-IE-do-destinat%C3%A1rio"
+  },
+  {
+    "codigo": "792",
+    "resultado": "Rejeição: Informada a IE do destinatário para operação com destinatário no Exterior"
+  },
+  {
+    "codigo": "793",
+    "resultado": "Rejeição: Valor do ICMS relativo ao Fundo de Combate à Pobreza na UF de destino difere do calculado"
+  },
+  {
+    "codigo": "794",
+    "resultado": "Rejeição: NF-e com indicativo de NFC-e com entrega a domicílio"
+  },
+  {
+    "codigo": "795",
+    "resultado": "Rejeição: Total do ICMS desonerado difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360035789394-Rejei%C3%A7%C3%A3o-795-Total-do-ICMS-desonerado-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "796",
+    "resultado": "Rejeição: CNPJ recebedor do pagamento inválido [nOcor:999]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/22107086183191-Rejei%C3%A7%C3%A3o-796-CNPJ-recebedor-do-pagamento-inv%C3%A1lido-nOcor-999"
+  },
+  {
+    "codigo": "798",
+    "resultado": "Rejeição: Valor total do ICMS relativo Fundo de Combate à Pobreza (FCP) da UF de destino difere do somatório do valor dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/6581500777495"
+  },
+  {
+    "codigo": "799",
+    "resultado": "Rejeição: Valor total do ICMS Interestadual da UF de destino difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4532501013143-Rejei%C3%A7%C3%A3o-799-Valor-total-do-ICMS-Interestadual-da-UF-de-destino-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "800",
+    "resultado": "Rejeição: Valor total do ICMS Interestadual da UF do remetente difere do somatório dos itens"
+  },
+  {
+    "codigo": "805",
+    "resultado": "Rejeição: A SEFAZ do destinatário não permite Contribuinte Isento de Inscrição Estadual em operações interestaduais.",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360012402673-Rejei%C3%A7%C3%A3o-805-A-SEFAZ-do-destinat%C3%A1rio-n%C3%A3o-permite-Contribuinte-Isento-de-Inscri%C3%A7%C3%A3o-Estadual"
+  },
+  {
+    "codigo": "806",
+    "resultado": "Rejeição: Operação com ICMS-ST sem informação do CEST.",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360011304494-Rejei%C3%A7%C3%A3o-806-Opera%C3%A7%C3%A3o-com-ICMS-ST-sem-informa%C3%A7%C3%A3o-do-CEST"
+  },
+  {
+    "codigo": "812",
+    "resultado": "Rejeição: Regime Tributário SN, com excesso de sublimite não é permitido para Emitentes desta UF",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360011393193-Rejei%C3%A7%C3%A3o-812-Regime-Tribut%C3%A1rio-SN-com-excesso-de-sublimite-n%C3%A3o-%C3%A9-permitido-para-Emitentes-desta-UF"
+  },
+  {
+    "codigo": "814",
+    "resultado": "Rejeição: Nota Fiscal com grupo de comércio exterior",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360011306214-Rejei%C3%A7%C3%A3o-814-Nota-Fiscal-com-grupo-de-com%C3%A9rcio-exterior"
+  },
+  {
+    "codigo": "815",
+    "resultado": "Rejeição: Valor do ICMS Interestadual para UF de Destino difere do calculado [nItem:999] (Valor Informado: XXX, Valor Calculado:XXX)",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4408970186903-Rejei%C3%A7%C3%A3o-815-Valor-do-ICMS-interestadual-para-UF-de-destino-difere-do-calculado"
+  },
+  {
+    "codigo": "816",
+    "resultado": "Rejeição: Valor do ICMS Interestadual para UF do Remetente difere do calculado [nItem:999] (Valor Informado: XXX, Valor Calculado:XXX)",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4408977318935-Rejei%C3%A7%C3%A3o-816-Valor-do-ICMS-interestadual-para-UF-do-remetente-difere-do-calculado"
+  },
+  {
+    "codigo": "817",
+    "resultado": "Rejeição: Unidade Tributável incompatível com o NCM informado na operação com Comércio Exterior [nItem:nnn]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360011120013-Rejei%C3%A7%C3%A3o-817-Unidade-Tribut%C3%A1vel-incompat%C3%ADvel-com-o-NCM-informado-na-opera%C3%A7%C3%A3o-com-Com%C3%A9rcio-Exterior-nItem-nnn-"
+  },
+  {
+    "codigo": "840",
+    "resultado": "Rejeição: NCM de medicamento e não informado o grupo de medicamento (med)",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4419366327191"
+  },
+  {
+    "codigo": "841",
+    "resultado": "Rejeição: Código do tipo de veiculo inexistente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4419366505495"
+  },
+  {
+    "codigo": "842",
+    "resultado": "Rejeição: Código da espécie de Veículo inexistente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4419374652823"
+  },
+  {
+    "codigo": "843",
+    "resultado": "Rejeição: Código da espécie de veículo incompatível com o tempo do veículo",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4419360407063"
+  },
+  {
+    "codigo": "844",
+    "resultado": "Rejeição: Código de Item da Lista de Serviços Inexistente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4419367104919"
+  },
+  {
+    "codigo": "845",
+    "resultado": "Rejeição: O Grupo transportador não pode ser preenchido para a modalidade do frete informada",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4419368110743"
+  },
+  {
+    "codigo": "846",
+    "resultado": "Transporte próprio por conta do Remetente e CNPJ Base ou CPF do Transportador difere do CNPJ Base ou CPF do Remetente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4419368502551"
+  },
+  {
+    "codigo": "847",
+    "resultado": "Transporte não é próprio por conta do Remetente e CNPJ base ou CPF do Transportador igual ao CNPJ base ou CPF do Remetente",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4419368564887"
+  },
+  {
+    "codigo": "848",
+    "resultado": "Transporte próprio por conta do Destinatário e CNPJ base ou CPF do transportador difere do CNPJ base ou CPF do Destinatário",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4419368599063"
+  },
+  {
+    "codigo": "849",
+    "resultado": "ransporte não é próprio por conta do Destinatário e CNPJ base ou CPF do transportador igual ao CNPJ base ou CPF do Destinatário",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4419376060951"
+  },
+  {
+    "codigo": "850",
+    "resultado": "Rejeição: Data de vencimento da parcela não informada ou menor que a Data de vencimento da parcela anterior"
+  },
+  {
+    "codigo": "851",
+    "resultado": "Rejeição: Soma do valor das parcelas difere do Valor Líquido da Fatura",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010358473-Rejei%C3%A7%C3%A3o-851-Soma-do-valor-das-parcelas-difere-do-Valor-L%C3%ADquido-da-Fatura"
+  },
+  {
+    "codigo": "852",
+    "resultado": "Rejeição: Número da parcela inválido ou não informado",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360006978213-Rejei%C3%A7%C3%A3o-852-N%C3%BAmero-da-parcela-inv%C3%A1lido-ou-n%C3%A3o-informado"
+  },
+  {
+    "codigo": "853",
+    "resultado": "Dados de cobrança não devem ser informados para pagamento à vista",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/34612733903895-NF-e-Como-resolver-a-Rejei%C3%A7%C3%A3o-853-Dados-de-cobran%C3%A7a-n%C3%A3o-devem-ser-informados-para-pagamento-%C3%A0-vista"
+  },
+  {
+    "codigo": "854",
+    "resultado": "Rejeição Unidade Tributável (tag: uTrib) incompatível com produto informado",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/17623256043159"
+  },
+  {
+    "codigo": "855",
+    "resultado": "Rejeição: Somatório percentuais de GLP derivado do petróleo, GLGNn e GLGNi diferente de 100",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360011394293-Rejei%C3%A7%C3%A3o-855-Somat%C3%B3rio-percentuais-de-GLP-derivado-do-petr%C3%B3leo-GLGNn-e-GLGNi-diferente-de-100"
+  },
+  {
+    "codigo": "856",
+    "resultado": "Rejeição: Campo valor de partida não preenchido para produto GLP",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360011307494-Rejei%C3%A7%C3%A3o-856-Campo-valor-de-partida-n%C3%A3o-preenchido-para-produto-GLP"
+  },
+  {
+    "codigo": "858",
+    "resultado": "Rejeição: Grupo de Tributação informado indevidamente [nItem: nnn]"
+  },
+  {
+    "codigo": "859",
+    "resultado": "Rejeição: Total do FCP retido anteriormente por Substituição Tributária difere do somatório dos itens"
+  },
+  {
+    "codigo": "860",
+    "resultado": "Rejeição: Valor do FCP informado difere de base de cálculo*alíquota [nItem: nnn]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/22017412060311-Rejei%C3%A7%C3%A3o-860-Valor-do-FCP-informado-difere-de-base-de-c%C3%A1lculo-al%C3%ADquota-nItem-nnn"
+  },
+  {
+    "codigo": "861",
+    "resultado": "Rejeição: Total do FCP difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360024198334-Rejei%C3%A7%C3%A3o-861-Total-do-FCP-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "862",
+    "resultado": "Rejeição: Total do FCP ST difere do somatório dos itens"
+  },
+  {
+    "codigo": "863",
+    "resultado": "Rejeição: Total do IPI devolvido difere do somatório dos itens",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360018955693-Rejei%C3%A7%C3%A3o-863-Total-do-IPI-devolvido-difere-do-somat%C3%B3rio-dos-itens"
+  },
+  {
+    "codigo": "864",
+    "resultado": "Rejeição: NF-e com indicativo de Operação presencial, fora do estabelecimento e não informada NF-e referenciada",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360014848694-Rejei%C3%A7%C3%A3o-864-NF-e-com-indicativo-de-Opera%C3%A7%C3%A3o-presencial-fora-do-estabelecimento-e-n%C3%A3o-informada-NF-e-referenciada"
+  },
+  {
+    "codigo": "865",
+    "resultado": "Rejeição 865: Total dos pagamentos menor que o total da nota",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360011394813-Rejei%C3%A7%C3%A3o-865-Total-dos-pagamentos-menor-que-o-total-da-nota"
+  },
+  {
+    "codigo": "866",
+    "resultado": "Rejeição: Ausência de troco quando o valor dos pagamentos informados for maior que o total da nota",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360008404053-Rejei%C3%A7%C3%A3o-866-Aus%C3%AAncia-de-troco-quando-o-valor-dos-pagamentos-informados-for-maior-que-o-total-da-nota"
+  },
+  {
+    "codigo": "868",
+    "resultado": "Rejeição: Grupos Transportador, Veículo Transporte e Reboque não devem ser informados",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360014431454-Rejei%C3%A7%C3%A3o-868-Grupos-Veiculo-Transporte-e-Reboque-n%C3%A3o-devem-ser-informados"
+  },
+  {
+    "codigo": "869",
+    "resultado": "Rejeição: Valor do troco incorreto",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360007470633-Rejei%C3%A7%C3%A3o-869-Valor-do-troco-incorreto"
+  },
+  {
+    "codigo": "870",
+    "resultado": "Rejeição Data de validade incompatível com data de fabricação [nItem:nnn]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360011308074-Rejei%C3%A7%C3%A3o-870-Data-de-validade-incompat%C3%ADvel-com-data-de-fabrica%C3%A7%C3%A3o-nItem-nnn-"
+  },
+  {
+    "codigo": "871",
+    "resultado": "Rejeição: O campo Meio de Pagamento deve ser preenchido com a opção Sem Pagamento",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010337073-Rejei%C3%A7%C3%A3o-871-O-campo-Meio-de-Pagamento-deve-ser-preenchido-com-a-op%C3%A7%C3%A3o-Sem-Pagamento"
+  },
+  {
+    "codigo": "872",
+    "resultado": "Rejeição: A SEFAZ do destinatário não permite Contribuinte Isento de Inscrição Estadual em operações internas"
+  },
+  {
+    "codigo": "873",
+    "resultado": "Rejeição: Operação com medicamentos e não informado os campos de rastreabilidade [nItem:nnn]"
+  },
+  {
+    "codigo": "874",
+    "resultado": "Rejeição: Percentual de FCP inválido [nItem: nnn]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360011395313-Rejei%C3%A7%C3%A3o-874-Percentual-de-FCP-inv%C3%A1lido-nItem-nnn-"
+  },
+  {
+    "codigo": "875",
+    "resultado": "Rejeição: Percentual de FCPST inválido [nItem: nnn]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360007388233-Rejei%C3%A7%C3%A3o-875-Percentual-de-FCPST-inv%C3%A1lido-nItem-nnn-"
+  },
+  {
+    "codigo": "876",
+    "resultado": "Rejeição: Operação interestadual para Consumidor Final e valor do FCP informado em campo diferente de vFCPUFDest (id:NA13) [nItem:nnn]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360011456194-Rejei%C3%A7%C3%A3o-876-Opera%C3%A7%C3%A3o-interestadual-para-Consumidor-Final-e-valor-do-FCP-informado-em-campo-diferente-de-vFCPUFDest-id-NA13-nItem-nnn-"
+  },
+  {
+    "codigo": "877",
+    "resultado": "Rejeição: Data de fabricação maior que a data de processamento [nItem:nnn]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360014152973-Rejei%C3%A7%C3%A3o-877-Data-de-fabrica%C3%A7%C3%A3o-maior-que-a-data-de-processamento-nItem-nnn-"
+  },
+  {
+    "codigo": "879",
+    "resultado": "Rejeição: Informado item “Produzido em Escala NÃO Relevante” e não informado CNPJ do Fabricante [nItem:nnn]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360011309054-Rejei%C3%A7%C3%A3o-879-Informado-item-Produzido-em-Escala-N%C3%83O-Relevante-e-n%C3%A3o-informado-CNPJ-do-Fabricante-nItem-nnn-"
+  },
+  {
+    "codigo": "880",
+    "resultado": "Rejeição: Percentual de FCP igual a zero [nItem: nnn]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360011447213-Rejei%C3%A7%C3%A3o-880-Percentual-de-FCP-igual-a-zero-nItem-nnn-"
+  },
+  {
+    "codigo": "881",
+    "resultado": "Rejeição: Percentual de FCP ST igual a zero [nItem: nnn]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360018771973-Rejei%C3%A7%C3%A3o-881-Percentual-de-FCP-ST-igual-a-zero-nItem-nnn-"
+  },
+  {
+    "codigo": "882",
+    "resultado": "Rejeição: GTIN (cEAN) com prefixo inválido [nItem:999]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010137593-Rejei%C3%A7%C3%A3o-882-GTIN-cEAN-com-prefixo-inv%C3%A1lido"
+  },
+  {
+    "codigo": "883",
+    "resultado": "Rejeição: GTIN (cEAN) sem informação [nItem:999]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360011010814-Rejei%C3%A7%C3%A3o-883-GTIN-cEAN-sem-informa%C3%A7%C3%A3o-nItem-999-"
+  },
+  {
+    "codigo": "884",
+    "resultado": "Rejeição: GTIN da unidade tributável (cEANTrib) com prefixo inválido [nItem:999]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360011012674-Rejei%C3%A7%C3%A3o-884-GTIN-da-unidade-tribut%C3%A1vel-cEANTrib-com-prefixo-inv%C3%A1lido-nItem-999-"
+  },
+  {
+    "codigo": "885",
+    "resultado": "Rejeição: GTIN informado, mas não informado o GTIN da unidade tributável [nItem:999]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360009860833-Rejei%C3%A7%C3%A3o-885-GTIN-informado-mas-n%C3%A3o-informado-o-GTIN-da-unidade-tribut%C3%A1vel"
+  },
+  {
+    "codigo": "886",
+    "resultado": "Rejeição: GTIN da unidade tributável informado, mas não informado o GTIN [nItem:999]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360011014214-Rejei%C3%A7%C3%A3o-886-GTIN-da-unidade-tribut%C3%A1vel-informado-mas-n%C3%A3o-informado-o-GTIN-nItem-999-"
+  },
+  {
+    "codigo": "887",
+    "resultado": "Rejeição: Informado GTIN de agrupamento de produtos homogêneos (GTIN-14) no GTIN da unidade tributável [nItem:999]"
+  },
+  {
+    "codigo": "888",
+    "resultado": "Rejeição: GTIN da unidade tributável (cEANTrib) sem informação [nItem:999]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360011014374-Rejei%C3%A7%C3%A3o-888-GTIN-da-unidade-tribut%C3%A1vel-cEANTrib-sem-informa%C3%A7%C3%A3o-nItem-999-"
+  },
+  {
+    "codigo": "889",
+    "resultado": "Rejeição: Obrigatória a informação do GTIN para o produto [nItem:999]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360011116153-Rejei%C3%A7%C3%A3o-889-Obrigat%C3%B3ria-a-informa%C3%A7%C3%A3o-do-GTIN-para-o-produto-nItem-999-"
+  },
+  {
+    "codigo": "890",
+    "resultado": "Rejeição: GTIN inexistente no Cadastro Centralizado de GTIN (CCG) [nItem:999]"
+  },
+  {
+    "codigo": "891",
+    "resultado": "Rejeição: GTIN incompatível com a NCM [nItem:999; NCM esperada: 99999999]"
+  },
+  {
+    "codigo": "892",
+    "resultado": "Rejeição: GTIN incompatível com CEST [nItem:999; CEST esperado: 9999999]"
+  },
+  {
+    "codigo": "893",
+    "resultado": "Rejeição: GTIN da unidade tributável diverge do GTIN Contido cadastrado no CCG [nItem:999; GTIN Contido esperado: 99999999999999]"
+  },
+  {
+    "codigo": "894",
+    "resultado": "Rejeição: GTIN da unidade tributável inexistente no Cadastro Centralizado de GTIN (CCG) [nItem:999]"
+  },
+  {
+    "codigo": "895",
+    "resultado": "Rejeição: GTIN da unidade tributável incompatível com a NCM [nItem:999; NCM esperada: 99999999]"
+  },
+  {
+    "codigo": "896",
+    "resultado": "Rejeição: GTIN da unidade tributável incompatível com CEST [nItem:999; CEST esperado: 9999999]"
+  },
+  {
+    "codigo": "897",
+    "resultado": "Rejeição: Valor Fatura maior que Valor Total da NF-e"
+  },
+  {
+    "codigo": "898",
+    "resultado": "Rejeição: Data de vencimento da parcela não informada ou menor que Data de Autorização",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010219714-Rejei%C3%A7%C3%A3o-898-Data-de-vencimento-da-parcela-n%C3%A3o-informada-ou-menor-que-Data-de-Autoriza%C3%A7%C3%A3o"
+  },
+  {
+    "codigo": "899",
+    "resultado": "Rejeição: Informado incorretamente o campo meio de pagamento",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360007469553-Rejei%C3%A7%C3%A3o-899-Informado-incorretamente-o-campo-meio-de-pagamento-"
+  },
+  {
+    "codigo": "900",
+    "resultado": "Rejeição: Data de vencimento da parcela não informada ou menor que Data de Emissão",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010388013-Rejei%C3%A7%C3%A3o-900-Data-de-vencimento-da-parcela-n%C3%A3o-informada-ou-menor-que-Data-de-Emiss%C3%A3o"
+  },
+  {
+    "codigo": "901",
+    "resultado": "Rejeição: Valor do Desconto da Fatura maior que o Valor Original da Fatura",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360006977193-Rejei%C3%A7%C3%A3o-901-Valor-do-desconto-da-fatura-maior-que-valor-original-da-fatura"
+  },
+  {
+    "codigo": "902",
+    "resultado": "Rejeição: Valor Liquido da Fatura difere do Valor Original menos o Valor do Desconto",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360006901314-Rejei%C3%A7%C3%A3o-902-Valor-liquido-da-fatura-difere-do-valor-original-menos-o-valor-do-desconto"
+  },
+  {
+    "codigo": "903",
+    "resultado": "Rejeição: Versão informada no QR-Code (“100”) não é mais válida para a data de emissão"
+  },
+  {
+    "codigo": "904",
+    "resultado": "Rejeição: Informado indevidamente campo valor de pagamento",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360007402413-Rejei%C3%A7%C3%A3o-904-Informado-indevidamente-campo-valor-de-pagamento"
+  },
+  {
+    "codigo": "905",
+    "resultado": "Rejeição: Campos do grupo fatura não informados",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360006784054-Rejei%C3%A7%C3%A3o-905-Campos-do-grupo-fatura-n%C3%A3o-informados-"
+  },
+  {
+    "codigo": "907",
+    "resultado": "Rejeição: Grupo de combustível não pode ter o índice de mistura do Biodiesel",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/17458745178519"
+  },
+  {
+    "codigo": "908",
+    "resultado": "Rejeição: Obrigatório o preenchimento do índice de mistura do Biodiesel",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/21212020596887-Como-resolver-a-Rejei%C3%A7%C3%A3o-908-Obrigat%C3%B3rio-o-preenchimento-do-%C3%ADndice-de-mistura-do-Biodiesel"
+  },
+  {
+    "codigo": "922",
+    "resultado": "Rejeição: Contranota de Produtor só pode referenciar NF-e ou NF de Produtor Modelo 4",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/22081969464727-Como-resolver-a-Rejei%C3%A7%C3%A3o-922-Contranota-de-Produtor-s%C3%B3-pode-referenciar-NF-e-ou-NF-de-Produtor-Modelo-4"
+  },
+  {
+    "codigo": "923",
+    "resultado": "Rejeição: Referenciado documento de operação interna em operação interestadual ou com o exterior",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/22094046459927-Como-resolver-a-Rejei%C3%A7%C3%A3o-923-Referenciado-documento-de-opera%C3%A7%C3%A3o-interna-em-opera%C3%A7%C3%A3o-interestadual-ou-com-o-exterior"
+  },
+  {
+    "codigo": "924",
+    "resultado": "Rejeição: Informado Cupom Fiscal referenciado",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/22094263712535-Como-resolver-a-Rejei%C3%A7%C3%A3o-924-Informado-Cupom-Fiscal-referenciado"
+  },
+  {
+    "codigo": "925",
+    "resultado": "Rejeição: NF-e com identificação de estrangeiro e inscrição estadual informada para destinatário",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360033981394-Como-resolver-a-Rejei%C3%A7%C3%A3o-925-NF-e-com-identifica%C3%A7%C3%A3o-de-estrangeiro-e-inscri%C3%A7%C3%A3o-estadual-informada-para-destinat%C3%A1rio"
+  },
+  {
+    "codigo": "926",
+    "resultado": "Rejeição: Operação com Exterior e país de destino igual a Brasil",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360034533813-Como-resolver-a-Rejei%C3%A7%C3%A3o-926-Opera%C3%A7%C3%A3o-com-Exterior-e-pa%C3%ADs-de-destino-igual-a-Brasil"
+  },
+  {
+    "codigo": "927",
+    "resultado": "Rejeição: Número do item fora da ordem sequencial",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360033717214-Como-resolver-a-Rejei%C3%A7%C3%A3o-927-N%C3%BAmero-do-item-fora-da-ordem-sequencial"
+  },
+  {
+    "codigo": "928",
+    "resultado": "Rejeição: Informado código de benefício fiscal para CST sem benefício fiscal [nItem: nnn]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360034339573-Como-resolver-a-Rejei%C3%A7%C3%A3o-928-Informado-c%C3%B3digo-de-benef%C3%ADcio-fiscal-para-CST-sem-benef%C3%ADcio-fiscal-nItem-nnn-NFe-NFce"
+  },
+  {
+    "codigo": "929",
+    "resultado": "Rejeição: Informado o CST de Diferimento sem as informações do Diferimento [nItem: nnn]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360034578633-Rejei%C3%A7%C3%A3o-929-Informado-o-CST-de-Diferimento-sem-as-informa%C3%A7%C3%B5es-do-Diferimento-nItem-nnn-"
+  },
+  {
+    "codigo": "930",
+    "resultado": "Rejeição: CST com benefício fiscal e não informado o código de benefício fiscal [nItem: nnn]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360034344913-Como-resolver-a-Rejei%C3%A7%C3%A3o-930-CST-com-benef%C3%ADcio-fiscal-e-n%C3%A3o-informado-o-c%C3%B3digo-de-benef%C3%ADcio-fiscal-nItem-nnn-NFe"
+  },
+  {
+    "codigo": "931",
+    "resultado": "Rejeição: Informado código de benefício fiscal incompatível com CST e UF [nItem: nnn]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360033814114-Como-resolver-a-Rejei%C3%A7%C3%A3o-931-Informado-c%C3%B3digo-de-benef%C3%ADcio-fiscal-incompat%C3%ADvel-com-CST-e-UF-nItem-nnn-NFe"
+  },
+  {
+    "codigo": "932",
+    "resultado": "Rejeição:: Informada modalidade de determinação da BC da ST como MVA e não informado o campo pMVAST [nItem: nnn]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360034049894-Rejei%C3%A7%C3%A3o-932-Informada-modalidade-de-determina%C3%A7%C3%A3o-da-BC-da-ST-como-MVA-e-n%C3%A3o-informado-o-campo-pMVAST-nItem-nnn-"
+  },
+  {
+    "codigo": "933",
+    "resultado": "Rejeição: Informada a modalidade de determinação da BC da ST diferente de MVA e informado o campo pMVAST [nItem: nnn]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360034050174-Rejei%C3%A7%C3%A3o-933-Informada-a-modalidade-de-determina%C3%A7%C3%A3o-da-BC-da-ST-diferente-de-MVA-e-informado-o-campo-pMVAST-nItem-nnn-"
+  },
+  {
+    "codigo": "934",
+    "resultado": "Rejeição: Não informado valor do ICMS desonerado ou o Motivo de desoneração [nItem: nnn]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360034581133-Rejei%C3%A7%C3%A3o-934-N%C3%A3o-informado-valor-do-ICMS-desonerado-ou-o-Motivo-de-desonera%C3%A7%C3%A3o-nItem-nnn-"
+  },
+  {
+    "codigo": "935",
+    "resultado": "Rejeição: Valor total da Base de Cálculo superior ao valor limite estabelecido [Valor Limite: R$ XXX.XXX,XX] (valor definido pela UF)",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360034585073-Rejei%C3%A7%C3%A3o-935-Valor-total-da-Base-de-C%C3%A1lculo-superior-ao-valor-limite-estabelecido-Valor-Limite-R-XXX-XXX-XX-valor-definido-pela-UF-"
+  },
+  {
+    "codigo": "938",
+    "resultado": "Rejeição: Não informada vBCSTRet, pST, vICMSSubstituto e vICMSSTRet [nItem: 999]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360022725593-Rejei%C3%A7%C3%A3o-938-N%C3%A3o-informada-vBCSTRet-pST-vICMSSubstituto-e-vICMSSTRet-nItem-999-"
+  },
+  {
+    "codigo": "939",
+    "resultado": "Rejeição: Pedido de cancelamento para NF-e com evento de averbação para exportação",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4408970084631-Rejei%C3%A7%C3%A3o-939-Pedido-de-cancelamento-para-NF-e-com-evento-de-averba%C3%A7%C3%A3o-para-exporta%C3%A7%C3%A3o"
+  },
+  {
+    "codigo": "940",
+    "resultado": "Rejeição: Pedido de cancelamento para NF-e com evento financeiro",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4408977210391-Rejei%C3%A7%C3%A3o-940-Pedido-de-cancelamento-para-NF-e-com-evento-financeiro"
+  },
+  {
+    "codigo": "941",
+    "resultado": "Rejeição: Número do Regime especial inválido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4419368687127"
+  },
+  {
+    "codigo": "942",
+    "resultado": "Rejeição: IE do local de retirada não cadastrada",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4419368721303"
+  },
+  {
+    "codigo": "943",
+    "resultado": "Rejeição: IE do local de retirada não vinculada ao CNPJ",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4419368757527"
+  },
+  {
+    "codigo": "944",
+    "resultado": "Rejeição: IE do local de retirada não vinculada ao CPF",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4419376212887"
+  },
+  {
+    "codigo": "945",
+    "resultado": "Rejeição: IE do local de entrega não cadastrada",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4419380004503"
+  },
+  {
+    "codigo": "946",
+    "resultado": "Rejeição: Informado código de benefício fiscal incorreto ou inexistente na UF [nItem: nnn]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/22103671496983-Como-resolver-a-Rejei%C3%A7%C3%A3o-946-Informado-c%C3%B3digo-de-benef%C3%ADcio-fiscal-incorreto-ou-inexistente-na-UF-nItem-nnn"
+  },
+  {
+    "codigo": "947",
+    "resultado": "Rejeição: IE do local de entrega não vinculada ao CNPJ",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4419369006743"
+  },
+  {
+    "codigo": "948",
+    "resultado": "Rejeição: IE do local de entrega não vinculada ao CPF",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4419369042327"
+  },
+  {
+    "codigo": "958",
+    "resultado": "Rejeição: Somatório dos percentuais originários para a UF do combustível diverge de 100",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/17624238921239"
+  },
+  {
+    "codigo": "961",
+    "resultado": "Rejeição: CNPJ transacional do pagamento inválido [nOcor:999]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/22107226437015-Rejei%C3%A7%C3%A3o-961-CNPJ-transacional-do-pagamento-inv%C3%A1lido-nOcor-999"
+  },
+  {
+    "codigo": "963",
+    "resultado": "Rejeição: Tipo de pagamento não aceita o grupo de cartões ou boletos. [nOcor:999]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/22108020094103-Rejei%C3%A7%C3%A3o-963-Tipo-de-pagamento-n%C3%A3o-aceita-o-grupo-de-cart%C3%B5es-ou-boletos-nOcor-999"
+  },
+  {
+    "codigo": "964",
+    "resultado": "Rejeição: Valor do ICMS com retenção difere do calculado",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/21798927024791-964-Rejei%C3%A7%C3%A3o-Valor-do-ICMS-com-reten%C3%A7%C3%A3o-difere-do-calculado"
+  },
+  {
+    "codigo": "965",
+    "resultado": "Rejeição: Valor do troco acima do permitido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/22108734906647-Rejei%C3%A7%C3%A3o-965-Valor-do-troco-acima-do-permitido"
+  },
+  {
+    "codigo": "971",
+    "resultado": "Rejeição: IE inválida [local de retirada/entrega]",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/17714742418071"
+  },
+  {
+    "codigo": "972",
+    "resultado": "Rejeição: Obrigatória as informações do responsável técnico",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360024026754-Rejei%C3%A7%C3%A3o-972-Obrigat%C3%B3ria-as-informa%C3%A7%C3%B5es-do-respons%C3%A1vel-t%C3%A9cnico"
+  },
+  {
+    "codigo": "973",
+    "resultado": "Rejeição: CNPJ do responsável técnico inválido",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360024189393-Rejei%C3%A7%C3%A3o-973-CNPJ-do-respons%C3%A1vel-t%C3%A9cnico-inv%C3%A1lido"
+  },
+  {
+    "codigo": "974",
+    "resultado": "Rejeição: CNPJ do responsável técnico diverge do cadastrado",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/31871255151383-NF-e-NFC-e-Como-resolver-a-Rejei%C3%A7%C3%A3o-974-CNPJ-do-respons%C3%A1vel-t%C3%A9cnico-diverge-do-cadastrado"
+  },
+  {
+    "codigo": "975",
+    "resultado": "Rejeiçãp: Obrigatória a informação do identificador do CSRT e do hash do CSRT",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4408977395607-Rejei%C3%A7%C3%A3o-975-Obrigat%C3%B3ria-a-informa%C3%A7%C3%A3o-do-identificador-do-CSRT-e-do-hash-do-CSRT"
+  },
+  {
+    "codigo": "999",
+    "resultado": "Rejeição: Erro não catalogado",
+    "linkSolucao": "https://atendimento.tecnospeed.com.br/hc/pt-br/articles/360010219454-Rejei%C3%A7%C3%A3o-999-Erro-n%C3%A3o-catalogado"
+  }
+];
 
         const listEl = document.getElementById('rejeicoesList');
         const searchInput = document.getElementById('searchInput');
@@ -118,3 +2625,4 @@
 </script>
 </body>
 </html>
+
