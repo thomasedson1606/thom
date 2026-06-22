@@ -303,7 +303,8 @@
 
             try {
                 await addDoc(collection(db, "banco_ideias_parametros"), { sistema, modulo });
-                document.getElementById('param-modulo').value = '';
+                document.getElementById('form-parametros').reset();
+                document.getElementById('param-sistema').value = 'STOR';
             } catch(e) {
                 alert('Erro ao cadastrar: ' + e);
             }
@@ -372,11 +373,12 @@
             try {
                 if (firebaseId) {
                     await updateDoc(doc(db, "banco_ideias_ideias", firebaseId), { data, sistema, modulo, titulo, texto });
+                    cancelarEdicao();
+                    switchTab('ideias');
                 } else {
                     await addDoc(collection(db, "banco_ideias_ideias"), { data, sistema, modulo, titulo, texto, desk: '' });
+                    cancelarEdicao();
                 }
-                cancelarEdicao();
-                switchTab('ideias');
             } catch(e) {
                 alert('Erro ao salvar: ' + e);
             }
