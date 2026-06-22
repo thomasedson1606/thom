@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco de Ideias (STOR Sistemas) - Thomas Tech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body { background: #0b0f14; color: #e1e7ef; }
+        .nav-bar { background: rgba(22, 27, 34, 0.95); border-bottom: 1px solid #21262d; }
+        [data-theme="light"] { --bg: #f5f7fa; --surface: #ffffff; --border: #d1d5db; --text: #1a1a2e; --muted: #6b7280; --accent: #0284c7; }
+        [data-theme="light"] body { background: var(--bg) !important; color: var(--text) !important; }
+        [data-theme="light"] .nav-bar { background: rgba(255,255,255,0.95) !important; border-color: var(--border) !important; }
+        [data-theme="light"] main { background: var(--surface) !important; color: var(--text) !important; }
+        [data-theme="light"] section { background: var(--surface) !important; }
+        [data-theme="light"] td, [data-theme="light"] th, [data-theme="light"] label { color: var(--text) !important; }
+        [data-theme="light"] input, [data-theme="light"] select, [data-theme="light"] textarea { background: var(--surface) !important; border-color: var(--border) !important; color: var(--text) !important; }
+        [data-theme="light"] table { background: var(--surface) !important; }
+        [data-theme="light"] table thead { background: var(--bg) !important; }
+        [data-theme="light"] .bg-gray-50 { background: var(--bg) !important; }
+        [data-theme="light"] .bg-blue-600 { background: var(--accent) !important; }
+        [data-theme="light"] .text-white { color: var(--text) !important; }
+        [data-theme="light"] .text-gray-800 { color: var(--text) !important; }
+        [data-theme="light"] .text-gray-700 { color: var(--text) !important; }
+        [data-theme="light"] .text-gray-600 { color: var(--muted) !important; }
+        [data-theme="light"] .text-gray-500 { color: var(--muted) !important; }
+        [data-theme="light"] .border-gray-200 { border-color: var(--border) !important; }
+        [data-theme="light"] .bg-white { background: var(--surface) !important; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0b0f14; }
+        ::-webkit-scrollbar-thumb { background: #21262d; border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+<div class="nav-bar" style="height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;">
+    <div style="display:flex;align-items:center;gap:16px;">
+        <a href="index.html" style="display:flex;align-items:center;gap:4px;color:#484f58;text-decoration:none;transition:color 0.2s;flex-shrink:0;white-space:nowrap" onmouseover="this.style.color='#06b6d4'" onmouseout="this.style.color='#484f58'">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            <span style="font-size:10px;font-weight:700;letter-spacing:.05em;color:#06b6d4;margin-left:4px">← VOLTAR</span>
+        </a>
+        <span style="width:1px;height:20px;background:#21262d;flex-shrink:0"></span>
+        <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#484f58;flex-shrink:0">Módulo 23</span>
+        <span style="width:1px;height:20px;background:#21262d;flex-shrink:0"></span>
+        <span class="title" style="font-size:14px;font-weight:700;color:#e1e7ef;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">Banco de Ideias (STOR Sistemas)</span>
+    </div>
+    <span style="font-size:10px;font-weight:700;color:#484f58;flex-shrink:0">Thomas Tech</span>
+</div>
+
+    <nav class="bg-blue-600 text-white shadow-md" style="margin-top:0;">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <span class="text-xl font-bold tracking-wide">Banco de Ideias <span class="text-blue-200">(STOR Sistemas)</span></span>
+                <div class="flex space-x-4">
+                    <button onclick="switchTab('parametros')" id="btn-parametros" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition">Parâmetros</button>
+                    <button onclick="switchTab('nova-ideia')" id="btn-nova-ideia" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition">Nova Ideia</button>
+                    <button onclick="switchTab('ideias')" id="btn-ideias" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition">Ideias</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto mt-8 p-4">
+        
+        <section id="tab-parametros" class="tab-content hidden bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">Configuração de Parâmetros</h2>
+            <form id="form-parametros" onsubmit="salvarParametro(event)" class="space-y-4 max-w-md">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Sistema</label>
+                    <select id="param-sistema" class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" required>
+                        <option value="STOR">STOR</option>
+                        <option value="STOR AGRO">STOR AGRO</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Nome do Módulo</label>
+                    <input type="text" id="param-modulo" class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: Financeiro, Estoque..." required>
+                </div>
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition font-medium">Cadastrar Módulo</button>
+            </form>
+
+            <div class="mt-8">
+                <h3 class="text-lg font-semibold mb-3 text-gray-700">Módulos Cadastrados</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 border">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sistema</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Módulo</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-parametros" class="bg-white divide-y divide-gray-200">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-nova-ideia" class="tab-content hidden bg-white p-6 rounded-lg shadow-md">
+            <h2 id="titulo-form-ideia" class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">Adicionar Nova Ideia</h2>
+            <form id="form-ideia" onsubmit="salvarIdeia(event)" class="space-y-4 max-w-2xl">
+                <input type="hidden" id="ideia-id">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Data</label>
+                        <input type="date" id="ideia-data" class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Sistema</label>
+                        <select id="ideia-sistema" onchange="atualizarModulosDropdown()" class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" required>
+                            <option value="">Selecione...</option>
+                            <option value="STOR">STOR</option>
+                            <option value="STOR AGRO">STOR AGRO</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Módulo</label>
+                        <select id="ideia-modulo" class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" required>
+                            <option value="">Selecione o sistema primeiro...</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
+                    <input type="text" id="ideia-titulo" class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" placeholder="Resumo da ideia" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Ideia (Detalhes)</label>
+                    <textarea id="ideia-texto" rows="6" class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" placeholder="Descreva detalhadamente a sua ideia aqui..." required></textarea>
+                </div>
+                <div class="flex space-x-3">
+                    <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition font-medium">SALVAR</button>
+                    <button type="button" onclick="cancelarEdicao()" id="btn-cancelar-ideia" class="hidden bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600 transition font-medium">Cancelar</button>
+                </div>
+            </form>
+        </section>
+
+        <section id="tab-ideias" class="tab-content hidden bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">Relação de Ideias</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 border">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Sistema/Módulo</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Título/Ideia</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cód. DESK</th>
+                            <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-ideias" class="bg-white divide-y divide-gray-200">
+                        </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div id="modal-desk" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-sm w-full p-6 animate-fade-in">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Vincular Código DESK</h3>
+            <input type="hidden" id="modal-ideia-id">
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Código DESK</label>
+                <input type="text" id="modal-desk-codigo" class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: DSK-1234">
+            </div>
+            <div class="flex justify-end space-x-2">
+                <button onclick="fecharModalDesk()" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 transition">Cancelar</button>
+                <button onclick="salvarModalDesk()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Banco de Dados Local (LocalStorage)
+        let dados = JSON.parse(localStorage.getItem('banco_ideias_stor')) || {
+            parametros: [],
+            ideias: []
+        };
+
+        // Inicialização do sistema ao carregar a página
+        window.onload = function() {
+            definirDataAtual();
+            switchTab('ideias'); // Começa na aba de ideias por padrão
+            renderizarParametros();
+            renderizarIdeias();
+        };
+
+        function salvarDados() {
+            localStorage.setItem('banco_ideias_stor', JSON.stringify(dados));
+        }
+
+        // Sistema de abas (Tabs)
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+
+            // Resetar estilos dos botões do menu
+            ['parametros', 'nova-ideia', 'ideias'].forEach(id => {
+                const btn = document.getElementById('btn-' + id);
+                if (id === tabId) {
+                    btn.classList.add('bg-blue-800', 'ring-2', 'ring-white');
+                } else {
+                    btn.classList.remove('bg-blue-800', 'ring-2', 'ring-white');
+                }
+            });
+
+            if (tabId === 'nova-ideia' && !document.getElementById('ideia-id').value) {
+                definirDataAtual();
+            }
+            atualizarModulosDropdown();
+        }
+
+        function definirDataAtual() {
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('ideia-data').value = hoje;
+        }
+
+        // ==========================================
+        // LÓGICA DE PARÂMETROS
+        // ==========================================
+        function salvarParametro(e) {
+            e.preventDefault();
+            const sistema = document.getElementById('param-sistema').value;
+            const modulo = document.getElementById('param-modulo').value.trim();
+
+            // Evitar duplicados simples
+            const existe = dados.parametros.some(p => p.sistema === sistema && p.modulo.toLowerCase() === modulo.toLowerCase());
+            if (existe) {
+                alert('Este módulo já está cadastrado para este sistema!');
+                return;
+            }
+
+            dados.parametros.push({ id: Date.now(), sistema, modulo });
+            salvarDados();
+            renderizarParametros();
+            atualizarModulosDropdown();
+            document.getElementById('param-modulo').value = '';
+        }
+
+        function excluirParametro(id) {
+            if (confirm('Deseja realmente excluir este parâmetro?')) {
+                dados.parametros = dados.parametros.filter(p => p.id !== id);
+                salvarDados();
+                renderizarParametros();
+                atualizarModulosDropdown();
+            }
+        }
+
+        function renderizarParametros() {
+            const corpoTabela = document.getElementById('lista-parametros');
+            corpoTabela.innerHTML = '';
+
+            if (dados.parametros.length === 0) {
+                corpoTabela.innerHTML = `<tr><td colspan="3" class="px-6 py-4 text-center text-sm text-gray-500">Nenhum módulo cadastrado.</td></tr>`;
+                return;
+            }
+
+            dados.parametros.forEach(p => {
+                corpoTabela.innerHTML += `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 text-sm font-medium text-gray-900">${p.sistema}</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">${p.modulo}</td>
+                        <td class="px-6 py-4 text-right text-sm font-medium">
+                            <button onclick="excluirParametro(${p.id})" class="text-red-600 hover:text-red-900 ml-2">Excluir</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function atualizarModulosDropdown() {
+            const sistemaSelecionado = document.getElementById('ideia-sistema').value;
+            const comboModulo = document.getElementById('ideia-modulo');
+            comboModulo.innerHTML = '<option value="">Selecione...</option>';
+
+            const filtrados = dados.parametros.filter(p => p.sistema === sistemaSelecionado);
+            
+            if (filtrados.length === 0 && sistemaSelecionado !== "") {
+                comboModulo.innerHTML = '<option value="">Nenhum módulo cadastrado para este sistema</option>';
+            } else {
+                filtrados.forEach(p => {
+                    comboModulo.innerHTML += `<option value="${p.modulo}">${p.modulo}</option>`;
+                });
+            }
+        }
+
+        // ==========================================
+        // LÓGICA DE IDEIAS
+        // ==========================================
+        function salvarIdeia(e) {
+            e.preventDefault();
+            const id = document.getElementById('ideia-id').value;
+            const data = document.getElementById('ideia-data').value;
+            const sistema = document.getElementById('ideia-sistema').value;
+            const modulo = document.getElementById('ideia-modulo').value;
+            const titulo = document.getElementById('ideia-titulo').value.trim();
+            const texto = document.getElementById('ideia-texto').value.trim();
+
+            if (id) {
+                // Modo Edição
+                const index = dados.ideias.findIndex(i => i.id == id);
+                if (index !== -1) {
+                    dados.ideias[index] = { ...dados.ideias[index], data, sistema, modulo, titulo, texto };
+                }
+            } else {
+                // Nova Ideia
+                dados.ideias.push({
+                    id: Date.now(),
+                    data,
+                    sistema,
+                    modulo,
+                    titulo,
+                    texto,
+                    desk: ''
+                });
+            }
+
+            salvarDados();
+            renderizarIdeias();
+            cancelarEdicao(); // Limpa formulário e volta o estado original
+            switchTab('ideias');
+        }
+
+        function editarIdeia(id) {
+            const ideia = dados.ideias.find(i => i.id == id);
+            if (!ideia) return;
+
+            document.getElementById('titulo-form-ideia').innerText = "Editar Ideia";
+            document.getElementById('ideia-id').value = ideia.id;
+            document.getElementById('ideia-data').value = ideia.data;
+            document.getElementById('ideia-sistema').value = ideia.sistema;
+            
+            // Atualiza os módulos condicionalmente antes de setar o valor
+            atualizarModulosDropdown();
+            document.getElementById('ideia-modulo').value = ideia.modulo;
+            
+            document.getElementById('ideia-titulo').value = ideia.titulo;
+            document.getElementById('ideia-texto').value = ideia.texto;
+
+            document.getElementById('btn-cancelar-ideia').classList.remove('hidden');
+            switchTab('nova-ideia');
+        }
+
+        function cancelarEdicao() {
+            document.getElementById('titulo-form-ideia').innerText = "Adicionar Nova Ideia";
+            document.getElementById('form-ideia').reset();
+            document.getElementById('ideia-id').value = '';
+            document.getElementById('btn-cancelar-ideia').classList.add('hidden');
+            definirDataAtual();
+        }
+
+        function excluirIdeia(id) {
+            if (confirm('Deseja realmente apagar esta ideia?')) {
+                dados.ideias = dados.ideias.filter(i => i.id !== id);
+                salvarDados();
+                renderizarIdeias();
+            }
+        }
+
+        function formatarDataBR(dataString) {
+            if(!dataString) return "";
+            const [ano, mes, dia] = dataString.split('-');
+            return `${dia}/${mes}/${ano}`;
+        }
+
+        function renderizarIdeias() {
+            const lista = document.getElementById('lista-ideias');
+            lista.innerHTML = '';
+
+            if (dados.ideias.length === 0) {
+                lista.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">Nenhuma ideia registrada ainda.</td></tr>`;
+                return;
+            }
+
+            // Ordenado das mais recentes para as mais antigas
+            const ideiasOrdenadas = [...dados.ideias].sort((a,b) => new Date(b.data) - new Date(a.data));
+
+            ideiasOrdenadas.forEach(i => {
+                lista.innerHTML += `
+                    <tr class="hover:bg-gray-50 align-top">
+                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-600">${formatarDataBR(i.data)}</td>
+                        <td class="px-4 py-4 whitespace-nowrap text-sm">
+                            <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded font-semibold mb-1">${i.sistema}</span><br>
+                            <span class="text-gray-500 text-xs">${i.modulo}</span>
+                        </td>
+                        <td class="px-4 py-4 text-sm max-w-xs">
+                            <div class="font-bold text-gray-900">${i.titulo}</div>
+                            <div class="text-gray-600 text-xs mt-1 whitespace-pre-line">${i.texto}</div>
+                        </td>
+                        <td class="px-4 py-4 whitespace-nowrap text-sm">
+                            <span class="${i.desk ? 'bg-purple-100 text-purple-800 font-mono' : 'text-gray-400 italic'} text-xs px-2 py-1 rounded">
+                                ${i.desk || 'Nenhum'}
+                            </span>
+                        </td>
+                        <td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                            <button onclick="abrirModalDesk(${i.id}, '${i.desk}')" class="text-purple-600 hover:text-purple-900 bg-purple-50 px-2 py-1 rounded border border-purple-200">DESK</button>
+                            <button onclick="editarIdeia(${i.id})" class="text-amber-600 hover:text-amber-900 bg-amber-50 px-2 py-1 rounded border border-amber-200">Editar</button>
+                            <button onclick="excluirIdeia(${i.id})" class="text-red-600 hover:text-red-900 bg-red-50 px-2 py-1 rounded border border-red-200">Excluir</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // ==========================================
+        // LÓGICA DO JANELA (MODAL) DESK
+        // ==========================================
+        function abrirModalDesk(id, codigoAtual) {
+            document.getElementById('modal-ideia-id').value = id;
+            document.getElementById('modal-desk-codigo').value = codigoAtual === 'undefined' || codigoAtual === 'null' ? '' : codigoAtual;
+            document.getElementById('modal-desk').classList.remove('hidden');
+        }
+
+        function fecharModalDesk() {
+            document.getElementById('modal-desk').classList.add('hidden');
+        }
+
+        function salvarModalDesk() {
+            const id = document.getElementById('modal-ideia-id').value;
+            const codigo = document.getElementById('modal-desk-codigo').value.trim();
+
+            const index = dados.ideias.findIndex(i => i.id == id);
+            if (index !== -1) {
+                dados.ideias[index].desk = codigo;
+                salvarDados();
+                renderizarIdeias();
+            }
+            fecharModalDesk();
+        }
+    </script>
+<script>
+(function(){var t=localStorage.getItem('theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');function toggle(){var h=document.documentElement;if(h.getAttribute('data-theme')==='light'){h.removeAttribute('data-theme');localStorage.setItem('theme','dark');}else{h.setAttribute('data-theme','light');localStorage.setItem('theme','light');}}var nav=document.querySelector('nav')||document.querySelector('.nav-bar');if(nav){var btn=document.createElement('button');btn.innerHTML=document.documentElement.getAttribute('data-theme')==='light'?'🌙':'☀️';btn.style.cssText='background:none;border:none;cursor:pointer;font-size:18px;padding:2px 8px;margin-left:auto;line-height:1';btn.title='Alternar tema claro/escuro';btn.onclick=toggle;nav.appendChild(btn);}
+})();
+</script>
+</body>
+</html>
