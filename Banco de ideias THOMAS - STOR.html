@@ -173,24 +173,61 @@
         </div>
     </div>
 
-    <script>
-        // Banco de Dados Local (LocalStorage)
-        let dados = JSON.parse(localStorage.getItem('banco_ideias_stor')) || {
-            parametros: [],
-            ideias: []
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA_po9hvJqFPri_AI4uw73AiYb5BbspNjs",
+            authDomain: "thomas-teste-d7a3d.firebaseapp.com",
+            projectId: "thomas-teste-d7a3d",
+            storageBucket: "thomas-teste-d7a3d.firebasestorage.app",
+            messagingSenderId: "280109049625",
+            appId: "1:280109049625:web:487874357d0173797d0788"
         };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let parametros = [];
+        let ideias = [];
+
+        // Expor funções ao HTML (onclick, onsubmit, onchange)
+        window.parametros = parametros;
+        window.ideias = ideias;
+        window.switchTab = switchTab;
+        window.salvarParametro = salvarParametro;
+        window.excluirParametro = excluirParametro;
+        window.salvarIdeia = salvarIdeia;
+        window.editarIdeia = editarIdeia;
+        window.excluirIdeia = excluirIdeia;
+        window.cancelarEdicao = cancelarEdicao;
+        window.atualizarModulosDropdown = atualizarModulosDropdown;
+        window.abrirModalDesk = abrirModalDesk;
+        window.fecharModalDesk = fecharModalDesk;
+        window.salvarModalDesk = salvarModalDesk;
 
         // Inicialização do sistema ao carregar a página
-        window.onload = function() {
-            definirDataAtual();
-            switchTab('ideias'); // Começa na aba de ideias por padrão
-            renderizarParametros();
-            renderizarIdeias();
-        };
+        definirDataAtual();
+        switchTab('ideias');
+        renderizarParametros();
+        renderizarIdeias();
 
-        function salvarDados() {
-            localStorage.setItem('banco_ideias_stor', JSON.stringify(dados));
-        }
+        // Listeners em tempo real
+        onSnapshot(collection(db, "banco_ideias_parametros"), (snapshot) => {
+            parametros = [];
+            snapshot.forEach(d => { let item = d.data(); item.firebaseId = d.id; parametros.push(item); });
+            window.parametros = parametros;
+            renderizarParametros();
+            atualizarModulosDropdown();
+        });
+
+        onSnapshot(collection(db, "banco_ideias_ideias"), (snapshot) => {
+            ideias = [];
+            snapshot.forEach(d => { let item = d.data(); item.firebaseId = d.id; ideias.push(item); });
+            window.ideias = ideias;
+            renderizarIdeias();
+        });
 
         // Sistema de abas (Tabs)
         function switchTab(tabId) {
@@ -221,31 +258,32 @@
         // ==========================================
         // LÓGICA DE PARÂMETROS
         // ==========================================
-        function salvarParametro(e) {
+        async function salvarParametro(e) {
             e.preventDefault();
             const sistema = document.getElementById('param-sistema').value;
             const modulo = document.getElementById('param-modulo').value.trim();
 
-            // Evitar duplicados simples
-            const existe = dados.parametros.some(p => p.sistema === sistema && p.modulo.toLowerCase() === modulo.toLowerCase());
+            const existe = parametros.some(p => p.sistema === sistema && p.modulo.toLowerCase() === modulo.toLowerCase());
             if (existe) {
                 alert('Este módulo já está cadastrado para este sistema!');
                 return;
             }
 
-            dados.parametros.push({ id: Date.now(), sistema, modulo });
-            salvarDados();
-            renderizarParametros();
-            atualizarModulosDropdown();
-            document.getElementById('param-modulo').value = '';
+            try {
+                await addDoc(collection(db, "banco_ideias_parametros"), { sistema, modulo });
+                document.getElementById('param-modulo').value = '';
+            } catch(e) {
+                alert('Erro ao cadastrar: ' + e);
+            }
         }
 
-        function excluirParametro(id) {
+        async function excluirParametro(firebaseId) {
             if (confirm('Deseja realmente excluir este parâmetro?')) {
-                dados.parametros = dados.parametros.filter(p => p.id !== id);
-                salvarDados();
-                renderizarParametros();
-                atualizarModulosDropdown();
+                try {
+                    await deleteDoc(doc(db, "banco_ideias_parametros", firebaseId));
+                } catch(e) {
+                    alert('Erro ao excluir: ' + e);
+                }
             }
         }
 
@@ -253,18 +291,18 @@
             const corpoTabela = document.getElementById('lista-parametros');
             corpoTabela.innerHTML = '';
 
-            if (dados.parametros.length === 0) {
+            if (parametros.length === 0) {
                 corpoTabela.innerHTML = `<tr><td colspan="3" class="px-6 py-4 text-center text-sm text-gray-500">Nenhum módulo cadastrado.</td></tr>`;
                 return;
             }
 
-            dados.parametros.forEach(p => {
+            parametros.forEach(p => {
                 corpoTabela.innerHTML += `
                     <tr class="hover:bg-gray-50">
                         <td class="px-6 py-4 text-sm font-medium text-gray-900">${p.sistema}</td>
                         <td class="px-6 py-4 text-sm text-gray-500">${p.modulo}</td>
                         <td class="px-6 py-4 text-right text-sm font-medium">
-                            <button onclick="excluirParametro(${p.id})" class="text-red-600 hover:text-red-900 ml-2">Excluir</button>
+                            <button onclick="excluirParametro('${p.firebaseId}')" class="text-red-600 hover:text-red-900 ml-2">Excluir</button>
                         </td>
                     </tr>
                 `;
@@ -276,7 +314,7 @@
             const comboModulo = document.getElementById('ideia-modulo');
             comboModulo.innerHTML = '<option value="">Selecione...</option>';
 
-            const filtrados = dados.parametros.filter(p => p.sistema === sistemaSelecionado);
+            const filtrados = parametros.filter(p => p.sistema === sistemaSelecionado);
             
             if (filtrados.length === 0 && sistemaSelecionado !== "") {
                 comboModulo.innerHTML = '<option value="">Nenhum módulo cadastrado para este sistema</option>';
@@ -290,50 +328,37 @@
         // ==========================================
         // LÓGICA DE IDEIAS
         // ==========================================
-        function salvarIdeia(e) {
+        async function salvarIdeia(e) {
             e.preventDefault();
-            const id = document.getElementById('ideia-id').value;
+            const firebaseId = document.getElementById('ideia-id').value;
             const data = document.getElementById('ideia-data').value;
             const sistema = document.getElementById('ideia-sistema').value;
             const modulo = document.getElementById('ideia-modulo').value;
             const titulo = document.getElementById('ideia-titulo').value.trim();
             const texto = document.getElementById('ideia-texto').value.trim();
 
-            if (id) {
-                // Modo Edição
-                const index = dados.ideias.findIndex(i => i.id == id);
-                if (index !== -1) {
-                    dados.ideias[index] = { ...dados.ideias[index], data, sistema, modulo, titulo, texto };
+            try {
+                if (firebaseId) {
+                    await updateDoc(doc(db, "banco_ideias_ideias", firebaseId), { data, sistema, modulo, titulo, texto });
+                } else {
+                    await addDoc(collection(db, "banco_ideias_ideias"), { data, sistema, modulo, titulo, texto, desk: '' });
                 }
-            } else {
-                // Nova Ideia
-                dados.ideias.push({
-                    id: Date.now(),
-                    data,
-                    sistema,
-                    modulo,
-                    titulo,
-                    texto,
-                    desk: ''
-                });
+                cancelarEdicao();
+                switchTab('ideias');
+            } catch(e) {
+                alert('Erro ao salvar: ' + e);
             }
-
-            salvarDados();
-            renderizarIdeias();
-            cancelarEdicao(); // Limpa formulário e volta o estado original
-            switchTab('ideias');
         }
 
-        function editarIdeia(id) {
-            const ideia = dados.ideias.find(i => i.id == id);
+        function editarIdeia(firebaseId) {
+            const ideia = ideias.find(i => i.firebaseId === firebaseId);
             if (!ideia) return;
 
             document.getElementById('titulo-form-ideia').innerText = "Editar Ideia";
-            document.getElementById('ideia-id').value = ideia.id;
+            document.getElementById('ideia-id').value = ideia.firebaseId;
             document.getElementById('ideia-data').value = ideia.data;
             document.getElementById('ideia-sistema').value = ideia.sistema;
             
-            // Atualiza os módulos condicionalmente antes de setar o valor
             atualizarModulosDropdown();
             document.getElementById('ideia-modulo').value = ideia.modulo;
             
@@ -352,11 +377,13 @@
             definirDataAtual();
         }
 
-        function excluirIdeia(id) {
+        async function excluirIdeia(firebaseId) {
             if (confirm('Deseja realmente apagar esta ideia?')) {
-                dados.ideias = dados.ideias.filter(i => i.id !== id);
-                salvarDados();
-                renderizarIdeias();
+                try {
+                    await deleteDoc(doc(db, "banco_ideias_ideias", firebaseId));
+                } catch(e) {
+                    alert('Erro ao excluir: ' + e);
+                }
             }
         }
 
@@ -370,13 +397,12 @@
             const lista = document.getElementById('lista-ideias');
             lista.innerHTML = '';
 
-            if (dados.ideias.length === 0) {
+            if (ideias.length === 0) {
                 lista.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">Nenhuma ideia registrada ainda.</td></tr>`;
                 return;
             }
 
-            // Ordenado das mais recentes para as mais antigas
-            const ideiasOrdenadas = [...dados.ideias].sort((a,b) => new Date(b.data) - new Date(a.data));
+            const ideiasOrdenadas = [...ideias].sort((a,b) => new Date(b.data) - new Date(a.data));
 
             ideiasOrdenadas.forEach(i => {
                 lista.innerHTML += `
@@ -396,9 +422,9 @@
                             </span>
                         </td>
                         <td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                            <button onclick="abrirModalDesk(${i.id}, '${i.desk}')" class="text-purple-600 hover:text-purple-900 bg-purple-50 px-2 py-1 rounded border border-purple-200">DESK</button>
-                            <button onclick="editarIdeia(${i.id})" class="text-amber-600 hover:text-amber-900 bg-amber-50 px-2 py-1 rounded border border-amber-200">Editar</button>
-                            <button onclick="excluirIdeia(${i.id})" class="text-red-600 hover:text-red-900 bg-red-50 px-2 py-1 rounded border border-red-200">Excluir</button>
+                            <button onclick="abrirModalDesk('${i.firebaseId}', '${i.desk || ''}')" class="text-purple-600 hover:text-purple-900 bg-purple-50 px-2 py-1 rounded border border-purple-200">DESK</button>
+                            <button onclick="editarIdeia('${i.firebaseId}')" class="text-amber-600 hover:text-amber-900 bg-amber-50 px-2 py-1 rounded border border-amber-200">Editar</button>
+                            <button onclick="excluirIdeia('${i.firebaseId}')" class="text-red-600 hover:text-red-900 bg-red-50 px-2 py-1 rounded border border-red-200">Excluir</button>
                         </td>
                     </tr>
                 `;
@@ -408,8 +434,8 @@
         // ==========================================
         // LÓGICA DO JANELA (MODAL) DESK
         // ==========================================
-        function abrirModalDesk(id, codigoAtual) {
-            document.getElementById('modal-ideia-id').value = id;
+        function abrirModalDesk(firebaseId, codigoAtual) {
+            document.getElementById('modal-ideia-id').value = firebaseId;
             document.getElementById('modal-desk-codigo').value = codigoAtual === 'undefined' || codigoAtual === 'null' ? '' : codigoAtual;
             document.getElementById('modal-desk').classList.remove('hidden');
         }
@@ -418,22 +444,17 @@
             document.getElementById('modal-desk').classList.add('hidden');
         }
 
-        function salvarModalDesk() {
-            const id = document.getElementById('modal-ideia-id').value;
+        async function salvarModalDesk() {
+            const firebaseId = document.getElementById('modal-ideia-id').value;
             const codigo = document.getElementById('modal-desk-codigo').value.trim();
 
-            const index = dados.ideias.findIndex(i => i.id == id);
-            if (index !== -1) {
-                dados.ideias[index].desk = codigo;
-                salvarDados();
-                renderizarIdeias();
+            try {
+                await updateDoc(doc(db, "banco_ideias_ideias", firebaseId), { desk: codigo });
+                fecharModalDesk();
+            } catch(e) {
+                alert('Erro ao salvar código DESK: ' + e);
             }
-            fecharModalDesk();
         }
     </script>
-<script>
-(function(){var t=localStorage.getItem('theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');function toggle(){var h=document.documentElement;if(h.getAttribute('data-theme')==='light'){h.removeAttribute('data-theme');localStorage.setItem('theme','dark');}else{h.setAttribute('data-theme','light');localStorage.setItem('theme','light');}}var nav=document.querySelector('nav')||document.querySelector('.nav-bar');if(nav){var btn=document.createElement('button');btn.innerHTML=document.documentElement.getAttribute('data-theme')==='light'?'🌙':'☀️';btn.style.cssText='background:none;border:none;cursor:pointer;font-size:18px;padding:2px 8px;margin-left:auto;line-height:1';btn.title='Alternar tema claro/escuro';btn.onclick=toggle;nav.appendChild(btn);}
-})();
-</script>
 </body>
 </html>
