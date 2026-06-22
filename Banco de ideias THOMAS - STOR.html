@@ -10,24 +10,53 @@
         * { font-family: 'Inter', sans-serif; }
         body { background: #0b0f14; color: #e1e7ef; }
         .nav-bar { background: rgba(22, 27, 34, 0.95); border-bottom: 1px solid #21262d; }
-        [data-theme="light"] { --bg: #f5f7fa; --surface: #ffffff; --border: #d1d5db; --text: #1a1a2e; --muted: #6b7280; --accent: #0284c7; }
+        .app-nav { background: #12171f; border-bottom: 1px solid #222a35; }
+        .app-content { background: #12171f; border: 1px solid #222a35; border-radius: 12px; }
+        .input-field { background: #0b0f14; border: 1px solid #222a35; color: #e1e7ef; border-radius: 8px; }
+        .input-field:focus { border-color: #06b6d4; box-shadow: 0 0 0 3px rgba(6,182,212,.15); outline: none; }
+        .btn-primary { background: #02727e; color: #fff; font-weight: 700; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; transition: background .15s; }
+        .btn-primary:hover { background: #06b6d4; }
+        .btn-success { background: #1a7f4a; color: #fff; font-weight: 700; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; transition: background .15s; }
+        .btn-success:hover { background: #22c55e; }
+        .btn-cancel { background: #2a3340; color: #e1e7ef; font-weight: 700; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; transition: background .15s; }
+        .btn-cancel:hover { background: #3b4658; }
+        .btn-desk { background: #1f1335; color: #a78bfa; padding: 6px 12px; border-radius: 6px; border: 1px solid #3a2560; cursor: pointer; font-weight: 600; font-size: 12px; transition: background .15s; }
+        .btn-desk:hover { background: #2f1f4a; }
+        .btn-edit { background: #1a2a1a; color: #fbbf24; padding: 6px 12px; border-radius: 6px; border: 1px solid #3a4a1a; cursor: pointer; font-weight: 600; font-size: 12px; transition: background .15s; }
+        .btn-edit:hover { background: #2a3a2a; }
+        .btn-delete { background: #2a1a1a; color: #f87171; padding: 6px 12px; border-radius: 6px; border: 1px solid #4a2a2a; cursor: pointer; font-weight: 600; font-size: 12px; transition: background .15s; }
+        .btn-delete:hover { background: #3a2a2a; }
+        .badge-sistema { background: #062d3a; color: #06b6d4; font-size: 11px; padding: 3px 10px; border-radius: 6px; font-weight: 700; display: inline-block; }
+        .badge-desk { background: #1f1335; color: #a78bfa; font-size: 11px; padding: 3px 10px; border-radius: 6px; font-family: monospace; }
+        .badge-desk-empty { color: #6b7280; font-size: 11px; font-style: italic; padding: 3px 10px; }
+        .modal-overlay { background: rgba(0,0,0,0.6); }
+        .modal-box { background: #12171f; border: 1px solid #222a35; border-radius: 12px; }
+        table { border-collapse: collapse; }
+        th { color: #8b949e; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 12px 16px; text-align: left; }
+        td { color: #e1e7ef; font-size: 13px; padding: 12px 16px; border-bottom: 1px solid #222a35; }
+        tr:hover td { background: rgba(255,255,255,0.02); }
+        .tab-btn { padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; border: none; cursor: pointer; transition: all .15s; color: #8b949e; background: transparent; }
+        .tab-btn:hover { background: rgba(255,255,255,0.05); color: #e1e7ef; }
+        .tab-btn.active { background: #1a2332; color: #06b6d4; box-shadow: 0 0 0 1px rgba(6,182,212,.3); }
+        [data-theme="light"] { --bg: #f5f7fa; --surface: #ffffff; --border: #d1d5db; --text: #1a1a2e; --muted: #6b7280; --accent: #02727e; }
         [data-theme="light"] body { background: var(--bg) !important; color: var(--text) !important; }
         [data-theme="light"] .nav-bar { background: rgba(255,255,255,0.95) !important; border-color: var(--border) !important; }
-        [data-theme="light"] main { background: var(--surface) !important; color: var(--text) !important; }
-        [data-theme="light"] section { background: var(--surface) !important; }
-        [data-theme="light"] td, [data-theme="light"] th, [data-theme="light"] label { color: var(--text) !important; }
-        [data-theme="light"] input, [data-theme="light"] select, [data-theme="light"] textarea { background: var(--surface) !important; border-color: var(--border) !important; color: var(--text) !important; }
-        [data-theme="light"] table { background: var(--surface) !important; }
-        [data-theme="light"] table thead { background: var(--bg) !important; }
-        [data-theme="light"] .bg-gray-50 { background: var(--bg) !important; }
-        [data-theme="light"] .bg-blue-600 { background: var(--accent) !important; }
-        [data-theme="light"] .text-white { color: var(--text) !important; }
-        [data-theme="light"] .text-gray-800 { color: var(--text) !important; }
-        [data-theme="light"] .text-gray-700 { color: var(--text) !important; }
-        [data-theme="light"] .text-gray-600 { color: var(--muted) !important; }
-        [data-theme="light"] .text-gray-500 { color: var(--muted) !important; }
-        [data-theme="light"] .border-gray-200 { border-color: var(--border) !important; }
-        [data-theme="light"] .bg-white { background: var(--surface) !important; }
+        [data-theme="light"] .app-nav { background: var(--surface) !important; border-color: var(--border) !important; }
+        [data-theme="light"] .app-content { background: var(--surface) !important; border-color: var(--border) !important; }
+        [data-theme="light"] .modal-box { background: var(--surface) !important; border-color: var(--border) !important; }
+        [data-theme="light"] .input-field { background: var(--surface) !important; border-color: var(--border) !important; color: var(--text) !important; }
+        [data-theme="light"] th { color: var(--muted) !important; }
+        [data-theme="light"] td { color: var(--text) !important; border-color: var(--border) !important; }
+        [data-theme="light"] tr:hover td { background: rgba(0,0,0,0.02) !important; }
+        [data-theme="light"] .tab-btn { color: var(--muted) !important; }
+        [data-theme="light"] .tab-btn:hover { background: rgba(0,0,0,0.05) !important; color: var(--text) !important; }
+        [data-theme="light"] .tab-btn.active { background: rgba(2,114,126,.1) !important; color: var(--accent) !important; box-shadow: 0 0 0 1px rgba(2,114,126,.2) !important; }
+        [data-theme="light"] .btn-primary { background: var(--accent) !important; }
+        [data-theme="light"] .badge-sistema { background: rgba(2,114,126,.1) !important; color: var(--accent) !important; }
+        [data-theme="light"] .badge-desk { background: rgba(167,139,250,.1) !important; color: #7c3aed !important; }
+        [data-theme="light"] .btn-desk { background: rgba(167,139,250,.08) !important; color: #7c3aed !important; border-color: rgba(167,139,250,.2) !important; }
+        [data-theme="light"] .btn-edit { background: rgba(251,191,36,.08) !important; color: #d97706 !important; border-color: rgba(251,191,36,.2) !important; }
+        [data-theme="light"] .btn-delete { background: rgba(248,113,113,.08) !important; color: #dc2626 !important; border-color: rgba(248,113,113,.2) !important; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0b0f14; }
         ::-webkit-scrollbar-thumb { background: #21262d; border-radius: 3px; }
@@ -49,14 +78,14 @@
     <span style="font-size:10px;font-weight:700;color:#484f58;flex-shrink:0">Thomas Tech</span>
 </div>
 
-    <nav class="bg-blue-600 text-white shadow-md" style="margin-top:0;">
+    <nav class="app-nav" style="margin-top:0;">
         <div class="max-w-6xl mx-auto px-4">
             <div class="flex justify-between items-center h-16">
-                <span class="text-xl font-bold tracking-wide">Banco de Ideias <span class="text-blue-200">(STOR Sistemas)</span></span>
-                <div class="flex space-x-4">
-                    <button onclick="switchTab('parametros')" id="btn-parametros" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition">Parâmetros</button>
-                    <button onclick="switchTab('nova-ideia')" id="btn-nova-ideia" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition">Nova Ideia</button>
-                    <button onclick="switchTab('ideias')" id="btn-ideias" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition">Ideias</button>
+                <span class="text-xl font-bold tracking-wide" style="color:#e1e7ef;">Banco de Ideias <span style="color:#06b6d4;">(STOR Sistemas)</span></span>
+                <div class="flex space-x-2">
+                    <button onclick="switchTab('parametros')" id="btn-parametros" class="tab-btn">Parâmetros</button>
+                    <button onclick="switchTab('nova-ideia')" id="btn-nova-ideia" class="tab-btn">Nova Ideia</button>
+                    <button onclick="switchTab('ideias')" id="btn-ideias" class="tab-btn active">Ideias</button>
                 </div>
             </div>
         </div>
@@ -64,111 +93,111 @@
 
     <main class="max-w-6xl mx-auto mt-8 p-4">
         
-        <section id="tab-parametros" class="tab-content hidden bg-white p-6 rounded-lg shadow-md">
-            <h2 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">Configuração de Parâmetros</h2>
+        <section id="tab-parametros" class="tab-content hidden app-content p-6">
+            <h2 style="font-size:22px;font-weight:800;margin-bottom:20px;padding-bottom:8px;border-bottom:1px solid #222a35;color:#e1e7ef;">Configuração de Parâmetros</h2>
             <form id="form-parametros" onsubmit="salvarParametro(event)" class="space-y-4 max-w-md">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Sistema</label>
-                    <select id="param-sistema" class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" required>
+                    <label style="display:block;font-size:13px;font-weight:600;color:#c1c9d4;margin-bottom:6px;">Sistema</label>
+                    <select id="param-sistema" class="input-field w-full p-3" required>
                         <option value="STOR">STOR</option>
                         <option value="STOR AGRO">STOR AGRO</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nome do Módulo</label>
-                    <input type="text" id="param-modulo" class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: Financeiro, Estoque..." required>
+                    <label style="display:block;font-size:13px;font-weight:600;color:#c1c9d4;margin-bottom:6px;">Nome do Módulo</label>
+                    <input type="text" id="param-modulo" class="input-field w-full p-3" placeholder="Ex: Financeiro, Estoque..." required>
                 </div>
-                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition font-medium">Cadastrar Módulo</button>
+                <button type="submit" class="btn-primary">Cadastrar Módulo</button>
             </form>
 
             <div class="mt-8">
-                <h3 class="text-lg font-semibold mb-3 text-gray-700">Módulos Cadastrados</h3>
+                <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;color:#c1c9d4;">Módulos Cadastrados</h3>
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200 border">
-                        <thead class="bg-gray-50">
+                    <table style="width:100%;border:1px solid #222a35;border-radius:8px;overflow:hidden;">
+                        <thead style="background:#0d1219;">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sistema</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Módulo</th>
-                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                <th>Sistema</th>
+                                <th>Módulo</th>
+                                <th style="text-align:right;">Ações</th>
                             </tr>
                         </thead>
-                        <tbody id="lista-parametros" class="bg-white divide-y divide-gray-200">
-                            </tbody>
+                        <tbody id="lista-parametros">
+                        </tbody>
                     </table>
                 </div>
             </div>
         </section>
 
-        <section id="tab-nova-ideia" class="tab-content hidden bg-white p-6 rounded-lg shadow-md">
-            <h2 id="titulo-form-ideia" class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">Adicionar Nova Ideia</h2>
+        <section id="tab-nova-ideia" class="tab-content hidden app-content p-6">
+            <h2 id="titulo-form-ideia" style="font-size:22px;font-weight:800;margin-bottom:20px;padding-bottom:8px;border-bottom:1px solid #222a35;color:#e1e7ef;">Adicionar Nova Ideia</h2>
             <form id="form-ideia" onsubmit="salvarIdeia(event)" class="space-y-4 max-w-2xl">
                 <input type="hidden" id="ideia-id">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Data</label>
-                        <input type="date" id="ideia-data" class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" required>
+                        <label style="display:block;font-size:13px;font-weight:600;color:#c1c9d4;margin-bottom:6px;">Data</label>
+                        <input type="date" id="ideia-data" class="input-field w-full p-3" required>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Sistema</label>
-                        <select id="ideia-sistema" onchange="atualizarModulosDropdown()" class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" required>
+                        <label style="display:block;font-size:13px;font-weight:600;color:#c1c9d4;margin-bottom:6px;">Sistema</label>
+                        <select id="ideia-sistema" onchange="atualizarModulosDropdown()" class="input-field w-full p-3" required>
                             <option value="">Selecione...</option>
                             <option value="STOR">STOR</option>
                             <option value="STOR AGRO">STOR AGRO</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Módulo</label>
-                        <select id="ideia-modulo" class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" required>
+                        <label style="display:block;font-size:13px;font-weight:600;color:#c1c9d4;margin-bottom:6px;">Módulo</label>
+                        <select id="ideia-modulo" class="input-field w-full p-3" required>
                             <option value="">Selecione o sistema primeiro...</option>
                         </select>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
-                    <input type="text" id="ideia-titulo" class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" placeholder="Resumo da ideia" required>
+                    <label style="display:block;font-size:13px;font-weight:600;color:#c1c9d4;margin-bottom:6px;">Título</label>
+                    <input type="text" id="ideia-titulo" class="input-field w-full p-3" placeholder="Resumo da ideia" required>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Ideia (Detalhes)</label>
-                    <textarea id="ideia-texto" rows="6" class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" placeholder="Descreva detalhadamente a sua ideia aqui..." required></textarea>
+                    <label style="display:block;font-size:13px;font-weight:600;color:#c1c9d4;margin-bottom:6px;">Ideia (Detalhes)</label>
+                    <textarea id="ideia-texto" rows="6" class="input-field w-full p-3" placeholder="Descreva detalhadamente a sua ideia aqui..." required></textarea>
                 </div>
-                <div class="flex space-x-3">
-                    <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition font-medium">SALVAR</button>
-                    <button type="button" onclick="cancelarEdicao()" id="btn-cancelar-ideia" class="hidden bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600 transition font-medium">Cancelar</button>
+                <div style="display:flex;gap:12px;">
+                    <button type="submit" class="btn-success">SALVAR</button>
+                    <button type="button" onclick="cancelarEdicao()" id="btn-cancelar-ideia" class="hidden btn-cancel">Cancelar</button>
                 </div>
             </form>
         </section>
 
-        <section id="tab-ideias" class="tab-content hidden bg-white p-6 rounded-lg shadow-md">
-            <h2 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">Relação de Ideias</h2>
+        <section id="tab-ideias" class="tab-content hidden app-content p-6">
+            <h2 style="font-size:22px;font-weight:800;margin-bottom:20px;padding-bottom:8px;border-bottom:1px solid #222a35;color:#e1e7ef;">Relação de Ideias</h2>
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200 border">
-                    <thead class="bg-gray-50">
+                <table style="width:100%;border:1px solid #222a35;border-radius:8px;overflow:hidden;">
+                    <thead style="background:#0d1219;">
                         <tr>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Sistema/Módulo</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Título/Ideia</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cód. DESK</th>
-                            <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Ações</th>
+                            <th>Data</th>
+                            <th>Sistema/Módulo</th>
+                            <th>Título/Ideia</th>
+                            <th>Cód. DESK</th>
+                            <th style="text-align:right;">Ações</th>
                         </tr>
                     </thead>
-                    <tbody id="lista-ideias" class="bg-white divide-y divide-gray-200">
-                        </tbody>
+                    <tbody id="lista-ideias">
+                    </tbody>
                 </table>
             </div>
         </section>
     </main>
 
-    <div id="modal-desk" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-xl max-w-sm w-full p-6 animate-fade-in">
-            <h3 class="text-lg font-bold text-gray-900 mb-4">Vincular Código DESK</h3>
+    <div id="modal-desk" class="fixed inset-0 modal-overlay hidden flex items-center justify-center p-4">
+        <div class="modal-box max-w-sm w-full p-6">
+            <h3 style="font-size:18px;font-weight:800;color:#e1e7ef;margin-bottom:16px;">Vincular Código DESK</h3>
             <input type="hidden" id="modal-ideia-id">
             <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Código DESK</label>
-                <input type="text" id="modal-desk-codigo" class="w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500 focus:border-blue-500" placeholder="Ex: DSK-1234">
+                <label style="display:block;font-size:13px;font-weight:600;color:#c1c9d4;margin-bottom:6px;">Código DESK</label>
+                <input type="text" id="modal-desk-codigo" class="input-field w-full p-3" placeholder="Ex: DSK-1234">
             </div>
-            <div class="flex justify-end space-x-2">
-                <button onclick="fecharModalDesk()" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 transition">Cancelar</button>
-                <button onclick="salvarModalDesk()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">Salvar</button>
+            <div style="display:flex;justify-content:flex-end;gap:8px;">
+                <button onclick="fecharModalDesk()" class="btn-cancel">Cancelar</button>
+                <button onclick="salvarModalDesk()" class="btn-primary">Salvar</button>
             </div>
         </div>
     </div>
@@ -238,9 +267,9 @@
             ['parametros', 'nova-ideia', 'ideias'].forEach(id => {
                 const btn = document.getElementById('btn-' + id);
                 if (id === tabId) {
-                    btn.classList.add('bg-blue-800', 'ring-2', 'ring-white');
+                    btn.classList.add('active');
                 } else {
-                    btn.classList.remove('bg-blue-800', 'ring-2', 'ring-white');
+                    btn.classList.remove('active');
                 }
             });
 
@@ -292,17 +321,17 @@
             corpoTabela.innerHTML = '';
 
             if (parametros.length === 0) {
-                corpoTabela.innerHTML = `<tr><td colspan="3" class="px-6 py-4 text-center text-sm text-gray-500">Nenhum módulo cadastrado.</td></tr>`;
+                corpoTabela.innerHTML = `<tr><td colspan="3" style="text-align:center;color:#8b949e;padding:24px;font-size:13px;">Nenhum módulo cadastrado.</td></tr>`;
                 return;
             }
 
             parametros.forEach(p => {
                 corpoTabela.innerHTML += `
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-6 py-4 text-sm font-medium text-gray-900">${p.sistema}</td>
-                        <td class="px-6 py-4 text-sm text-gray-500">${p.modulo}</td>
-                        <td class="px-6 py-4 text-right text-sm font-medium">
-                            <button onclick="excluirParametro('${p.firebaseId}')" class="text-red-600 hover:text-red-900 ml-2">Excluir</button>
+                    <tr>
+                        <td style="font-weight:700;">${p.sistema}</td>
+                        <td style="color:#8b949e;">${p.modulo}</td>
+                        <td style="text-align:right;">
+                            <button onclick="excluirParametro('${p.firebaseId}')" class="btn-delete">Excluir</button>
                         </td>
                     </tr>
                 `;
@@ -398,7 +427,7 @@
             lista.innerHTML = '';
 
             if (ideias.length === 0) {
-                lista.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">Nenhuma ideia registrada ainda.</td></tr>`;
+                lista.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#8b949e;padding:24px;font-size:13px;">Nenhuma ideia registrada ainda.</td></tr>`;
                 return;
             }
 
@@ -406,25 +435,25 @@
 
             ideiasOrdenadas.forEach(i => {
                 lista.innerHTML += `
-                    <tr class="hover:bg-gray-50 align-top">
-                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-600">${formatarDataBR(i.data)}</td>
-                        <td class="px-4 py-4 whitespace-nowrap text-sm">
-                            <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded font-semibold mb-1">${i.sistema}</span><br>
-                            <span class="text-gray-500 text-xs">${i.modulo}</span>
+                    <tr>
+                        <td style="color:#8b949e;white-space:nowrap;">${formatarDataBR(i.data)}</td>
+                        <td style="white-space:nowrap;">
+                            <span class="badge-sistema">${i.sistema}</span><br>
+                            <span style="color:#6b7280;font-size:12px;">${i.modulo}</span>
                         </td>
-                        <td class="px-4 py-4 text-sm max-w-xs">
-                            <div class="font-bold text-gray-900">${i.titulo}</div>
-                            <div class="text-gray-600 text-xs mt-1 whitespace-pre-line">${i.texto}</div>
+                        <td style="max-width:280px;">
+                            <div style="font-weight:700;">${i.titulo}</div>
+                            <div style="color:#8b949e;font-size:12px;margin-top:4px;white-space:pre-line;">${i.texto}</div>
                         </td>
-                        <td class="px-4 py-4 whitespace-nowrap text-sm">
-                            <span class="${i.desk ? 'bg-purple-100 text-purple-800 font-mono' : 'text-gray-400 italic'} text-xs px-2 py-1 rounded">
+                        <td>
+                            <span class="${i.desk ? 'badge-desk' : 'badge-desk-empty'}">
                                 ${i.desk || 'Nenhum'}
                             </span>
                         </td>
-                        <td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                            <button onclick="abrirModalDesk('${i.firebaseId}', '${i.desk || ''}')" class="text-purple-600 hover:text-purple-900 bg-purple-50 px-2 py-1 rounded border border-purple-200">DESK</button>
-                            <button onclick="editarIdeia('${i.firebaseId}')" class="text-amber-600 hover:text-amber-900 bg-amber-50 px-2 py-1 rounded border border-amber-200">Editar</button>
-                            <button onclick="excluirIdeia('${i.firebaseId}')" class="text-red-600 hover:text-red-900 bg-red-50 px-2 py-1 rounded border border-red-200">Excluir</button>
+                        <td style="text-align:right;white-space:nowrap;">
+                            <button onclick="abrirModalDesk('${i.firebaseId}', '${i.desk || ''}')" class="btn-desk">DESK</button>
+                            <button onclick="editarIdeia('${i.firebaseId}')" class="btn-edit">Editar</button>
+                            <button onclick="excluirIdeia('${i.firebaseId}')" class="btn-delete">Excluir</button>
                         </td>
                     </tr>
                 `;
