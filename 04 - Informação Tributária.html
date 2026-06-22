@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thomas Tech - Informativo Técnico - Regimes Tributários</title>
+    <style>
+        :root {
+            --bg-color: #0b0f14;
+            --card-bg: #161b22;
+            --text-primary: #e1e7ef;
+            --text-secondary: #94a3b8;
+            --border-color: #21262d;
+            --sidebar-bg: #0d1117;
+            --sidebar-hover: #161b22;
+            --danger-color: #f87171;
+            --danger-bg: #1c1010;
+            --danger-border: #7f1d1d;
+            --warning-color: #fbbf24;
+            --warning-bg: #1c1a0e;
+            --warning-border: #713f12;
+            --mei-color: #0284c7;
+            --simples-color: #16a34a;
+            --lucro-color: #ea580c;
+            --real-color: #7c3aed;
+        }
+        [data-theme="light"] { --bg-color: #f8fafc; --card-bg: #ffffff; --text-primary: #0f172a; --text-secondary: #475569; --border-color: #e2e8f0; --sidebar-bg: #0f172a; --sidebar-hover: #1e293b; --danger-color: #dc2626; --danger-bg: #fef2f2; --danger-border: #fca5a5; --warning-color: #854d0e; --warning-bg: #fef9c3; --warning-border: #fef08a; }
+        [data-theme="light"] .nav-bar { background: rgba(255,255,255,0.95) !important; border-color: #d1d5db !important; }
+        [data-theme="light"] .nav-bar span, [data-theme="light"] .nav-bar a { color: #6b7280 !important; }
+        [data-theme="light"] .nav-bar .title { color: #1a1a2e !important; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: var(--bg-color); color: var(--text-primary); display: flex; height: 100vh; overflow: hidden; margin: 0; }
+        .sidebar { width: 280px; background-color: var(--sidebar-bg); color: #ffffff; display: flex; flex-direction: column; padding: 24px; box-shadow: 4px 0 12px rgba(0,0,0,0.08); z-index: 20; flex-shrink: 0; }
+        .sidebar-header { margin-bottom: 32px; border-bottom: 1px solid #334155; padding-bottom: 16px; }
+        .sidebar-header h2 { font-size: 18px; font-weight: 600; color: #f8fafc; letter-spacing: 0.5px; }
+        .menu-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin-bottom: 12px; font-weight: 700; }
+        .nav-btn { background: none; border: none; color: #94a3b8; padding: 14px 16px; text-align: left; width: 100%; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; margin-bottom: 8px; transition: all 0.2s ease; display: flex; align-items: center; justify-content: space-between; }
+        .nav-btn:hover { background-color: var(--sidebar-hover); color: #f8fafc; }
+        .nav-btn.active { color: #ffffff; }
+        .nav-btn.active[data-target="mei"] { background-color: var(--mei-color); }
+        .nav-btn.active[data-target="simples"] { background-color: var(--simples-color); }
+        .nav-btn.active[data-target="lucro"] { background-color: var(--lucro-color); }
+        .nav-btn.active[data-target="real"] { background-color: var(--real-color); }
+        .badge-count { font-size: 11px; background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 12px; color: #e2e8f0; }
+        .main-content { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        .fixed-alerts-container { display: flex; flex-direction: column; flex-shrink: 0; z-index: 10; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .alert-danger { background-color: var(--danger-bg); border-bottom: 1px solid var(--danger-border); padding: 14px 40px; color: var(--danger-color); font-size: 13.5px; font-weight: 700; display: flex; align-items: center; gap: 10px; letter-spacing: 0.2px; }
+        .alert-warning { background-color: var(--warning-bg); border-bottom: 1px solid var(--warning-border); padding: 14px 40px; color: var(--warning-color); font-size: 13.5px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .alert-icon { flex-shrink: 0; display: flex; align-items: center; }
+        .tab-viewport { flex: 1; overflow-y: auto; padding: 40px; }
+        .tab-content { display: none; max-width: 1200px; margin: 0 auto; }
+        .tab-content.active { display: block; animation: fadeIn 0.25s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        .card { background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border-color); padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; margin-bottom: 24px; }
+        .card-title { font-size: 22px; font-weight: 700; color: var(--text-primary); }
+        .emission-status { display: flex; gap: 12px; }
+        .status-pill { padding: 6px 14px; border-radius: 30px; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; }
+        .status-pill.yes { background-color: #052e16; color: #4ade80; border: 1px solid #166534; }
+        .status-pill.no { background-color: #1c1010; color: #f87171; border: 1px solid #7f1d1d; }
+        .table-responsive { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+        th { background-color: rgba(255,255,255,0.03); color: var(--text-secondary); font-weight: 600; padding: 14px 18px; border-bottom: 2px solid var(--border-color); white-space: nowrap; }
+        td { padding: 16px 18px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background-color: rgba(255,255,255,0.03); }
+        .highlight-cell { font-weight: 700; color: var(--text-primary); background-color: rgba(255,255,255,0.03); }
+        .footer-metrics { display: flex; gap: 32px; margin-top: 24px; padding: 18px 24px; background-color: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border-color); }
+        .metric-item { font-size: 14px; color: var(--text-secondary); }
+        .metric-item strong { color: var(--text-primary); font-size: 16px; margin-left: 4px; }
+    </style>
+</head>
+<body>
+
+    <div class="nav-bar" style="position:fixed;top:0;left:0;right:0;z-index:50;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(22,27,34,0.95);border-bottom:1px solid #21262d;">
+        <div style="display:flex;align-items:center;gap:16px;">
+            <a href="index.html" style="display:flex;align-items:center;gap:4px;color:#484f58;text-decoration:none;transition:color 0.2s;flex-shrink:0;white-space:nowrap" onmouseover="this.style.color='#06b6d4'" onmouseout="this.style.color='#484f58'">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                <span style="font-size:10px;font-weight:700;letter-spacing:.05em;color:#06b6d4;margin-left:4px">← VOLTAR</span>
+            </a>
+            <span style="width:1px;height:20px;background:#21262d;flex-shrink:0"></span>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#484f58;flex-shrink:0">Módulo 22</span>
+            <span style="width:1px;height:20px;background:#21262d;flex-shrink:0"></span>
+            <span class="title" style="font-size:14px;font-weight:700;color:#e1e7ef;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">Informativo Técnico - Regimes Tributários</span>
+        </div>
+        <span style="font-size:10px;font-weight:700;color:#484f58;flex-shrink:0">Thomas Tech</span>
+    </div>
+
+    <div class="sidebar" style="margin-top:52px;height:calc(100vh - 52px);">
+        <div class="sidebar-header">
+            <h2>Módulo Fiscal</h2>
+        </div>
+        <div class="menu-label">Selecione o Regime</div>
+        <button class="nav-btn active" data-target="mei">MEI <span class="badge-count">4</span></button>
+        <button class="nav-btn" data-target="simples">Simples Nacional <span class="badge-count">4</span></button>
+        <button class="nav-btn" data-target="lucro">Lucro Presumido <span class="badge-count">4</span></button>
+        <button class="nav-btn" data-target="real">Lucro Real <span class="badge-count">4</span></button>
+    </div>
+
+    <div class="main-content" style="margin-top:52px;">
+        <div class="fixed-alerts-container">
+            <div class="alert-danger" id="global-danger-alert">
+                <span class="alert-icon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></span>
+                <span>SEMPRE ORIENTAR CLIENTE A VALIDAR COM CONTABILIDADE</span>
+            </div>
+            <div class="alert-warning" id="mei-warning-alert">
+                <span class="alert-icon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></span>
+                <span>NO MEI ELES NÃO SÃO OBRIGADOS A EMITIR NOTAS, MAS SE FOR EMITIR VAI PRECISAR DESSAS INFORMAÇÕES ABAIXO.</span>
+            </div>
+        </div>
+
+        <div class="tab-viewport">
+            <div class="tab-content active" id="mei">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Microempreendedor Individual (MEI)</div>
+                        <div class="emission-status"><span class="status-pill no">NFCE: NÃO</span><span class="status-pill no">NFE: NÃO</span></div>
+                    </div>
+                    <div class="table-responsive">
+                        <table><thead><tr><th>CSOSN ICMS</th><th>CFOP Estadual (Saída)</th><th>CFOP Nacional (Saída)</th><th>CFOP Estadual (Entrada)</th><th>CFOP Nacional (Entrada)</th></tr></thead>
+                            <tbody>
+                                <tr><td class="highlight-cell">102</td><td>5102</td><td>6102</td><td>1102</td><td>2102</td></tr>
+                                <tr><td class="highlight-cell">500</td><td>5405</td><td>6403</td><td>1403</td><td>2403</td></tr>
+                                <tr><td class="highlight-cell">400</td><td>5102</td><td>6102</td><td>1102</td><td>2102</td></tr>
+                                <tr><td class="highlight-cell">900</td><td>5102</td><td>6102</td><td>1102</td><td>2102</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="footer-metrics"><div class="metric-item">Alíquota PIS:<strong>0%</strong></div><div class="metric-item">Alíquota COFINS:<strong>0%</strong></div></div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="simples">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Simples Nacional</div>
+                        <div class="emission-status"><span class="status-pill yes">NFCE: SIM</span><span class="status-pill yes">NFE: SIM</span></div>
+                    </div>
+                    <div class="table-responsive">
+                        <table><thead><tr><th>CSOSN ICMS</th><th>CFOP Est. (Saída)</th><th>CFOP Nac. (Saída)</th><th>CFOP Est. (Entrada)</th><th>CFOP Nac. (Entrada)</th><th>Dev. Saída (Est / Nac)</th><th>Dev. Entrada (Est / Nac)</th></tr></thead>
+                            <tbody>
+                                <tr><td class="highlight-cell">102 - GARANTIDO INTEGRAL</td><td>5102</td><td>6102</td><td>1102</td><td>2102</td><td>5202 / 6202</td><td>1202 / 2202</td></tr>
+                                <tr><td class="highlight-cell">500 - SUBSTITUIÇÃO TRIBUTARIA</td><td>5405</td><td>6403</td><td>1403</td><td>2403</td><td>5411 / 6411</td><td>1411 / 2411</td></tr>
+                                <tr><td class="highlight-cell">400 - ISENTO</td><td>5102</td><td>6102</td><td>1102</td><td>2102</td><td>5202 / 6202</td><td>1202 / 2202</td></tr>
+                                <tr><td class="highlight-cell">900 - OUTROS</td><td>5102</td><td>6102</td><td>1102</td><td>2102</td><td>5202 / 6202</td><td>1202 / 2202</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="footer-metrics"><div class="metric-item">Alíquota PIS:<strong>0%</strong></div><div class="metric-item">Alíquota COFINS:<strong>0%</strong></div></div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="lucro">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Lucro Presumido</div>
+                        <div class="emission-status"><span class="status-pill yes">NFCE: SIM</span><span class="status-pill yes">NFE: SIM</span></div>
+                    </div>
+                    <div class="table-responsive">
+                        <table><thead><tr><th>CST ICMS</th><th>CFOP Est. (Saída)</th><th>CFOP Nac. (Saída)</th><th>CFOP Est. (Entrada)</th><th>CFOP Nac. (Entrada)</th><th>Dev. Saída (Est / Nac)</th><th>Dev. Entrada (Est / Nac)</th></tr></thead>
+                            <tbody>
+                                <tr><td class="highlight-cell">00 - GARANTIDO INTEGRAL</td><td>5102</td><td>6102</td><td>1102</td><td>2102</td><td>5202 / 6202</td><td>1202 / 2202</td></tr>
+                                <tr><td class="highlight-cell">60 - SUBSTITUIÇÃO TRIBUTARIA</td><td>5405</td><td>6403</td><td>1403</td><td>2403</td><td>5411 / 6411</td><td>1411 / 2411</td></tr>
+                                <tr><td class="highlight-cell">40 - ISENTO</td><td>5102</td><td>6102</td><td>1102</td><td>2102</td><td>5202 / 6202</td><td>1202 / 2202</td></tr>
+                                <tr><td class="highlight-cell">90 - OUTROS</td><td>5102</td><td>6102</td><td>1102</td><td>2102</td><td>5202 / 6202</td><td>1202 / 2202</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="footer-metrics"><div class="metric-item">Alíquota PIS:<strong>0.65%</strong></div><div class="metric-item">Alíquota COFINS:<strong>3%</strong></div></div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="real">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Lucro Real</div>
+                        <div class="emission-status"><span class="status-pill yes">NFCE: SIM</span><span class="status-pill yes">NFE: SIM</span></div>
+                    </div>
+                    <div class="table-responsive">
+                        <table><thead><tr><th>CST ICMS</th><th>CFOP Est. (Saída)</th><th>CFOP Nac. (Saída)</th><th>CFOP Est. (Entrada)</th><th>CFOP Nac. (Entrada)</th><th>Dev. Saída (Est / Nac)</th><th>Dev. Entrada (Est / Nac)</th></tr></thead>
+                            <tbody>
+                                <tr><td class="highlight-cell">00 - GARANTIDO INTEGRAL</td><td>5102</td><td>6102</td><td>1102</td><td>2102</td><td>5202 / 6202</td><td>1202 / 2202</td></tr>
+                                <tr><td class="highlight-cell">60 - SUBSTITUIÇÃO TRIBUTARIA</td><td>5405</td><td>6403</td><td>1403</td><td>2403</td><td>5411 / 6411</td><td>1411 / 2411</td></tr>
+                                <tr><td class="highlight-cell">40 - ISENTO</td><td>5102</td><td>6102</td><td>1102</td><td>2102</td><td>5202 / 6202</td><td>1202 / 2202</td></tr>
+                                <tr><td class="highlight-cell">90 - OUTROS</td><td>5102</td><td>6102</td><td>1102</td><td>2102</td><td>5202 / 6202</td><td>1202 / 2202</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="footer-metrics"><div class="metric-item">Alíquota PIS:<strong>1.65%</strong></div><div class="metric-item">Alíquota COFINS:<strong>7.60%</strong></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const buttons = document.querySelectorAll('.nav-btn');
+        const contents = document.querySelectorAll('.tab-content');
+        const meiWarningAlert = document.getElementById('mei-warning-alert');
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                buttons.forEach(btn => btn.classList.remove('active'));
+                contents.forEach(content => content.classList.remove('active'));
+                button.classList.add('active');
+                const targetId = button.getAttribute('data-target');
+                document.getElementById(targetId).classList.add('active');
+                meiWarningAlert.style.display = targetId === 'mei' ? 'flex' : 'none';
+            });
+        });
+    </script>
+<script>
+(function(){var t=localStorage.getItem('theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');function toggle(){var h=document.documentElement;if(h.getAttribute('data-theme')==='light'){h.removeAttribute('data-theme');localStorage.setItem('theme','dark');}else{h.setAttribute('data-theme','light');localStorage.setItem('theme','light');}}var nav=document.querySelector('nav')||document.querySelector('.nav-bar');if(nav){var btn=document.createElement('button');btn.innerHTML=document.documentElement.getAttribute('data-theme')==='light'?'🌙':'☀️';btn.style.cssText='background:none;border:none;cursor:pointer;font-size:18px;padding:2px 8px;margin-left:auto;line-height:1';btn.title='Alternar tema claro/escuro';btn.onclick=toggle;nav.appendChild(btn);}
+})();
+</script>
+</body>
+</html>

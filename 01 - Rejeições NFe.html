@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thomas Tech - Manual de Rejeições NF-e</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0b0a0d;
+            --card-container-bg: #131118;
+            --card-bg: #1a1721;
+            --input-bg: #1c1924;
+            --text-main: #ffffff;
+            --text-muted: #8b879a;
+            --purple-primary: #7c3aed;
+            --purple-badge-bg: #2d1d4c;
+            --purple-badge-text: #d8b4fe;
+            --border-color: #262135;
+            --blue-btn: #0284c7;
+            --blue-btn-hover: #0369a1;
+        }
+        [data-theme="light"] body { background: #f5f7fa !important; color: #1f2937 !important; }
+        [data-theme="light"] .nav-bar { background: rgba(255,255,255,0.95) !important; border-color: #d1d5db !important; }
+        [data-theme="light"] .nav-bar span, [data-theme="light"] .nav-bar a { color: #6b7280 !important; }
+        [data-theme="light"] .nav-bar .title { color: #1a1a2e !important; }
+        [data-theme="light"] .main-panel { background: #ffffff !important; border-color: #d1d5db !important; }
+        [data-theme="light"] .search-input { background: #f3f4f6 !important; border-color: #d1d5db !important; color: #1f2937 !important; }
+        [data-theme="light"] .rejeicao-card { background: #ffffff !important; border-color: #e5e7eb !important; }
+        [data-theme="light"] .texto-rejeicao { color: #374151 !important; }
+        [data-theme="light"] .modal-content { background: #ffffff !important; }
+        [data-theme="light"] .modal-body { background: #f3f4f6 !important; color: #374151 !important; }
+        [data-theme="light"] .results-count { color: #6b7280 !important; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem 1rem; }
+        .header-area { display: flex; align-items: center; margin-bottom: 2rem; }
+        .title-container { display: flex; align-items: center; gap: 12px; }
+        .title-container i { color: var(--purple-primary); font-size: 1.8rem; }
+        h1 { font-size: 1.8rem; font-weight: 700; margin: 0; }
+        .main-panel { background-color: var(--card-container-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; }
+        .search-container { position: relative; margin-bottom: 1rem; }
+        .search-container i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        .search-input { width: 100%; background-color: var(--input-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 14px 14px 45px; color: var(--text-main); font-size: 1rem; box-sizing: border-box; outline: none; transition: border-color 0.2s; }
+        .search-input:focus { border-color: var(--purple-primary); }
+        .results-count { text-align: right; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; font-weight: 600; }
+        .cards-list { display: flex; flex-direction: column; gap: 12px; max-height: 500px; overflow-y: auto; padding-right: 5px; }
+        .cards-list::-webkit-scrollbar { width: 6px; }
+        .cards-list::-webkit-scrollbar-thumb { background: var(--purple-primary); border-radius: 10px; }
+        .cards-list::-webkit-scrollbar-track { background: transparent; }
+        .rejeicao-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; gap: 15px; }
+        .card-left { display: flex; align-items: center; gap: 15px; }
+        .badge-codigo { background-color: var(--purple-badge-bg); color: var(--purple-badge-text); padding: 6px 12px; border-radius: 6px; font-weight: 700; font-size: 0.9rem; white-space: nowrap; }
+        .texto-rejeicao { font-size: 1rem; font-weight: 600; color: #e2e8f0; }
+        .btn-solucao { background-color: transparent; color: #38bdf8; border: 1px solid #0369a1; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; white-space: nowrap; transition: all 0.2s; }
+        .btn-solucao:hover { background-color: rgba(3, 105, 161, 0.2); border-color: #38bdf8; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); align-items: center; justify-content: center; z-index: 1000; padding: 1rem; box-sizing: border-box; }
+        .modal-content { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; max-width: 500px; width: 100%; padding: 2rem; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .modal-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+        .modal-close { position: absolute; top: 15px; right: 20px; background: transparent; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }
+        .modal-close:hover { color: var(--text-main); }
+        .modal-body { background-color: var(--input-bg); border-left: 4px solid var(--purple-primary); padding: 1rem; border-radius: 4px; line-height: 1.6; color: #cbd5e1; }
+        .source-footer { margin-top: 1.5rem; font-size: 0.8rem; text-align: center; color: var(--text-muted); }
+        .source-footer a { color: var(--purple-badge-text); text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <div class="nav-bar" style="height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(22,27,34,0.95);border-bottom:1px solid #21262d;">
+        <div style="display:flex;align-items:center;gap:16px;">
+            <a href="index.html" style="display:flex;align-items:center;gap:4px;color:#484f58;text-decoration:none;transition:color 0.2s;flex-shrink:0;white-space:nowrap" onmouseover="this.style.color='#06b6d4'" onmouseout="this.style.color='#484f58'">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                <span style="font-size:10px;font-weight:700;letter-spacing:.05em;color:#06b6d4;margin-left:4px">← VOLTAR</span>
+            </a>
+            <span style="width:1px;height:20px;background:#21262d;flex-shrink:0"></span>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#484f58;flex-shrink:0">Módulo 19</span>
+            <span style="width:1px;height:20px;background:#21262d;flex-shrink:0"></span>
+            <span class="title" style="font-size:14px;font-weight:700;color:#e1e7ef;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">Manual de Rejeições NF-e</span>
+        </div>
+        <span style="font-size:10px;font-weight:700;color:#484f58;flex-shrink:0">Thomas Tech</span>
+    </div>
+
+    <div class="container">
+        <div class="header-area">
+            <div class="title-container">
+                <i class="fa-solid fa-book-open"></i>
+                <h1>Manual de Rejeições NF-e</h1>
+            </div>
+        </div>
+
+        <div class="main-panel">
+            <div class="search-container">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar por código (ex: 204) ou texto...">
+            </div>
+            <div class="results-count" id="resultsCount">0 resultados</div>
+            <div class="cards-list" id="cardsList"></div>
+        </div>
+
+        <div class="source-footer">
+            Base de dados referenciada de <a href="https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4421365750167-Lista-de-Rejei%C3%A7%C3%B5es-NF-e" target="_blank">TecnoSpeed Atendimento</a>
+        </div>
+    </div>
+
+    <div class="modal" id="solutionModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div class="modal-header">
+                <span class="badge-codigo" id="modalBadge">Cód. 000</span>
+                <h3 style="margin:0; font-size:1.2rem;" id="modalTitle">Título da Rejeição</h3>
+            </div>
+            <div class="modal-body">
+                <strong style="color: #fff; display:block; margin-bottom: 8px;">💡 Solução Recomendada:</strong>
+                <p id="modalSolution" style="margin:0;"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const rejeicoesDados = [
+            { codigo: "106", mensagem: "Rejeição: Lote não localizado", correcao: "O lote enviado ainda não foi processado pela SEFAZ ou o número do lote não existe na base de dados deles. Aguarde alguns segundos e tente consultar o recibo novamente. Se o problema persistir, reenvie o lote de notas." },
+            { codigo: "108", mensagem: "Rejeição: Serviço paralisado momentaneamente", correcao: "O servidor da SEFAZ do seu estado está passando por uma instabilidade temporária ou manutenção de sistema. Geralmente o serviço normaliza em poucos minutos. Aguarde e tente transmitir novamente mais tarde." },
+            { codigo: "204", mensagem: "Rejeição: Duplicidade de NF-e", correcao: "Uma NF-e com essa mesma numeração, série e CNPJ emitente já foi autorizada na SEFAZ. Verifique se a nota já foi emitida pelo sistema ou se houve falha de comunicação na primeira tentativa." },
+            { codigo: "210", mensagem: "Rejeição: IE do destinatário inválida", correcao: "A Inscrição Estadual informada no cadastro do seu cliente está incorreta ou desalinhada com o formato exigido pelo estado dele. Consulte o CNPJ do cliente no SINTEGRA ou CCC para pegar o código exato." },
+            { codigo: "225", mensagem: "Rejeição: Falha no Schema XML do lote de NFe", correcao: "O arquivo gerado contém algum caractere especial proibido, quebra de regras estruturais ou falta de preenchimento de alguma tag obrigatória do layout vigente." },
+            { codigo: "321", mensagem: "Rejeição: NF-e de devolução de mercadoria não possui documento fiscal referenciado", correcao: "Notas com finalidade de Devolução (finNFe = 4) exigem obrigatoriamente que você informe a chave de acesso da nota original de compra que gerou a devolução." }
+        ];
+
+        const cardsList = document.getElementById('cardsList');
+        const searchInput = document.getElementById('searchInput');
+        const resultsCount = document.getElementById('resultsCount');
+        const solutionModal = document.getElementById('solutionModal');
+        const modalBadge = document.getElementById('modalBadge');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalSolution = document.getElementById('modalSolution');
+
+        function render(dados) {
+            cardsList.innerHTML = '';
+            resultsCount.textContent = `${dados.length} resultados`;
+            dados.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'rejeicao-card';
+                card.innerHTML = `
+                    <div class="card-left">
+                        <span class="badge-codigo">Cód. ${item.codigo}</span>
+                        <span class="texto-rejeicao">${item.mensagem}</span>
+                    </div>
+                    <button class="btn-solucao" onclick="openModal('${item.codigo}', '${item.mensagem}', \`${item.correcao}\`)">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Solução
+                    </button>`;
+                cardsList.appendChild(card);
+            });
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            const termo = e.target.value.toLowerCase().trim();
+            const filtrados = rejeicoesDados.filter(item => item.codigo.includes(termo) || item.mensagem.toLowerCase().includes(termo));
+            render(filtrados);
+        });
+
+        function openModal(codigo, mensagem, correcao) {
+            modalBadge.textContent = `Cód. ${codigo}`;
+            modalTitle.textContent = mensagem;
+            modalSolution.textContent = correcao;
+            solutionModal.style.display = 'flex';
+        }
+        function closeModal() { solutionModal.style.display = 'none'; }
+        window.onclick = function(event) { if (event.target == solutionModal) closeModal(); };
+        render(rejeicoesDados);
+    </script>
+<script>
+(function(){var t=localStorage.getItem('theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');function toggle(){var h=document.documentElement;if(h.getAttribute('data-theme')==='light'){h.removeAttribute('data-theme');localStorage.setItem('theme','dark');}else{h.setAttribute('data-theme','light');localStorage.setItem('theme','light');}}var nav=document.querySelector('nav')||document.querySelector('.nav-bar');if(nav){var btn=document.createElement('button');btn.innerHTML=document.documentElement.getAttribute('data-theme')==='light'?'🌙':'☀️';btn.style.cssText='background:none;border:none;cursor:pointer;font-size:18px;padding:2px 8px;margin-left:auto;line-height:1';btn.title='Alternar tema claro/escuro';btn.onclick=toggle;nav.appendChild(btn);}
+})();
+</script>
+</body>
+</html>

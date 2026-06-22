@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thomas Tech - Calculadora CBS/IBS (Reforma Tributária)</title>
+    <style>
+        :root {
+            --bg-main: #0b0c10;
+            --bg-card: #12131a;
+            --bg-input: #1a1b23;
+            --text-color: #ffffff;
+            --text-muted: #94a3b8;
+            --border-color: #262936;
+            --accent-green: #00e676;
+            --accent-red: #ff5252;
+            --focus-blue: #3b82f6;
+        }
+        [data-theme="light"] body { background: #f5f7fa !important; color: #1f2937 !important; }
+        [data-theme="light"] .nav-bar { background: rgba(255,255,255,0.95) !important; border-color: #d1d5db !important; }
+        [data-theme="light"] .nav-bar span, [data-theme="light"] .nav-bar a { color: #6b7280 !important; }
+        [data-theme="light"] .nav-bar .title { color: #1a1a2e !important; }
+        [data-theme="light"] .panel-inputs, [data-theme="light"] .panel-summary { background: #ffffff !important; border-color: #d1d5db !important; }
+        [data-theme="light"] select, [data-theme="light"] input { background: #f3f4f6 !important; border-color: #d1d5db !important; color: #1f2937 !important; }
+        [data-theme="light"] .summary-card { background: #f3f4f6 !important; border-color: #d1d5db !important; }
+        [data-theme="light"] .total-card { background: #e5e7eb !important; border-color: #d1d5db !important; }
+        [data-theme="light"] h2, [data-theme="light"] label, [data-theme="light"] .summary-label, [data-theme="light"] .total-label { color: #1f2937 !important; }
+        [data-theme="light"] .total-value { color: #16a34a !important; }
+        [data-theme="light"] .status-success { color: #16a34a !important; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-color); min-height: 100vh; padding: 0; }
+        .container { display: grid; grid-template-columns: 1fr; gap: 24px; max-width: 1350px; width: 100%; margin: 0 auto; padding: 24px; }
+        @media (min-width: 768px) { .container { grid-template-columns: 1.4fr 1fr; } }
+        .panel-inputs, .panel-summary { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; }
+        .panel-summary { display: flex; flex-direction: column; gap: 16px; }
+        h2 { font-size: 1.3rem; margin-bottom: 20px; font-weight: 600; }
+        .form-group { margin-bottom: 20px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        label { display: block; font-size: 0.85rem; color: var(--text-color); margin-bottom: 8px; font-weight: 500; }
+        select, input { width: 100%; background-color: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-color); padding: 12px 16px; border-radius: 8px; font-size: 0.95rem; outline: none; transition: border-color 0.2s; }
+        select:focus, input:focus { border-color: var(--focus-blue); }
+        .status-success { color: var(--accent-green); font-size: 0.85rem; margin-top: -12px; margin-bottom: 16px; display: flex; align-items: center; gap: 4px; line-height: 1.4; }
+        .summary-card { background-color: var(--bg-input); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; display: flex; justify-content: space-between; align-items: center; }
+        .summary-label { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; }
+        .summary-label span.icon { color: var(--text-muted); }
+        .summary-value { font-size: 1.15rem; font-weight: 600; }
+        .total-card { background-color: #161920; border: 1px solid #1e293b; border-radius: 8px; padding: 20px; display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+        .total-label { font-weight: 600; font-size: 1rem; }
+        .total-value { color: var(--accent-green); font-size: 1.4rem; font-weight: 700; }
+        .btn-reset { width: 100%; background-color: transparent; border: 1px solid var(--accent-red); color: var(--accent-red); padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.95rem; transition: all 0.2s; margin-top: 10px; }
+        .btn-reset:hover { background-color: var(--accent-red); color: #ffffff; }
+    </style>
+</head>
+<body>
+
+    <div class="nav-bar" style="height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(22,27,34,0.95);border-bottom:1px solid #21262d;">
+        <div style="display:flex;align-items:center;gap:16px;">
+            <a href="index.html" style="display:flex;align-items:center;gap:4px;color:#484f58;text-decoration:none;transition:color 0.2s;flex-shrink:0;white-space:nowrap" onmouseover="this.style.color='#06b6d4'" onmouseout="this.style.color='#484f58'">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                <span style="font-size:10px;font-weight:700;letter-spacing:.05em;color:#06b6d4;margin-left:4px">← VOLTAR</span>
+            </a>
+            <span style="width:1px;height:20px;background:#21262d;flex-shrink:0"></span>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#484f58;flex-shrink:0">Módulo 21</span>
+            <span style="width:1px;height:20px;background:#21262d;flex-shrink:0"></span>
+            <span class="title" style="font-size:14px;font-weight:700;color:#e1e7ef;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">Calculadora CBS/IBS</span>
+        </div>
+        <span style="font-size:10px;font-weight:700;color:#484f58;flex-shrink:0">Thomas Tech</span>
+    </div>
+
+    <div class="container">
+        <div class="panel-inputs">
+            <div class="form-group">
+                <label for="cst">Código CST (Código de Situação Tributária IBS/CBS)</label>
+                <select id="cst" onchange="carregarClassificacoes()"></select>
+            </div>
+            <div class="form-group">
+                <label for="cClassTrib">Código de Classificação Tributária (cClassTrib)</label>
+                <select id="cClassTrib" onchange="atualizarAliquotasAutomaticas()"></select>
+            </div>
+            <div class="status-success" id="statusVia">✓ Operação Ativa</div>
+            <div class="form-group">
+                <label for="baseCalculo">Base de Cálculo (R$)</label>
+                <input type="number" id="baseCalculo" value="4500" step="0.01" oninput="calcularTributos()" placeholder="0,00">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="aliquotaCBS">Alíquota CBS (%)</label>
+                    <input type="number" id="aliquotaCBS" value="0.9" step="0.0001" oninput="calcularTributos()">
+                </div>
+                <div class="form-group">
+                    <label for="aliquotaIBS">Alíquota IBS (%)</label>
+                    <input type="number" id="aliquotaIBS" value="0.1" step="0.0001" oninput="calcularTributos()">
+                </div>
+            </div>
+            <button class="btn-reset" onclick="zerarCalculos()">ZERAR CÁLCULOS</button>
+        </div>
+
+        <div class="panel-summary">
+            <h2>Resumo da Operação</h2>
+            <div class="summary-card">
+                <div class="summary-label"><span class="icon">📖</span> Total Base de Cálculo</div>
+                <div class="summary-value" id="resBase">R$ 0,00</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-label"><span class="icon">🧮</span> Valor CBS (<span id="lblCbs">0.00%</span>)</div>
+                <div class="summary-value" id="resCbs">R$ 0,00</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-label"><span class="icon">🧮</span> Valor IBS (<span id="lblIbs">0.00%</span>)</div>
+                <div class="summary-value" id="resIbs">R$ 0,00</div>
+            </div>
+            <div class="total-card">
+                <div class="total-label">Total IVA (Base + Tributos)</div>
+                <div class="total-value" id="resTotal">R$ 0,00</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ALIQ_PADRAO_CBS = 0.9, ALIQ_PADRAO_IBS = 0.1;
+
+        const tabelaCST = [
+            { cod: "000", desc: "000 - Tributação integral" }, { cod: "010", desc: "010 - Tributação com alíquotas uniformes" },
+            { cod: "011", desc: "011 - Tributação com alíquotas uniformes reduzidas" }, { cod: "200", desc: "200 - Alíquota reduzida" },
+            { cod: "210", desc: "210 - Redução de alíquota com redutor de base de cálculo" }, { cod: "220", desc: "220 - Alíquota fixa" },
+            { cod: "221", desc: "221 - Alíquota fixa proporcional" }, { cod: "222", desc: "222 - Redução de base de cálculo" },
+            { cod: "400", desc: "400 - Isenção" }, { cod: "410", desc: "410 - Imunidade e não incidência" },
+            { cod: "500", desc: "500 - Diferimento sem direito a crédito" }, { cod: "510", desc: "510 - Diferimento" },
+            { cod: "515", desc: "515 - Diferimento com redução de alíquota" }, { cod: "550", desc: "550 - Suspensão" },
+            { cod: "600", desc: "600 - Tributação monofásica com alíquotas uniformes" }, { cod: "610", desc: "610 - Tributação monofásica com alíquotas uniformes reduzidas" },
+            { cod: "620", desc: "620 - Tributação monofásica" }, { cod: "621", desc: "621 - Tributação monofásica com redução de alíquota" },
+            { cod: "700", desc: "700 - Operação sem incidência do IBS e CBS com direito a crédito" }, { cod: "800", desc: "800 - Transferência de crédito" },
+            { cod: "810", desc: "810 - Ajustes de IBS e CBS relativos a incentivos da ZFM e ALC" }, { cod: "811", desc: "811 - Operações específicas e ajustes adicionais da ZFM" },
+            { cod: "820", desc: "820 - Tributação em documento específico" }
+        ];
+
+        function gerarItens(prefixoCST, totalItens, redutorIbs=0, redutorCbs=0, customNomes={}) {
+            return Array.from({length: totalItens}, (_, i) => {
+                const index = i + 1;
+                let rIbs = redutorIbs, rCbs = redutorCbs;
+                if (prefixoCST === "200") { if (index <= 30) { rIbs = 0.6; rCbs = 0.6; } else if (index >= 31 && index <= 41) { rIbs = 0.3; rCbs = 0.3; } else { rIbs = 1.0; rCbs = 1.0; } }
+                if (prefixoCST === "011") { rIbs = index <= 3 ? 0.6 : 0.3; rCbs = index <= 3 ? 0.6 : 0.3; }
+                return { cod: String(index).padStart(6,'0'), nome: customNomes[index] || `Operação Regulamentada pelo Enquadramento Oficial nº ${index}`, redIbs: rIbs, redCbs: rCbs };
+            });
+        }
+
+        const tabelaClassificacaoCompleta = {
+            "000": [{ cod:"000001", nome:"Situações tributadas integralmente pelo IBS e CBS.", redIbs:0, redCbs:0 }, { cod:"000002", nome:"Exploração de via pública mediante cobrança de pedágio.", redIbs:0, redCbs:0 }, { cod:"000003", nome:"Serviços de intermediação e ecossistemas de plataformas digitais.", redIbs:0, redCbs:0 }, { cod:"000004", nome:"Regime de comercialização de bens usados e recondicionados.", redIbs:0, redCbs:0 }],
+            "010": [{ cod:"010001", nome:"Combustíveis sujeitos à incidência uniforme por unidade de medida.", redIbs:0, redCbs:0 }, { cod:"010002", nome:"Operações com lubrificantes sob incidência uniforme padrão.", redIbs:0, redCbs:0 }],
+            "011": gerarItens("011",5,0.6,0.6,{1:"Serviços Financeiros Gerais sob alíquota uniforme reduzida em 60%",2:"Operações de Crédito e Financiamento com redutor uniforme de 60%",3:"Serviços de Câmbio e Seguros com redutor de 60%",4:"Operações de previdência complementar reduzida em 30%",5:"Capitalização e demais ativos do setor financeiro com redutor de 30%"}),
+            "200": gerarItens("200",52), "210": [{ cod:"210001", nome:"Redução de alíquota combinada com ajuste de base.", redIbs:0.6, redCbs:0.6 }, { cod:"210002", nome:"Ajuste por redutor específico regional proporcional.", redIbs:0.3, redCbs:0.3 }, { cod:"210003", nome:"Regime misto para ativos industriais qualificados.", redIbs:0.5, redCbs:0.5 }],
+            "220": [{ cod:"220001", nome:"Alíquota fixa padrão por volume comercializado.", redIbs:0, redCbs:0 }, { cod:"220002", nome:"Alíquota fixa por unidade de medida em operações interestaduais.", redIbs:0, redCbs:0 }, { cod:"220003", nome:"Alíquota fixa especial para bebidas e produtos específicos.", redIbs:0, redCbs:0 }],
+            "221": [{ cod:"221001", nome:"Alíquota fixa ajustada proporcionalmente por volume ou tara.", redIbs:0, redCbs:0 }], "222": [{ cod:"222001", nome:"Redução de base de cálculo - Ativos de infraestrutura", redIbs:0.5, redCbs:0.5 }, { cod:"222002", nome:"Redução de base de cálculo - Setor Imobiliário e Locações", redIbs:0.4, redCbs:0.4 }],
+            "400": [{ cod:"400001", nome:"Isenção total sem direito a manutenção de créditos.", redIbs:1, redCbs:1 }],
+            "410": gerarItens("410",27,1.0,1.0), "500": [{ cod:"500001", nome:"Diferimento puro sem direito à manutenção de créditos.", redIbs:1, redCbs:1 }],
+            "510": [{ cod:"510001", nome:"Diferimento padrão na cadeia interna industrial.", redIbs:1, redCbs:1 }, { cod:"510002", nome:"Diferimento nas operações de importação de insumos.", redIbs:1, redCbs:1 }],
+            "515": [{ cod:"515001", nome:"Diferimento com abatimento parcial de alíquota", redIbs:1, redCbs:1 }], "550": gerarItens("550",21,1.0,1.0),
+            "600": [{ cod:"600001", nome:"Monofásico regime padrão uniforme", redIbs:1, redCbs:1 }], "610": [{ cod:"610001", nome:"Monofásico regime uniforme com redução", redIbs:1, redCbs:1 }],
+            "620": gerarItens("620",6,1.0,1.0,{1:"Combustíveis Monofásicos líquidos derivados de petróleo",2:"Biocombustíveis e álcool anidro combustível",3:"Gás liquefeito de petróleo (GLP)",4:"Gás natural veicular ou encanado",5:"Lubrificantes derivados de petróleo sob regime monofásico",6:"Outros combustíveis especiais listados sob incidência única"}),
+            "621": [{ cod:"621001", nome:"Monofásico com redução percentual", redIbs:1, redCbs:1 }], "700": [{ cod:"700001", nome:"Não incidência com manutenção total de créditos", redIbs:1, redCbs:1 }],
+            "800": [{ cod:"800001", nome:"Transferência de créditos acumulados autorizados", redIbs:1, redCbs:1 }, { cod:"800002", nome:"Transferência de saldo credor entre estabelecimentos de cooperativas", redIbs:1, redCbs:1 }],
+            "810": [{ cod:"810001", nome:"Ajustes de contrapartida incentivos Zona Franca de Manaus", redIbs:1, redCbs:1 }],
+            "811": [{ cod:"811001", nome:"Isenção ou crédito presumido em operações com a ZFM", redIbs:1, redCbs:1 }, { cod:"811002", nome:"Vendas destinadas a Áreas de Livre Comércio (ALC)", redIbs:1, redCbs:1 }, { cod:"811003", nome:"Ajuste extra de diferencial de alíquota incentivada na região Norte", redIbs:1, redCbs:1 }],
+            "820": gerarItens("820",6,1.0,1.0)
+        };
+
+        function formatarMoeda(valor) { return valor.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
+        function inicializarApp() { const s = document.getElementById('cst'); s.innerHTML = ''; tabelaCST.forEach(c => { let o = document.createElement('option'); o.value = c.cod; o.text = c.desc; s.appendChild(o); }); carregarClassificacoes(); }
+        function carregarClassificacoes() { const cst = document.getElementById('cst').value; const sc = document.getElementById('cClassTrib'); sc.innerHTML = ''; (tabelaClassificacaoCompleta[cst]||[]).forEach(item => { let o = document.createElement('option'); o.value = item.cod; o.text = `${item.cod} - ${item.nome}`; o.setAttribute('data-redibs',item.redIbs); o.setAttribute('data-redcbs',item.redCbs); sc.appendChild(o); }); atualizarAliquotasAutomaticas(); }
+        function atualizarAliquotasAutomaticas() { const cst = document.getElementById('cst').value; const sc = document.getElementById('cClassTrib'); const sv = document.getElementById('statusVia'); if(cst === "000"){ document.getElementById('aliquotaCBS').value = ALIQ_PADRAO_CBS; document.getElementById('aliquotaIBS').value = ALIQ_PADRAO_IBS; } else if(sc.options.length > 0){ const opt = sc.options[sc.selectedIndex]; const rIbs = parseFloat(opt.getAttribute('data-redibs'))||0; const rCbs = parseFloat(opt.getAttribute('data-redcbs'))||0; document.getElementById('aliquotaCBS').value = (ALIQ_PADRAO_CBS*(1-rCbs)).toFixed(4); document.getElementById('aliquotaIBS').value = (ALIQ_PADRAO_IBS*(1-rIbs)).toFixed(4); } else { document.getElementById('aliquotaCBS').value = 0; document.getElementById('aliquotaIBS').value = 0; } if(sc.options.length > 0){ sv.style.display = 'flex'; sv.textContent = '✓ '+sc.options[sc.selectedIndex].text.split(' - ')[1]; } else sv.style.display = 'none'; calcularTributos(); }
+        function calcularTributos() { const base = parseFloat(document.getElementById('baseCalculo').value)||0; const aCBS = parseFloat(document.getElementById('aliquotaCBS').value)||0; const aIBS = parseFloat(document.getElementById('aliquotaIBS').value)||0; document.getElementById('lblCbs').textContent = aCBS.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:4})+ '%'; document.getElementById('lblIbs').textContent = aIBS.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:4})+ '%'; const vCBS = base*(aCBS/100), vIBS = base*(aIBS/100); document.getElementById('resBase').textContent = formatarMoeda(base); document.getElementById('resCbs').textContent = formatarMoeda(vCBS); document.getElementById('resIbs').textContent = formatarMoeda(vIBS); document.getElementById('resTotal').textContent = formatarMoeda(base+vCBS+vIBS); }
+        function zerarCalculos() { document.getElementById('cst').value = "000"; document.getElementById('baseCalculo').value = ""; document.getElementById('aliquotaCBS').value = "0"; document.getElementById('aliquotaIBS').value = "0"; carregarClassificacoes(); }
+        window.onload = inicializarApp;
+    </script>
+<script>
+(function(){var t=localStorage.getItem('theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');function toggle(){var h=document.documentElement;if(h.getAttribute('data-theme')==='light'){h.removeAttribute('data-theme');localStorage.setItem('theme','dark');}else{h.setAttribute('data-theme','light');localStorage.setItem('theme','light');}}var nav=document.querySelector('nav')||document.querySelector('.nav-bar');if(nav){var btn=document.createElement('button');btn.innerHTML=document.documentElement.getAttribute('data-theme')==='light'?'🌙':'☀️';btn.style.cssText='background:none;border:none;cursor:pointer;font-size:18px;padding:2px 8px;margin-left:auto;line-height:1';btn.title='Alternar tema claro/escuro';btn.onclick=toggle;nav.appendChild(btn);}
+})();
+</script>
+</body>
+</html>
