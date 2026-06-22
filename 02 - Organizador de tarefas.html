@@ -3,61 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thomas Tech - Rejeições NFe SEFAZ</title>
+    <title>Thomas Tech - Organizador de Tarefas</title>
     <style>
         :root {
-            --primary-color: #0056b3;
-            --secondary-color: #f8f9fa;
-            --text-color: #333;
-            --border-color: #ddd;
-            --accent-color: #dc3545;
-            --success-color: #28a745;
+            --kanban-bg: #0b0f14;
+            --kanban-surface: #161b22;
+            --kanban-card: #1c2333;
+            --kanban-column: #1a1f2e;
+            --kanban-text: #e1e7ef;
+            --kanban-muted: #8b949e;
+            --kanban-border: #21262d;
+            --kanban-accent: #06b6d4;
         }
-        [data-theme="light"] body { background: #f5f7fa !important; color: #1f2937 !important; }
+        [data-theme="light"] { --kanban-bg: #f4f5f7; --kanban-surface: #ffffff; --kanban-card: #ffffff; --kanban-column: #ebecf0; --kanban-text: #172b4d; --kanban-muted: #5e6c84; --kanban-border: #dfe1e6; --kanban-accent: #0052cc; }
         [data-theme="light"] .nav-bar { background: rgba(255,255,255,0.95) !important; border-color: #d1d5db !important; }
         [data-theme="light"] .nav-bar span, [data-theme="light"] .nav-bar a { color: #6b7280 !important; }
         [data-theme="light"] .nav-bar .title { color: #1a1a2e !important; }
-        [data-theme="light"] header { background: #02727e !important; }
-        [data-theme="light"] .rejeicao-card { background: #ffffff !important; border-color: #e5e7eb !important; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #0b0f14;
-            color: #e1e7ef;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body { background-color: var(--kanban-bg); padding: 20px; color: var(--kanban-text); min-height: 100vh; margin: 0; }
+
+        header { margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+        h1 { font-size: 24px; color: var(--kanban-text); }
+
+        .btn-add {
+            background-color: var(--kanban-accent); color: white; border: none; padding: 10px 20px;
+            border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px; transition: background 0.2s;
         }
-        header {
-            background-color: #0d1b2a;
-            border-bottom: 1px solid #1e293b;
-            text-align: center;
-            padding: 2rem 1rem;
+        .btn-add:hover { opacity: 0.85; }
+
+        .kanban-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
+
+        .column {
+            background-color: var(--kanban-column); border-radius: 8px; padding: 15px;
+            min-height: 500px; border: 1px solid var(--kanban-border);
         }
-        header h1 { margin: 0; font-size: 2rem; color: #e1e7ef; }
-        header p { margin: 0.5rem 0 0 0; opacity: 0.7; color: #94a3b8; }
-        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
-        .search-box { display: flex; gap: 10px; margin-bottom: 2rem; }
-        .search-box input {
-            flex: 1; padding: 12px 20px; font-size: 1rem;
-            border: 1px solid #262936; border-radius: 8px; outline: none;
-            background: #1a1b23; color: #e1e7ef; transition: border-color 0.3s;
+        .column h2 {
+            font-size: 16px; margin-bottom: 15px; color: var(--kanban-muted);
+            text-transform: uppercase; letter-spacing: 0.5px;
         }
-        .search-box input:focus { border-color: #06b6d4; }
-        .source-link { text-align: right; margin-bottom: 1rem; font-size: 0.9rem; }
-        .source-link a { color: #06b6d4; text-decoration: none; font-weight: bold; }
-        .source-link a:hover { text-decoration: underline; }
-        .rejeicao-card {
-            background: #161b22; border-radius: 8px; padding: 1.5rem;
-            margin-bottom: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            border-left: 5px solid var(--accent-color); transition: transform 0.2s;
+        .task-list { min-height: 450px; display: flex; flex-direction: column; gap: 10px; }
+
+        .task-card {
+            background-color: var(--kanban-card); padding: 15px; border-radius: 6px;
+            border: 1px solid var(--kanban-border); cursor: grab; user-select: none;
+            position: relative; transition: transform 0.1s, box-shadow 0.1s;
         }
-        .rejeicao-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.4); }
-        .rejeicao-header { display: flex; align-items: center; gap: 15px; margin-bottom: 1rem; border-bottom: 1px solid #21262d; padding-bottom: 0.5rem; }
-        .codigo-badge { background-color: var(--accent-color); color: white; padding: 5px 12px; border-radius: 4px; font-weight: bold; font-size: 1.1rem; }
-        .rejeicao-titulo { font-size: 1.2rem; margin: 0; font-weight: 600; color: #e1e7ef; }
-        .secao-correcao { background-color: #0f1a12; border-left: 4px solid var(--success-color); padding: 1rem; border-radius: 0 4px 4px 0; margin-top: 0.5rem; }
-        .secao-correcao h4 { margin: 0 0 0.5rem 0; color: #4ade80; display: flex; align-items: center; gap: 5px; }
-        .secao-correcao p { margin: 0; color: #94a3b8; }
-        .no-results { text-align: center; padding: 3rem; background: #161b22; border-radius: 8px; color: #6b7280; font-size: 1.1rem; }
+        .task-card:active { cursor: grabbing; }
+        .task-card.dragging { opacity: 0.5; transform: scale(0.98); }
+
+        .task-text { font-size: 15px; margin-bottom: 15px; word-break: break-word; line-height: 1.4; }
+        .task-actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+        .btn-action { border: none; padding: 5px 10px; border-radius: 4px; font-size: 12px; cursor: pointer; font-weight: 600; }
+        .btn-edit { background-color: rgba(6,182,212,0.15); color: var(--kanban-accent); }
+        .btn-edit:hover { background-color: rgba(6,182,212,0.25); }
+        .btn-delete { background-color: rgba(239,68,68,0.15); color: #ef4444; }
+        .btn-delete:hover { background-color: rgba(239,68,68,0.25); }
+
+        @media (max-width: 768px) {
+            .kanban-board { grid-template-columns: 1fr; }
+            .column { min-height: auto; }
+        }
     </style>
 </head>
 <body>
@@ -71,79 +78,89 @@
             <span style="width:1px;height:20px;background:#21262d;flex-shrink:0"></span>
             <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#484f58;flex-shrink:0">Módulo 20</span>
             <span style="width:1px;height:20px;background:#21262d;flex-shrink:0"></span>
-            <span class="title" style="font-size:14px;font-weight:700;color:#e1e7ef;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">Rejeições NFe SEFAZ</span>
+            <span class="title" style="font-size:14px;font-weight:700;color:#e1e7ef;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">Organizador de Tarefas</span>
         </div>
         <span style="font-size:10px;font-weight:700;color:#484f58;flex-shrink:0">Thomas Tech</span>
     </div>
 
     <header>
-        <h1>Rejeições NFe SEFAZ</h1>
-        <p>Consulte códigos de erros e saiba como corrigir suas notas fiscais eletrônicas</p>
+        <h1>Organizador de Tarefas</h1>
+        <button class="btn-add" onclick="createTask()">+ Nova Tarefa</button>
     </header>
 
-    <div class="container">
-        <div class="source-link">
-            <span>Fonte de referência: </span>
-            <a href="https://atendimento.tecnospeed.com.br/hc/pt-br/articles/4421365750167-Lista-de-Rejei%C3%A7%C3%B5es-NF-e" target="_blank">TecnoSpeed Central de Atendimento</a>
+    <div class="kanban-board">
+        <div class="column" data-status="nova">
+            <h2>Nova</h2>
+            <div class="task-list" id="col-nova"></div>
         </div>
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Digite o código da rejeição (ex: 204) ou termos da mensagem (ex: duplicidade, IE)...">
+        <div class="column" data-status="executando">
+            <h2>Executando</h2>
+            <div class="task-list" id="col-executando"></div>
         </div>
-        <div id="listaRejeicoes"></div>
+        <div class="column" data-status="finalizada">
+            <h2>Finalizada</h2>
+            <div class="task-list" id="col-finalizada"></div>
+        </div>
     </div>
 
     <script>
-        const rejeicoesDados = [
-            { codigo: "204", mensagem: "Rejeição: Duplicidade de NF-e", correcao: "Essa rejeição ocorre quando uma NF-e com a mesma Chave de Acesso (mesmo CNPJ Emitente, Modelo, Série e Número) já foi autorizada na SEFAZ. Verifique se a nota já foi emitida com sucesso em seu sistema ou se houve algum problema de duplicidade no envio dos lotes." },
-            { codigo: "206", mensagem: "Rejeição: NF-e já está inutilizada na Base de dados da SEFAZ", correcao: "Significa que o número que você está tentando utilizar nesta NF-e já foi inutilizado previamente. Altere a numeração da nota para o próximo número sequencial disponível que ainda não tenha sido usado ou inutilizado." },
-            { codigo: "207", mensagem: "Rejeição: CNPJ do emitente inválido", correcao: "O CNPJ informado no grupo do Emitente possui erros de digitação, tamanho inadequado ou o dígito verificador está incorreto. Revise o cadastro de sua empresa nas configurações do emissor." },
-            { codigo: "209", mensagem: "Rejeição: IE do emitente inválida", correcao: "A Inscrição Estadual informada para o emitente não é válida para a UF indicada. Verifique a numeração correta no SINTEGRA ou no Cadastro Centralizado de Contribuintes (CCC) e remova pontuações do campo." },
-            { codigo: "210", mensagem: "Rejeição: IE do destinatário inválida", correcao: "A Inscrição Estadual informada no cadastro do destinatário (cliente) está com formatação incorreta ou inválida para o estado dele. Consulte o CNPJ do cliente no SINTEGRA/CCC para extrair a IE correta." },
-            { codigo: "212", mensagem: "Rejeição: Data de Emissão posterior a data de recebimento", correcao: "A data e hora de emissão da NF-e informada é maior (está no futuro) do que o relógio oficial do servidor da SEFAZ no momento da recepção. Verifique o fuso horário configurado no seu servidor/computador ou ajuste o campo 'dhEmi' no XML." },
-            { codigo: "225", mensagem: "Rejeição: Falha no Schema XML do lote de NFe", correcao: "O arquivo XML gerado possui erros estruturais, como tags obrigatórias ausentes, caracteres especiais inválidos ou campos preenchidos fora do formato exigido no Manual de Orientação do Contribuinte. Valide o XML no validador da SEFAZ para identificar o campo exato." },
-            { codigo: "226", mensagem: "Rejeição: Código da UF do Emitente diverge da UF autorizadora", correcao: "O código da UF (campo cUF) indicado no XML pertence a um estado diferente daquele para onde a nota foi enviada (Webservice correspondente). Verifique se as configurações de envio e o cadastro do emitente combinam com o mesmo estado." },
-            { codigo: "228", mensagem: "Rejeição: Data de Emissão muito atrasada", correcao: "A data de emissão informada na nota é mais antiga do que o limite permitido pela SEFAZ do seu estado (geralmente superior a 30 dias). Ajuste a data de emissão para o dia atual." },
-            { codigo: "230", mensagem: "Rejeição: Inscrição Estadual do emitente não cadastrada", correcao: "A IE informada para o Emitente não consta na base de dados da SEFAZ do estado correspondente. Pode ser decorrente de uma empresa recém-aberta ou alteração cadastral recente. Verifique a regularidade no site do SINTEGRA." },
-            { codigo: "232", mensagem: "Rejeição: IE do destinatário não informada", correcao: "O destinatário foi configurado como contribuinte de ICMS, mas o campo da Inscrição Estadual (IE) ficou vazio no XML. Se o cliente possuir IE, preencha-a; se ele for Isento ou Não Contribuinte, altere a tag indicadora de Inscrição Estadual (indIEDest)." },
-            { codigo: "233", mensagem: "Rejeição: IE do destinatário não cadastrada", correcao: "A Inscrição Estadual informada para o seu cliente (destinatário) não existe no cadastro da SEFAZ da UF dele. Confirme os dados diretamente com o cliente ou realize uma pesquisa no CCC (Cadastro Centralizado de Contribuintes)." },
-            { codigo: "234", mensagem: "Rejeição: IE do destinatário não vinculada ao CNPJ", correcao: "A Inscrição Estadual inserida no XML pertence a outra empresa ou está incorreta para o CNPJ informado. Certifique-se de que os dados do destinatário coincidem cruzando as informações no SINTEGRA." },
-            { codigo: "321", mensagem: "Rejeição: NF-e de devolução de mercadoria não possui documento fiscal referenciado", correcao: "Toda nota de devolução (Finalidade = 4) exige que seja informado obrigatoriamente qual documento fiscal originou essa operação. Adicione a chave de acesso da nota de compra original no grupo de documentos referenciados (tag refNFe)." },
-            { codigo: "624", mensagem: "Rejeição: IE Destinatário não vinculada ao CPF", correcao: "Ocorre quando a nota é emitida para uma Pessoa Física com Inscrição Estadual (Produtor Rural, por exemplo), mas a IE informada não está associada àquele CPF na Receita Estadual. Valide os dados junto ao cliente." },
-            { codigo: "772", mensagem: "Rejeição: Operação Interestadual e UF de destino igual à UF de origem", correcao: "A operação foi configurada como interestadual (idDest = 2), mas a UF do emitente é exatamente a mesma UF do destinatário. Corrija o indicador de destino para Operação Interna (idDest = 1) ou ajuste o endereço do cliente." },
-            { codigo: "965", mensagem: "Rejeição: Valor do troco acima do permitido", correcao: "O valor informado na tag de Troco (vTroco) no grupo de pagamentos está incorreto ou é absurdamente alto em relação ao valor da nota. Ajuste os campos informados no detalhamento de pagamento (vMP e vTroco)." }
-        ];
+        const columns = document.querySelectorAll('.task-list');
 
-        const searchInput = document.getElementById('searchInput');
-        const listaRejeicoes = document.getElementById('listaRejeicoes');
-
-        function renderizarCards(dados) {
-            listaRejeicoes.innerHTML = '';
-            if (dados.length === 0) {
-                listaRejeicoes.innerHTML = '<div class="no-results">Nenhuma rejeição encontrada com os termos digitados.</div>';
-                return;
+        function createTask() {
+            const taskContent = prompt("Digite a descrição da nova tarefa:");
+            if (taskContent && taskContent.trim() !== "") {
+                const taskCard = generateTaskElement(taskContent.trim());
+                document.getElementById('col-nova').appendChild(taskCard);
             }
-            dados.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'rejeicao-card';
-                card.innerHTML = `
-                    <div class="rejeicao-header">
-                        <span class="codigo-badge">${item.codigo}</span>
-                        <h3 class="rejeicao-titulo">${item.mensagem}</h3>
-                    </div>
-                    <div class="secao-correcao">
-                        <h4>💡 Como Corrigir:</h4>
-                        <p>${item.correcao}</p>
-                    </div>`;
-                listaRejeicoes.appendChild(card);
-            });
         }
 
-        searchInput.addEventListener('input', (e) => {
-            const termo = e.target.value.toLowerCase().trim();
-            const filtrados = rejeicoesDados.filter(item => item.codigo.includes(termo) || item.mensagem.toLowerCase().includes(termo) || item.correcao.toLowerCase().includes(termo));
-            renderizarCards(filtrados);
+        function generateTaskElement(text) {
+            const card = document.createElement('div');
+            card.classList.add('task-card');
+            card.setAttribute('draggable', 'true');
+            card.addEventListener('dragstart', () => card.classList.add('dragging'));
+            card.addEventListener('dragend', () => card.classList.remove('dragging'));
+            card.innerHTML = `
+                <div class="task-text">${text}</div>
+                <div class="task-actions">
+                    <button class="btn-action btn-edit" onclick="editTask(this)">Editar</button>
+                    <button class="btn-action btn-delete" onclick="deleteTask(this)">Excluir</button>
+                </div>`;
+            return card;
+        }
+
+        function editTask(button) {
+            const card = button.closest('.task-card');
+            const textElement = card.querySelector('.task-text');
+            const newText = prompt("Edite sua tarefa:", textElement.innerText);
+            if (newText && newText.trim() !== "") textElement.innerText = newText.trim();
+        }
+
+        function deleteTask(button) {
+            if (confirm("Tem certeza que deseja excluir esta tarefa?")) {
+                button.closest('.task-card').remove();
+            }
+        }
+
+        columns.forEach(column => {
+            column.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                const draggingCard = document.querySelector('.dragging');
+                const afterElement = getDragAfterElement(column, e.clientY);
+                if (afterElement == null) column.appendChild(draggingCard);
+                else column.insertBefore(draggingCard, afterElement);
+            });
         });
-        renderizarCards(rejeicoesDados);
+
+        function getDragAfterElement(column, y) {
+            const draggableElements = [...column.querySelectorAll('.task-card:not(.dragging)')];
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                if (offset < 0 && offset > closest.offset) return { offset, element: child };
+                return closest;
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
     </script>
 <script>
 (function(){var t=localStorage.getItem('theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');function toggle(){var h=document.documentElement;if(h.getAttribute('data-theme')==='light'){h.removeAttribute('data-theme');localStorage.setItem('theme','dark');}else{h.setAttribute('data-theme','light');localStorage.setItem('theme','light');}}var nav=document.querySelector('nav')||document.querySelector('.nav-bar');if(nav){var btn=document.createElement('button');btn.innerHTML=document.documentElement.getAttribute('data-theme')==='light'?'🌙':'☀️';btn.style.cssText='background:none;border:none;cursor:pointer;font-size:18px;padding:2px 8px;margin-left:auto;line-height:1';btn.title='Alternar tema claro/escuro';btn.onclick=toggle;nav.appendChild(btn);}
