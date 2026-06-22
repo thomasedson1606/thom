@@ -204,18 +204,21 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
         import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyA_po9hvJqFPri_AI4uw73AiYb5BbspNjs",
-            authDomain: "thomas-teste-d7a3d.firebaseapp.com",
-            projectId: "thomas-teste-d7a3d",
-            storageBucket: "thomas-teste-d7a3d.firebasestorage.app",
-            messagingSenderId: "280109049625",
-            appId: "1:280109049625:web:487874357d0173797d0788"
+            apiKey: "AIzaSyDj_Xqd_gkMeCJKugNpCcircqEWV6DTcMI",
+            authDomain: "bancodeideias-fc2c0.firebaseapp.com",
+            projectId: "bancodeideias-fc2c0",
+            storageBucket: "bancodeideias-fc2c0.firebasestorage.app",
+            messagingSenderId: "858542610553",
+            appId: "1:858542610553:web:897737f8c1c25d5f065ca8",
+            measurementId: "G-BZ078R31EZ"
         };
 
         const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
         const db = getFirestore(app);
 
         let parametros = [];
