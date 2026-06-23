@@ -6,7 +6,8 @@
     <title>Banco de Ideias (STOR Sistemas) - Thomas Tech</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * { font-family: 'Inter', sans-serif; }
@@ -674,16 +675,67 @@
         }
 
         function exportarPDF() {
-            const element = document.getElementById('tabela-relatorio');
-            if (!element) return;
-            const opt = {
-                margin: 8,
-                filename: 'relatorio-ideias.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
-            };
-            html2pdf().set(opt).from(element).save();
+            const filtradas = getIdeiasFiltradas();
+            if (filtradas.length === 0) { alert('Nenhum dado para exportar.'); return; }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+
+            const colunas = ['Data', 'Sistema', 'Módulo', 'Título', 'Ideia', 'Justificativa', 'DESK'];
+            const linhas = filtradas.map(i => [
+                formatarDataBR(i.data),
+                i.sistema,
+                i.modulo,
+                i.titulo,
+                i.texto,
+                i.justificativa || '',
+                i.desk || ''
+            ]);
+
+            doc.autoTable({
+                head: [colunas],
+                body: linhas,
+                theme: 'grid',
+                headStyles: {
+                    fillColor: [2, 114, 126],
+                    textColor: [255, 255, 255],
+                    fontStyle: 'bold',
+                    fontSize: 8,
+                    halign: 'center'
+                },
+                bodyStyles: {
+                    textColor: [30, 30, 40],
+                    fontSize: 7,
+                    lineColor: [200, 200, 200],
+                    lineWidth: 0.3
+                },
+                alternateRowStyles: {
+                    fillColor: [245, 247, 250]
+                },
+                styles: {
+                    font: 'helvetica',
+                    overflow: 'linebreak',
+                    cellPadding: 2
+                },
+                columnStyles: {
+                    0: { cellWidth: 18 },
+                    1: { cellWidth: 20 },
+                    2: { cellWidth: 22 },
+                    3: { cellWidth: 35 },
+                    4: { cellWidth: 'auto' },
+                    5: { cellWidth: 'auto' },
+                    6: { cellWidth: 18 }
+                },
+                margin: { top: 15, right: 8, bottom: 15, left: 8 },
+                pageBreak: 'auto',
+                didDrawPage: (data) => {
+                    doc.setFontSize(7);
+                    doc.setTextColor(120, 120, 120);
+                    doc.text('Relatório de Ideias - ' + new Date().toLocaleDateString('pt-BR'), data.settings.margin.left, 8);
+                }
+            });
+
+            doc.save('relatorio-ideias.pdf');
         }
 
         function exportarXLS() {
