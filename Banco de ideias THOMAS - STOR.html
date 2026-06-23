@@ -167,6 +167,10 @@
                     <label style="display:block;font-size:13px;font-weight:600;color:#c1c9d4;margin-bottom:6px;">Ideia (Detalhes)</label>
                     <textarea id="ideia-texto" rows="6" class="input-field w-full p-3" placeholder="Descreva detalhadamente a sua ideia aqui..." required></textarea>
                 </div>
+                <div>
+                    <label style="display:block;font-size:13px;font-weight:600;color:#c1c9d4;margin-bottom:6px;">Justificativa</label>
+                    <textarea id="ideia-justificativa" rows="4" class="input-field w-full p-3" placeholder="Por que esta ideia é necessária?"></textarea>
+                </div>
                 <div style="display:flex;gap:12px;">
                     <button type="submit" class="btn-success">SALVAR</button>
                     <button type="button" id="btn-cancelar-ideia" class="hidden btn-cancel">Cancelar</button>
@@ -183,6 +187,7 @@
                             <th>Data</th>
                             <th>Sistema/Módulo</th>
                             <th>Título/Ideia</th>
+                            <th>Justificativa</th>
                             <th>Cód. DESK</th>
                             <th style="text-align:right;">Ações</th>
                         </tr>
@@ -235,11 +240,12 @@
                             <th>Módulo</th>
                             <th>Título</th>
                             <th>Ideia</th>
+                            <th>Justificativa</th>
                             <th>Cód. DESK</th>
                         </tr>
                     </thead>
                     <tbody id="lista-relatorio">
-                        <tr><td colspan="6" style="text-align:center;color:#8b949e;padding:24px;font-size:13px;">Aplique os filtros e clique em Filtrar.</td></tr>
+                        <tr><td colspan="7" style="text-align:center;color:#8b949e;padding:24px;font-size:13px;">Aplique os filtros e clique em Filtrar.</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -484,14 +490,15 @@
             const modulo = document.getElementById('ideia-modulo').value;
             const titulo = document.getElementById('ideia-titulo').value.trim();
             const texto = document.getElementById('ideia-texto').value.trim();
+            const justificativa = document.getElementById('ideia-justificativa').value.trim();
 
             try {
                 if (firebaseId) {
-                    await updateDoc(doc(db, "banco_ideias_ideias", firebaseId), { data, sistema, modulo, titulo, texto });
+                    await updateDoc(doc(db, "banco_ideias_ideias", firebaseId), { data, sistema, modulo, titulo, texto, justificativa });
                     cancelarEdicao();
                     switchTab('ideias');
                 } else {
-                    await addDoc(collection(db, "banco_ideias_ideias"), { data, sistema, modulo, titulo, texto, desk: '' });
+                    await addDoc(collection(db, "banco_ideias_ideias"), { data, sistema, modulo, titulo, texto, justificativa, desk: '' });
                     cancelarEdicao();
                 }
             } catch(e) {
@@ -513,6 +520,7 @@
             
             document.getElementById('ideia-titulo').value = ideia.titulo;
             document.getElementById('ideia-texto').value = ideia.texto;
+            document.getElementById('ideia-justificativa').value = ideia.justificativa || '';
 
             document.getElementById('btn-cancelar-ideia').classList.remove('hidden');
             switchTab('nova-ideia');
@@ -547,7 +555,7 @@
             lista.innerHTML = '';
 
             if (ideias.length === 0) {
-                lista.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#8b949e;padding:24px;font-size:13px;">Nenhuma ideia registrada ainda.</td></tr>`;
+                lista.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#8b949e;padding:24px;font-size:13px;">Nenhuma ideia registrada ainda.</td></tr>`;
                 return;
             }
 
@@ -565,6 +573,7 @@
                             <div style="font-weight:700;">${i.titulo}</div>
                             <div style="color:#8b949e;font-size:12px;margin-top:4px;white-space:pre-line;">${i.texto}</div>
                         </td>
+                        <td style="max-width:200px;color:#a3b3c6;font-size:12px;white-space:pre-line;">${i.justificativa || '<span style="color:#6b7280;font-style:italic;">—</span>'}</td>
                         <td>
                             <span class="${i.desk ? 'badge-desk' : 'badge-desk-empty'}">
                                 ${i.desk || 'Nenhum'}
@@ -644,7 +653,7 @@
             const filtradas = getIdeiasFiltradas();
 
             if (filtradas.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#8b949e;padding:24px;font-size:13px;">Nenhum resultado encontrado.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:#8b949e;padding:24px;font-size:13px;">Nenhum resultado encontrado.</td></tr>`;
                 return;
             }
 
@@ -657,6 +666,7 @@
                         <td style="color:#8b949e;">${i.modulo}</td>
                         <td style="font-weight:700;">${i.titulo}</td>
                         <td style="color:#8b949e;font-size:12px;white-space:pre-line;">${i.texto}</td>
+                        <td style="color:#a3b3c6;font-size:12px;white-space:pre-line;">${i.justificativa || '—'}</td>
                         <td>${i.desk ? `<span class="badge-desk">${i.desk}</span>` : '<span style="color:#6b7280;font-size:12px;">—</span>'}</td>
                     </tr>
                 `;
@@ -680,9 +690,9 @@
             const filtradas = getIdeiasFiltradas();
             if (filtradas.length === 0) { alert('Nenhum dado para exportar.'); return; }
 
-            let html = `<table><tr><th>Data</th><th>Sistema</th><th>Módulo</th><th>Título</th><th>Ideia</th><th>DESK</th></tr>`;
+            let html = `<table><tr><th>Data</th><th>Sistema</th><th>Módulo</th><th>Título</th><th>Ideia</th><th>Justificativa</th><th>DESK</th></tr>`;
             filtradas.forEach(i => {
-                html += `<tr><td>${i.data}</td><td>${i.sistema}</td><td>${i.modulo}</td><td>${i.titulo}</td><td>${i.texto}</td><td>${i.desk || ''}</td></tr>`;
+                html += `<tr><td>${i.data}</td><td>${i.sistema}</td><td>${i.modulo}</td><td>${i.titulo}</td><td>${i.texto}</td><td>${i.justificativa || ''}</td><td>${i.desk || ''}</td></tr>`;
             });
             html += `</table>`;
 
@@ -722,6 +732,7 @@
                 linhas += `Módulo : ${i.modulo}\n`;
                 linhas += `Título : ${i.titulo}\n`;
                 linhas += `Ideia  : ${i.texto}\n`;
+                linhas += `Justif : ${i.justificativa || '—'}\n`;
                 linhas += `DESK   : ${i.desk || '—'}\n`;
                 linhas += '-'.repeat(40) + '\n\n';
             });
