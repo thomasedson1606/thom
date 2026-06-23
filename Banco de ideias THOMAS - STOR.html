@@ -339,6 +339,7 @@
             window.parametros = parametros;
             renderizarParametros();
             atualizarModulosDropdown();
+            atualizarModulosRelatorio();
         });
 
         onSnapshot(collection(db, "banco_ideias_ideias"), (snapshot) => {
@@ -623,14 +624,12 @@
             const combo = document.getElementById('rel-modulo');
             combo.innerHTML = '<option value="">Todos</option>';
 
-            if (!sistema) return;
-
             const filtrados = parametros
-                .filter(p => p.sistema === sistema)
+                .filter(p => !sistema || p.sistema === sistema)
                 .sort((a, b) => a.modulo.localeCompare(b.modulo, 'pt-BR'));
 
             filtrados.forEach(p => {
-                combo.innerHTML += `<option value="${p.modulo}">${p.modulo}</option>`;
+                combo.innerHTML += `<option value="${p.modulo}">${p.modulo} (${p.sistema})</option>`;
             });
         }
 
