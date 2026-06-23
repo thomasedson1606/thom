@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Banco de Ideias (STOR Sistemas) - Thomas Tech</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * { font-family: 'Inter', sans-serif; }
@@ -83,9 +85,10 @@
             <div class="flex justify-between items-center h-16">
                 <span class="text-xl font-bold tracking-wide" style="color:#e1e7ef;">Banco de Ideias <span style="color:#06b6d4;">(STOR Sistemas)</span></span>
                 <div class="flex space-x-2">
-                    <button onclick="switchTab('parametros')" id="btn-parametros" class="tab-btn">Parâmetros</button>
-                    <button onclick="switchTab('nova-ideia')" id="btn-nova-ideia" class="tab-btn">Nova Ideia</button>
-                    <button onclick="switchTab('ideias')" id="btn-ideias" class="tab-btn active">Ideias</button>
+                    <button id="btn-parametros" class="tab-btn">Parâmetros</button>
+                    <button id="btn-nova-ideia" class="tab-btn">Nova Ideia</button>
+                    <button id="btn-ideias" class="tab-btn active">Ideias</button>
+                    <button id="btn-relatorio" class="tab-btn">Relatório</button>
                 </div>
             </div>
         </div>
@@ -95,7 +98,8 @@
         
         <section id="tab-parametros" class="tab-content hidden app-content p-6">
             <h2 style="font-size:22px;font-weight:800;margin-bottom:20px;padding-bottom:8px;border-bottom:1px solid #222a35;color:#e1e7ef;">Configuração de Parâmetros</h2>
-            <form id="form-parametros" onsubmit="salvarParametro(event)" class="space-y-4 max-w-md">
+            <form id="form-parametros" class="space-y-4 max-w-md">
+                <input type="hidden" id="param-id">
                 <div>
                     <label style="display:block;font-size:13px;font-weight:600;color:#c1c9d4;margin-bottom:6px;">Sistema</label>
                     <select id="param-sistema" class="input-field w-full p-3" required>
@@ -107,7 +111,10 @@
                     <label style="display:block;font-size:13px;font-weight:600;color:#c1c9d4;margin-bottom:6px;">Nome do Módulo</label>
                     <input type="text" id="param-modulo" class="input-field w-full p-3" placeholder="Ex: Financeiro, Estoque..." required>
                 </div>
-                <button type="submit" class="btn-primary">Cadastrar Módulo</button>
+                <div style="display:flex;gap:12px;">
+                    <button type="submit" class="btn-primary" id="btn-salvar-param">Cadastrar Módulo</button>
+                    <button type="button" id="btn-cancelar-param" class="hidden btn-cancel">Cancelar</button>
+                </div>
             </form>
 
             <div class="mt-8">
@@ -130,7 +137,7 @@
 
         <section id="tab-nova-ideia" class="tab-content hidden app-content p-6">
             <h2 id="titulo-form-ideia" style="font-size:22px;font-weight:800;margin-bottom:20px;padding-bottom:8px;border-bottom:1px solid #222a35;color:#e1e7ef;">Adicionar Nova Ideia</h2>
-            <form id="form-ideia" onsubmit="salvarIdeia(event)" class="space-y-4 max-w-2xl">
+            <form id="form-ideia" class="space-y-4 max-w-2xl">
                 <input type="hidden" id="ideia-id">
                 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;">
                     <div>
@@ -139,7 +146,7 @@
                     </div>
                     <div>
                         <label style="display:block;font-size:13px;font-weight:600;color:#c1c9d4;margin-bottom:6px;">Sistema</label>
-                        <select id="ideia-sistema" onchange="atualizarModulosDropdown()" class="input-field w-full p-3" required>
+                        <select id="ideia-sistema" class="input-field w-full p-3" required>
                             <option value="">Selecione...</option>
                             <option value="STOR">STOR</option>
                             <option value="STOR AGRO">STOR AGRO</option>
@@ -162,7 +169,7 @@
                 </div>
                 <div style="display:flex;gap:12px;">
                     <button type="submit" class="btn-success">SALVAR</button>
-                    <button type="button" onclick="cancelarEdicao()" id="btn-cancelar-ideia" class="hidden btn-cancel">Cancelar</button>
+                    <button type="button" id="btn-cancelar-ideia" class="hidden btn-cancel">Cancelar</button>
                 </div>
             </form>
         </section>
@@ -185,6 +192,58 @@
                 </table>
             </div>
         </section>
+
+        <section id="tab-relatorio" class="tab-content hidden app-content p-6">
+            <h2 style="font-size:22px;font-weight:800;margin-bottom:20px;padding-bottom:8px;border-bottom:1px solid #222a35;color:#e1e7ef;">Relatório de Ideias</h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:20px;">
+                <div>
+                    <label style="display:block;font-size:13px;font-weight:600;color:#c1c9d4;margin-bottom:6px;">Data Início</label>
+                    <input type="date" id="rel-data-inicio" class="input-field w-full p-3">
+                </div>
+                <div>
+                    <label style="display:block;font-size:13px;font-weight:600;color:#c1c9d4;margin-bottom:6px;">Data Fim</label>
+                    <input type="date" id="rel-data-fim" class="input-field w-full p-3">
+                </div>
+                <div>
+                    <label style="display:block;font-size:13px;font-weight:600;color:#c1c9d4;margin-bottom:6px;">Sistema</label>
+                    <select id="rel-sistema" class="input-field w-full p-3">
+                        <option value="">Todos</option>
+                        <option value="STOR">STOR</option>
+                        <option value="STOR AGRO">STOR AGRO</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display:block;font-size:13px;font-weight:600;color:#c1c9d4;margin-bottom:6px;">Módulo</label>
+                    <select id="rel-modulo" class="input-field w-full p-3">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
+                <button id="btn-filtrar-rel" class="btn-primary">Filtrar</button>
+                <button id="btn-export-pdf" class="btn-desk">Exportar PDF</button>
+                <button id="btn-export-xls" class="btn-edit">Exportar XLS</button>
+                <button id="btn-export-img" class="btn-primary" style="background:#5b21b6;">Exportar IMAGEM</button>
+                <button id="btn-export-txt" class="btn-delete">Exportar TXT</button>
+            </div>
+            <div id="relatorio-resultados" style="overflow-x:auto;">
+                <table id="tabela-relatorio" style="width:100%;border:1px solid #222a35;border-radius:8px;overflow:hidden;">
+                    <thead style="background:#0d1219;">
+                        <tr>
+                            <th>Data</th>
+                            <th>Sistema</th>
+                            <th>Módulo</th>
+                            <th>Título</th>
+                            <th>Ideia</th>
+                            <th>Cód. DESK</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-relatorio">
+                        <tr><td colspan="6" style="text-align:center;color:#8b949e;padding:24px;font-size:13px;">Aplique os filtros e clique em Filtrar.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </main>
 
     <div id="modal-desk" class="fixed inset-0 modal-overlay hidden flex items-center justify-center p-4">
@@ -196,8 +255,8 @@
                 <input type="text" id="modal-desk-codigo" class="input-field w-full p-3" placeholder="Ex: DSK-1234">
             </div>
             <div style="display:flex;justify-content:flex-end;gap:8px;">
-                <button onclick="fecharModalDesk()" class="btn-cancel">Cancelar</button>
-                <button onclick="salvarModalDesk()" class="btn-primary">Salvar</button>
+                <button id="btn-modal-cancelar" class="btn-cancel">Cancelar</button>
+                <button id="btn-modal-salvar" class="btn-primary">Salvar</button>
             </div>
         </div>
     </div>
@@ -218,32 +277,53 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
+        try { getAnalytics(app); } catch(e) { console.warn('Analytics não disponível:', e); }
         const db = getFirestore(app);
 
         let parametros = [];
         let ideias = [];
 
-        // Expor funções ao HTML (onclick, onsubmit, onchange)
-        window.parametros = parametros;
-        window.ideias = ideias;
-        window.switchTab = switchTab;
-        window.salvarParametro = salvarParametro;
+        // Expor funções chamadas de template literals (render)
         window.excluirParametro = excluirParametro;
-        window.salvarIdeia = salvarIdeia;
+        window.editarParametro = editarParametro;
         window.editarIdeia = editarIdeia;
         window.excluirIdeia = excluirIdeia;
-        window.cancelarEdicao = cancelarEdicao;
-        window.atualizarModulosDropdown = atualizarModulosDropdown;
         window.abrirModalDesk = abrirModalDesk;
         window.fecharModalDesk = fecharModalDesk;
         window.salvarModalDesk = salvarModalDesk;
+        window.cancelarEdicao = cancelarEdicao;
+        window.atualizarModulosDropdown = atualizarModulosDropdown;
+        window.atualizarModulosRelatorio = atualizarModulosRelatorio;
+        window.filtrarRelatorio = filtrarRelatorio;
+        window.exportarPDF = exportarPDF;
+        window.exportarXLS = exportarXLS;
+        window.exportarIMG = exportarIMG;
+        window.exportarTXT = exportarTXT;
 
         // Inicialização do sistema ao carregar a página
         definirDataAtual();
         switchTab('ideias');
         renderizarParametros();
         renderizarIdeias();
+
+        // Event listeners estáticos
+        document.getElementById('btn-parametros').addEventListener('click', () => switchTab('parametros'));
+        document.getElementById('btn-nova-ideia').addEventListener('click', () => switchTab('nova-ideia'));
+        document.getElementById('btn-ideias').addEventListener('click', () => switchTab('ideias'));
+        document.getElementById('btn-relatorio').addEventListener('click', () => switchTab('relatorio'));
+        document.getElementById('form-parametros').addEventListener('submit', salvarParametro);
+        document.getElementById('form-ideia').addEventListener('submit', salvarIdeia);
+        document.getElementById('ideia-sistema').addEventListener('change', atualizarModulosDropdown);
+        document.getElementById('btn-cancelar-ideia').addEventListener('click', cancelarEdicao);
+        document.getElementById('btn-cancelar-param').addEventListener('click', cancelarEdicaoParametro);
+        document.getElementById('btn-modal-cancelar').addEventListener('click', fecharModalDesk);
+        document.getElementById('btn-modal-salvar').addEventListener('click', salvarModalDesk);
+        document.getElementById('rel-sistema').addEventListener('change', atualizarModulosRelatorio);
+        document.getElementById('btn-filtrar-rel').addEventListener('click', filtrarRelatorio);
+        document.getElementById('btn-export-pdf').addEventListener('click', exportarPDF);
+        document.getElementById('btn-export-xls').addEventListener('click', exportarXLS);
+        document.getElementById('btn-export-img').addEventListener('click', exportarIMG);
+        document.getElementById('btn-export-txt').addEventListener('click', exportarTXT);
 
         // Listeners em tempo real
         onSnapshot(collection(db, "banco_ideias_parametros"), (snapshot) => {
@@ -267,7 +347,7 @@
             document.getElementById('tab-' + tabId).classList.remove('hidden');
 
             // Resetar estilos dos botões do menu
-            ['parametros', 'nova-ideia', 'ideias'].forEach(id => {
+            ['parametros', 'nova-ideia', 'ideias', 'relatorio'].forEach(id => {
                 const btn = document.getElementById('btn-' + id);
                 if (id === tabId) {
                     btn.classList.add('active');
@@ -292,28 +372,60 @@
         // ==========================================
         async function salvarParametro(e) {
             e.preventDefault();
+            const paramId = document.getElementById('param-id').value;
             const sistema = document.getElementById('param-sistema').value;
             const modulo = document.getElementById('param-modulo').value.trim();
 
-            const existe = parametros.some(p => p.sistema === sistema && p.modulo.toLowerCase() === modulo.toLowerCase());
+            const existe = parametros.some(p =>
+                p.firebaseId !== paramId &&
+                p.sistema === sistema &&
+                p.modulo.toLowerCase() === modulo.toLowerCase()
+            );
             if (existe) {
                 alert('Este módulo já está cadastrado para este sistema!');
                 return;
             }
 
             try {
-                await addDoc(collection(db, "banco_ideias_parametros"), { sistema, modulo });
-                document.getElementById('form-parametros').reset();
-                document.getElementById('param-sistema').value = 'STOR';
+                if (paramId) {
+                    await updateDoc(doc(db, "banco_ideias_parametros", paramId), { sistema, modulo });
+                    cancelarEdicaoParametro();
+                } else {
+                    await addDoc(collection(db, "banco_ideias_parametros"), { sistema, modulo });
+                    document.getElementById('form-parametros').reset();
+                    document.getElementById('param-sistema').value = 'STOR';
+                }
             } catch(e) {
-                alert('Erro ao cadastrar: ' + e);
+                alert('Erro ao salvar: ' + e);
             }
+        }
+
+        function editarParametro(firebaseId) {
+            const param = parametros.find(p => p.firebaseId === firebaseId);
+            if (!param) return;
+
+            document.getElementById('param-id').value = param.firebaseId;
+            document.getElementById('param-sistema').value = param.sistema;
+            document.getElementById('param-modulo').value = param.modulo;
+            document.getElementById('btn-salvar-param').innerText = 'Atualizar Módulo';
+            document.getElementById('btn-cancelar-param').classList.remove('hidden');
+        }
+
+        function cancelarEdicaoParametro() {
+            document.getElementById('param-id').value = '';
+            document.getElementById('form-parametros').reset();
+            document.getElementById('param-sistema').value = 'STOR';
+            document.getElementById('btn-salvar-param').innerText = 'Cadastrar Módulo';
+            document.getElementById('btn-cancelar-param').classList.add('hidden');
         }
 
         async function excluirParametro(firebaseId) {
             if (confirm('Deseja realmente excluir este parâmetro?')) {
                 try {
                     await deleteDoc(doc(db, "banco_ideias_parametros", firebaseId));
+                    if (document.getElementById('param-id').value === firebaseId) {
+                        cancelarEdicaoParametro();
+                    }
                 } catch(e) {
                     alert('Erro ao excluir: ' + e);
                 }
@@ -335,6 +447,7 @@
                         <td style="font-weight:700;">${p.sistema}</td>
                         <td style="color:#8b949e;">${p.modulo}</td>
                         <td style="text-align:right;">
+                            <button onclick="editarParametro('${p.firebaseId}')" class="btn-edit">Editar</button>
                             <button onclick="excluirParametro('${p.firebaseId}')" class="btn-delete">Excluir</button>
                         </td>
                     </tr>
@@ -347,7 +460,9 @@
             const comboModulo = document.getElementById('ideia-modulo');
             comboModulo.innerHTML = '<option value="">Selecione...</option>';
 
-            const filtrados = parametros.filter(p => p.sistema === sistemaSelecionado);
+            const filtrados = parametros
+                .filter(p => p.sistema === sistemaSelecionado)
+                .sort((a, b) => a.modulo.localeCompare(b.modulo, 'pt-BR'));
             
             if (filtrados.length === 0 && sistemaSelecionado !== "") {
                 comboModulo.innerHTML = '<option value="">Nenhum módulo cadastrado para este sistema</option>';
@@ -488,6 +603,136 @@
             } catch(e) {
                 alert('Erro ao salvar código DESK: ' + e);
             }
+        }
+
+        // ==========================================
+        // LÓGICA DO RELATÓRIO
+        // ==========================================
+        function atualizarModulosRelatorio() {
+            const sistema = document.getElementById('rel-sistema').value;
+            const combo = document.getElementById('rel-modulo');
+            combo.innerHTML = '<option value="">Todos</option>';
+
+            if (!sistema) return;
+
+            const filtrados = parametros
+                .filter(p => p.sistema === sistema)
+                .sort((a, b) => a.modulo.localeCompare(b.modulo, 'pt-BR'));
+
+            filtrados.forEach(p => {
+                combo.innerHTML += `<option value="${p.modulo}">${p.modulo}</option>`;
+            });
+        }
+
+        function getIdeiasFiltradas() {
+            const dataInicio = document.getElementById('rel-data-inicio').value;
+            const dataFim = document.getElementById('rel-data-fim').value;
+            const sistema = document.getElementById('rel-sistema').value;
+            const modulo = document.getElementById('rel-modulo').value;
+
+            return ideias.filter(i => {
+                if (dataInicio && i.data < dataInicio) return false;
+                if (dataFim && i.data > dataFim) return false;
+                if (sistema && i.sistema !== sistema) return false;
+                if (modulo && i.modulo !== modulo) return false;
+                return true;
+            }).sort((a, b) => new Date(b.data) - new Date(a.data));
+        }
+
+        function filtrarRelatorio() {
+            const tbody = document.getElementById('lista-relatorio');
+            const filtradas = getIdeiasFiltradas();
+
+            if (filtradas.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#8b949e;padding:24px;font-size:13px;">Nenhum resultado encontrado.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = '';
+            filtradas.forEach(i => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="color:#8b949e;white-space:nowrap;">${formatarDataBR(i.data)}</td>
+                        <td><span class="badge-sistema">${i.sistema}</span></td>
+                        <td style="color:#8b949e;">${i.modulo}</td>
+                        <td style="font-weight:700;">${i.titulo}</td>
+                        <td style="color:#8b949e;font-size:12px;white-space:pre-line;">${i.texto}</td>
+                        <td>${i.desk ? `<span class="badge-desk">${i.desk}</span>` : '<span style="color:#6b7280;font-size:12px;">—</span>'}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function exportarPDF() {
+            const element = document.getElementById('tabela-relatorio');
+            if (!element) return;
+            const opt = {
+                margin: 8,
+                filename: 'relatorio-ideias.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+
+        function exportarXLS() {
+            const filtradas = getIdeiasFiltradas();
+            if (filtradas.length === 0) { alert('Nenhum dado para exportar.'); return; }
+
+            let html = `<table><tr><th>Data</th><th>Sistema</th><th>Módulo</th><th>Título</th><th>Ideia</th><th>DESK</th></tr>`;
+            filtradas.forEach(i => {
+                html += `<tr><td>${i.data}</td><td>${i.sistema}</td><td>${i.modulo}</td><td>${i.titulo}</td><td>${i.texto}</td><td>${i.desk || ''}</td></tr>`;
+            });
+            html += `</table>`;
+
+            const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'relatorio-ideias.xls';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function exportarIMG() {
+            const element = document.getElementById('relatorio-resultados');
+            if (!element) return;
+            html2canvas(element, { scale: 2, backgroundColor: '#0b0f14' }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'relatorio-ideias.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+        function exportarTXT() {
+            const filtradas = getIdeiasFiltradas();
+            if (filtradas.length === 0) { alert('Nenhum dado para exportar.'); return; }
+
+            let linhas = `Relatório de Ideias - ${new Date().toLocaleDateString('pt-BR')}\n`;
+            linhas += `Data Início: ${document.getElementById('rel-data-inicio').value || '—'}  |  Data Fim: ${document.getElementById('rel-data-fim').value || '—'}  |  Sistema: ${document.getElementById('rel-sistema').value || 'Todos'}  |  Módulo: ${document.getElementById('rel-modulo').value || 'Todos'}\n`;
+            linhas += `Total de registros: ${filtradas.length}\n`;
+            linhas += '='.repeat(80) + '\n\n';
+
+            filtradas.forEach((i, idx) => {
+                linhas += `#${idx + 1}\n`;
+                linhas += `Data   : ${formatarDataBR(i.data)}\n`;
+                linhas += `Sistema: ${i.sistema}\n`;
+                linhas += `Módulo : ${i.modulo}\n`;
+                linhas += `Título : ${i.titulo}\n`;
+                linhas += `Ideia  : ${i.texto}\n`;
+                linhas += `DESK   : ${i.desk || '—'}\n`;
+                linhas += '-'.repeat(40) + '\n\n';
+            });
+
+            const blob = new Blob([linhas], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'relatorio-ideias.txt';
+            a.click();
+            URL.revokeObjectURL(url);
         }
     </script>
 </body>
