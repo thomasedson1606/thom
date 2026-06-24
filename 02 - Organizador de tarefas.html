@@ -104,24 +104,62 @@
     </div>
 
     <script>
+        const STORAGE_KEY = 'organizador_tarefas';
         const columns = document.querySelectorAll('.task-list');
+        let taskIdCounter = 0;
+
+        function loadTasks() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : [];
+        }
+
+        function saveTasks(tasks) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+        }
+
+        function getTasks() {
+            return loadTasks();
+        }
+
+        function setTasks(tasks) {
+            saveTasks(tasks);
+        }
+
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+        }
 
         function createTask() {
             const taskContent = prompt("Digite a descrição da nova tarefa:");
             if (taskContent && taskContent.trim() !== "") {
-                const taskCard = generateTaskElement(taskContent.trim());
-                document.getElementById('col-nova').appendChild(taskCard);
+                const tasks = getTasks();
+                const newTask = { id: generateId(), text: taskContent.trim(), status: 'nova' };
+                tasks.push(newTask);
+                setTasks(tasks);
+                renderAll();
             }
         }
 
-        function generateTaskElement(text) {
+        function renderAll() {
+            const tasks = getTasks();
+            ['nova', 'executando', 'finalizada'].forEach(status => {
+                const col = document.getElementById('col-' + status);
+                col.innerHTML = '';
+                tasks.filter(t => t.status === status).forEach(t => {
+                    col.appendChild(generateTaskElement(t));
+                });
+            });
+        }
+
+        function generateTaskElement(task) {
             const card = document.createElement('div');
             card.classList.add('task-card');
             card.setAttribute('draggable', 'true');
+            card.dataset.taskId = task.id;
             card.addEventListener('dragstart', () => card.classList.add('dragging'));
-            card.addEventListener('dragend', () => card.classList.remove('dragging'));
+            card.addEventListener('dragend', onDragEnd);
             card.innerHTML = `
-                <div class="task-text">${text}</div>
+                <div class="task-text">${task.text}</div>
                 <div class="task-actions">
                     <button class="btn-action btn-edit" onclick="editTask(this)">Editar</button>
                     <button class="btn-action btn-delete" onclick="deleteTask(this)">Excluir</button>
@@ -133,12 +171,42 @@
             const card = button.closest('.task-card');
             const textElement = card.querySelector('.task-text');
             const newText = prompt("Edite sua tarefa:", textElement.innerText);
-            if (newText && newText.trim() !== "") textElement.innerText = newText.trim();
+            if (newText && newText.trim() !== "") {
+                const tasks = getTasks();
+                const task = tasks.find(t => t.id === card.dataset.taskId);
+                if (task) {
+                    task.text = newText.trim();
+                    setTasks(tasks);
+                    renderAll();
+                }
+            }
         }
 
         function deleteTask(button) {
             if (confirm("Tem certeza que deseja excluir esta tarefa?")) {
-                button.closest('.task-card').remove();
+                const card = button.closest('.task-card');
+                const tasks = getTasks();
+                const idx = tasks.findIndex(t => t.id === card.dataset.taskId);
+                if (idx !== -1) {
+                    tasks.splice(idx, 1);
+                    setTasks(tasks);
+                    renderAll();
+                }
+            }
+        }
+
+        function onDragEnd() {
+            this.classList.remove('dragging');
+            const card = this;
+            const tasks = getTasks();
+            const task = tasks.find(t => t.id === card.dataset.taskId);
+            if (!task) return;
+
+            const parentCol = card.closest('.task-list');
+            const newStatus = parentCol.id.replace('col-', '');
+            if (task.status !== newStatus) {
+                task.status = newStatus;
+                setTasks(tasks);
             }
         }
 
@@ -146,6 +214,7 @@
             column.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 const draggingCard = document.querySelector('.dragging');
+                if (!draggingCard) return;
                 const afterElement = getDragAfterElement(column, e.clientY);
                 if (afterElement == null) column.appendChild(draggingCard);
                 else column.insertBefore(draggingCard, afterElement);
@@ -161,6 +230,9 @@
                 return closest;
             }, { offset: Number.NEGATIVE_INFINITY }).element;
         }
+
+        // Inicializar
+        renderAll();
     </script>
 <script>
 (function(){var t=localStorage.getItem('theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');function toggle(){var h=document.documentElement;if(h.getAttribute('data-theme')==='light'){h.removeAttribute('data-theme');localStorage.setItem('theme','dark');}else{h.setAttribute('data-theme','light');localStorage.setItem('theme','light');}}var nav=document.querySelector('nav')||document.querySelector('.nav-bar');if(nav){var btn=document.createElement('button');btn.innerHTML=document.documentElement.getAttribute('data-theme')==='light'?'🌙':'☀️';btn.style.cssText='background:none;border:none;cursor:pointer;font-size:18px;padding:2px 8px;margin-left:auto;line-height:1';btn.title='Alternar tema claro/escuro';btn.onclick=toggle;nav.appendChild(btn);}
