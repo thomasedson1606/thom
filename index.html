@@ -66,6 +66,20 @@
   .ambient-date{ font-size:13.5px; font-weight:700; color:var(--muted); text-transform:capitalize; margin-top:2px; }
   .ambient-weather{ display:inline-flex; align-items:center; gap:8px; margin-top:12px; padding:7px 14px; border-radius:999px; background:var(--border-soft); backdrop-filter:blur(10px); width:fit-content; font-size:12.5px; font-weight:700; color:var(--text); border:1px solid var(--border-soft); }
   .ambient-weather.is-hidden{ display:none; }
+  .ambient-row{ display:flex; align-items:flex-start; gap:28px; flex-wrap:wrap; }
+  .ambient-left{ flex-shrink:0; }
+
+  /* ---------- calendário compacto ---------- */
+  .ambient-cal{ flex-shrink:0; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:10px 12px 8px; min-width:200px; box-shadow:0 16px 32px -14px var(--shadow); }
+  .cal-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+  .cal-header .cal-mes{ font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:var(--text); }
+  .cal-nav{ background:none; border:none; color:var(--muted); cursor:pointer; font-size:14px; padding:0 4px; line-height:1; transition:color .12s; }
+  .cal-nav:hover{ color:var(--text); }
+  .cal-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:1px; }
+  .cal-dow{ font-size:9px; font-weight:700; text-transform:uppercase; color:var(--muted); text-align:center; padding:2px 0; }
+  .cal-num{ font-size:11px; font-weight:600; text-align:center; padding:3px 0; border-radius:4px; color:var(--muted); cursor:default; }
+  .cal-num.today{ background:var(--accent); color:#fff; font-weight:800; }
+  .cal-num.other{ opacity:.25; }
 
   /* ---------- desktop icons ---------- */
   .icon-grid{ position:relative; z-index:2; display:grid; grid-template-columns:repeat(auto-fill,96px); gap:14px 6px; justify-content:start; }
@@ -186,12 +200,24 @@
       </div>
 
       <div class="ambient">
-        <div class="ambient-clock">
-          <span class="h" id="clockTime">--:--</span><span class="s" id="clockSeconds">--</span>
-        </div>
-        <div class="ambient-date" id="clockDate">&nbsp;</div>
-        <div class="ambient-weather is-hidden" id="weatherWidget">
-          <span id="weatherIcon">🌡️</span><span id="weatherTemp">--°C</span><span id="weatherDesc" style="color:var(--muted); font-weight:600;"></span>
+        <div class="ambient-row">
+          <div class="ambient-left">
+            <div class="ambient-clock">
+              <span class="h" id="clockTime">--:--</span><span class="s" id="clockSeconds">--</span>
+            </div>
+            <div class="ambient-date" id="clockDate">&nbsp;</div>
+            <div class="ambient-weather is-hidden" id="weatherWidget">
+              <span id="weatherIcon">🌡️</span><span id="weatherTemp">--°C</span><span id="weatherDesc" style="color:var(--muted); font-weight:600;"></span>
+            </div>
+          </div>
+          <div class="ambient-cal" id="calendarWidget">
+            <div class="cal-header">
+              <button class="cal-nav" id="calPrev">◀</button>
+              <span class="cal-mes" id="calMesAno">--</span>
+              <button class="cal-nav" id="calNext">▶</button>
+            </div>
+            <div class="cal-grid" id="calGrid"></div>
+          </div>
         </div>
       </div>
 
@@ -299,7 +325,31 @@
     let dateStr = now.toLocaleDateString('pt-BR', { weekday:'long', day:'numeric', month:'long' });
     dateStr = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
     document.getElementById('clockDate').textContent = dateStr;
+    renderCalendar(now);
   }
+
+  /* ============ CALENDÁRIO ============ */
+  let calDate = new Date();
+  function renderCalendar(now){
+    const ano = calDate.getFullYear(), mes = calDate.getMonth();
+    document.getElementById('calMesAno').textContent =
+      new Intl.DateTimeFormat('pt-BR', { month:'long', year:'numeric' }).format(calDate).replace(/^./, c => c.toUpperCase());
+    const grid = document.getElementById('calGrid');
+    const diasSem = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+    let html = diasSem.map(d => `<span class="cal-dow">${d}</span>`).join('');
+    const primeiro = new Date(ano, mes, 1).getDay();
+    const ultimo = new Date(ano, mes + 1, 0).getDate();
+    const hoje = now ? `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}` : '';
+    for(let i = 0; i < primeiro; i++) html += '<span class="cal-num other"></span>';
+    for(let d = 1; d <= ultimo; d++){
+      const key = `${ano}-${mes}-${d}`;
+      const cls = key === hoje ? 'cal-num today' : 'cal-num';
+      html += `<span class="${cls}">${d}</span>`;
+    }
+    grid.innerHTML = html;
+  }
+  document.getElementById('calPrev').addEventListener('click', () => { calDate.setMonth(calDate.getMonth() - 1); renderCalendar(new Date()); });
+  document.getElementById('calNext').addEventListener('click', () => { calDate.setMonth(calDate.getMonth() + 1); renderCalendar(new Date()); });
 
   /* ============ CLIMA (Open-Meteo, sem chave de API) ============ */
   function weatherCodeInfo(code){
