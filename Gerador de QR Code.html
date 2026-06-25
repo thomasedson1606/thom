@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de QR Code - Thomas Tech</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <style>
+        * { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #0b0f14; color: #e1e7ef; margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+        .nav-bar { background: rgba(22,27,34,0.95); border-bottom: 1px solid #21262d; height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; width: 100%; box-sizing: border-box; }
+        .container { background: #12171f; border: 1px solid #222a35; border-radius: 12px; padding: 32px; margin: 32px auto; max-width: 520px; width: 90%; }
+        h2 { color: #06b6d4; font-size: 20px; margin: 0 0 8px; }
+        .sub { color: #8b949e; font-size: 13px; margin-bottom: 24px; }
+        .field { margin-bottom: 16px; }
+        .field label { display: block; font-size: 13px; font-weight: 600; color: #c1c9d4; margin-bottom: 5px; }
+        .field input, .field select { width: 100%; padding: 10px 12px; background: #0b0f14; border: 1px solid #222a35; color: #e1e7ef; border-radius: 8px; font-size: 14px; box-sizing: border-box; transition: border-color .15s; }
+        .field input:focus, .field select:focus { border-color: #06b6d4; box-shadow: 0 0 0 3px rgba(6,182,212,.15); outline: none; }
+        .field select { cursor: pointer; }
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .field-row .field { margin-bottom: 0; }
+        .color-input { display: flex; align-items: center; gap: 10px; }
+        .color-input input[type="color"] { width: 42px; height: 42px; padding: 2px; border: 1px solid #222a35; border-radius: 8px; background: #0b0f14; cursor: pointer; flex-shrink: 0; }
+        .color-input input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        .color-input input[type="color"]::-webkit-color-swatch { border: none; border-radius: 6px; }
+        .color-input span { font-size: 12px; color: #8b949e; font-family: monospace; }
+        .btn-gen { width: 100%; padding: 12px; font-size: 15px; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; background: #02727e; color: #fff; transition: background .15s; margin-top: 4px; }
+        .btn-gen:hover { background: #06b6d4; }
+        .btn-gen:disabled { opacity: .5; cursor: not-allowed; }
+        .preview-area { margin-top: 24px; text-align: center; display: none; }
+        .preview-area canvas { border-radius: 8px; max-width: 100%; height: auto; }
+        .preview-area .actions { display: flex; gap: 10px; margin-top: 16px; justify-content: center; flex-wrap: wrap; }
+        .btn-download { padding: 10px 20px; font-size: 13px; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; transition: background .15s; }
+        .btn-download.png { background: #1a7f4a; color: #fff; }
+        .btn-download.png:hover { background: #22c55e; }
+        .btn-download.svg { background: #1f1335; color: #a78bfa; border: 1px solid #3a2560; }
+        .btn-download.svg:hover { background: #2f1f4a; }
+        .error-msg { color: #f87171; font-size: 13px; margin-top: 6px; display: none; }
+        [data-theme="light"] body { background: #f4f5f7 !important; color: #172b4d !important; }
+        [data-theme="light"] .nav-bar { background: rgba(255,255,255,0.95) !important; border-color: #d1d5db !important; }
+        [data-theme="light"] .container { background: #ffffff !important; border-color: #dfe1e6 !important; }
+        [data-theme="light"] h2 { color: #0052cc !important; }
+        [data-theme="light"] .field label { color: #5e6c84 !important; }
+        [data-theme="light"] .field input, [data-theme="light"] .field select { background: #ffffff !important; border-color: #dfe1e6 !important; color: #172b4d !important; }
+        [data-theme="light"] .color-input input[type="color"] { background: #ffffff !important; }
+        [data-theme="light"] .sub { color: #5e6c84 !important; }
+        [data-theme="light"] .btn-gen { background: #0052cc !important; }
+        @media (max-width:500px) { .field-row { grid-template-columns: 1fr; } .container { padding: 20px; } }
+    </style>
+</head>
+<body>
+
+<div class="nav-bar">
+    <div style="display:flex;align-items:center;gap:16px;">
+        <a href="index.html" style="display:flex;align-items:center;gap:4px;color:#484f58;text-decoration:none;transition:color 0.2s;white-space:nowrap" onmouseover="this.style.color='#06b6d4'" onmouseout="this.style.color='#484f58'">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            <span style="font-size:10px;font-weight:700;letter-spacing:.05em;color:#06b6d4;margin-left:4px">← VOLTAR</span>
+        </a>
+        <span style="width:1px;height:20px;background:#21262d;flex-shrink:0"></span>
+        <span style="font-size:14px;font-weight:700;color:#e1e7ef">Gerador de QR Code</span>
+    </div>
+    <span style="font-size:10px;font-weight:700;color:#484f58">Thomas Tech</span>
+</div>
+
+<div class="container">
+    <h2>Gerador de QR Code</h2>
+    <div class="sub">Crie QR Codes de qualquer texto ou URL de forma fácil e gratuita.</div>
+
+    <div class="field">
+        <label>Texto ou URL</label>
+        <input type="text" id="qr-text" placeholder="Digite o texto ou cole uma URL..." value="https://github.com/thomasedson1606">
+    </div>
+
+    <div class="field-row">
+        <div class="field">
+            <label>Tamanho</label>
+            <select id="qr-size">
+                <option value="100">Pequeno (100×100)</option>
+                <option value="200">Médio (200×200)</option>
+                <option value="300" selected>Grande (300×300)</option>
+                <option value="500">Extra (500×500)</option>
+                <option value="800">Máximo (800×800)</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Correção de Erro</label>
+            <select id="qr-ec">
+                <option value="L">Baixa (L – 7%)</option>
+                <option value="M" selected>Média (M – 15%)</option>
+                <option value="Q">Alta (Q – 25%)</option>
+                <option value="H">Máxima (H – 30%)</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="field-row">
+        <div class="field">
+            <label>Cor do QR Code</label>
+            <div class="color-input">
+                <input type="color" id="qr-fg" value="#000000">
+                <span id="qr-fg-label">#000000</span>
+            </div>
+        </div>
+        <div class="field">
+            <label>Cor do Fundo</label>
+            <div class="color-input">
+                <input type="color" id="qr-bg" value="#ffffff">
+                <span id="qr-bg-label">#ffffff</span>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn-gen" id="btnGerar">GERAR QR CODE</button>
+    <div id="error-msg" class="error-msg">Digite um texto ou URL para gerar o QR Code.</div>
+
+    <div class="preview-area" id="previewArea">
+        <canvas id="qrCanvas"></canvas>
+        <div class="actions">
+            <button class="btn-download png" onclick="downloadPNG()">⬇ Baixar PNG</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const fgInput = document.getElementById('qr-fg');
+    const bgInput = document.getElementById('qr-bg');
+    fgInput.addEventListener('input', () => document.getElementById('qr-fg-label').textContent = fgInput.value);
+    bgInput.addEventListener('input', () => document.getElementById('qr-bg-label').textContent = bgInput.value);
+
+    document.getElementById('btnGerar').addEventListener('click', gerarQR);
+
+    document.getElementById('qr-text').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') gerarQR();
+    });
+
+    let ultimoDataURL = '';
+
+    async function gerarQR() {
+        const text = document.getElementById('qr-text').value.trim();
+        const errMsg = document.getElementById('error-msg');
+        const preview = document.getElementById('previewArea');
+
+        if (!text) {
+            errMsg.style.display = 'block';
+            preview.style.display = 'none';
+            return;
+        }
+        errMsg.style.display = 'none';
+
+        const size = parseInt(document.getElementById('qr-size').value);
+        const ec = document.getElementById('qr-ec').value;
+        const fg = fgInput.value;
+        const bg = bgInput.value;
+
+        const canvas = document.getElementById('qrCanvas');
+
+        try {
+            await QRCode.toCanvas(canvas, text, {
+                width: size,
+                margin: 2,
+                color: { dark: fg, light: bg },
+                errorCorrectionLevel: ec
+            });
+            preview.style.display = 'block';
+            ultimoDataURL = canvas.toDataURL('image/png');
+        } catch (e) {
+            errMsg.textContent = 'Erro ao gerar QR Code: ' + e.message;
+            errMsg.style.display = 'block';
+            preview.style.display = 'none';
+        }
+    }
+
+    function downloadPNG() {
+        if (!ultimoDataURL) return;
+        const link = document.createElement('a');
+        link.download = 'qrcode.png';
+        link.href = ultimoDataURL;
+        link.click();
+    }
+
+    gerarQR();
+</script>
+
+<script>
+(function(){
+    var t=localStorage.getItem('theme');
+    if(t==='light')document.documentElement.setAttribute('data-theme','light');
+    function toggle(){
+        var h=document.documentElement;
+        if(h.getAttribute('data-theme')==='light'){h.removeAttribute('data-theme');localStorage.setItem('theme','dark');}
+        else{h.setAttribute('data-theme','light');localStorage.setItem('theme','light');}
+    }
+    var nav=document.querySelector('.nav-bar');
+    if(nav){
+        var btn=document.createElement('button');
+        btn.innerHTML=document.documentElement.getAttribute('data-theme')==='light'?'🌙':'☀️';
+        btn.style.cssText='background:none;border:none;cursor:pointer;font-size:18px;padding:2px 8px;margin-left:auto;line-height:1;color:#484f58';
+        btn.title='Alternar tema';
+        btn.onclick=toggle;
+        nav.appendChild(btn);
+    }
+})();
+</script>
+</body>
+</html>
