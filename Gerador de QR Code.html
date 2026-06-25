@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerador de QR Code - Thomas Tech</title>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
     <style>
         * { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background: #0b0f14; color: #e1e7ef; margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
@@ -135,7 +135,7 @@
 
     let ultimoDataURL = '';
 
-    async function gerarQR() {
+    function gerarQR() {
         const text = document.getElementById('qr-text').value.trim();
         const errMsg = document.getElementById('error-msg');
         const preview = document.getElementById('previewArea');
@@ -148,19 +148,38 @@
         errMsg.style.display = 'none';
 
         const size = parseInt(document.getElementById('qr-size').value);
-        const ec = document.getElementById('qr-ec').value;
+        const ecMap = { L: 'L', M: 'M', Q: 'Q', H: 'H' };
+        const ec = ecMap[document.getElementById('qr-ec').value];
         const fg = fgInput.value;
         const bg = bgInput.value;
 
         const canvas = document.getElementById('qrCanvas');
 
         try {
-            await QRCode.toCanvas(canvas, text, {
-                width: size,
-                margin: 2,
-                color: { dark: fg, light: bg },
-                errorCorrectionLevel: ec
-            });
+            const typeNumber = text.length > 200 ? 10 : text.length > 80 ? 6 : 4;
+            const qr = qrcode(typeNumber, ec);
+            qr.addData(text);
+            qr.make();
+
+            const cellSize = Math.floor(size / (qr.getModuleCount() + 4));
+            const margin = 2;
+            const totalSize = (qr.getModuleCount() + margin * 2) * cellSize;
+            canvas.width = totalSize;
+            canvas.height = totalSize;
+            const ctx = canvas.getContext('2d');
+
+            ctx.fillStyle = bg;
+            ctx.fillRect(0, 0, totalSize, totalSize);
+
+            ctx.fillStyle = fg;
+            for (let r = 0; r < qr.getModuleCount(); r++) {
+                for (let c = 0; c < qr.getModuleCount(); c++) {
+                    if (qr.isDark(r, c)) {
+                        ctx.fillRect((c + margin) * cellSize, (r + margin) * cellSize, cellSize, cellSize);
+                    }
+                }
+            }
+
             preview.style.display = 'block';
             ultimoDataURL = canvas.toDataURL('image/png');
         } catch (e) {
