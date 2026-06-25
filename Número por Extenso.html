@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Número por Extenso - Thomas Tech</title>
+    <style>
+        * { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #0b0f14; color: #e1e7ef; margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+        .nav-bar { background: rgba(22,27,34,0.95); border-bottom: 1px solid #21262d; height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; width: 100%; box-sizing: border-box; }
+        .container { background: #12171f; border: 1px solid #222a35; border-radius: 12px; padding: 32px; margin: 32px auto; max-width: 520px; width: 90%; }
+        h2 { color: #06b6d4; font-size: 20px; margin: 0 0 8px; }
+        .sub { color: #8b949e; font-size: 13px; margin-bottom: 24px; }
+        .field { margin-bottom: 16px; }
+        .field label { display: block; font-size: 13px; font-weight: 600; color: #c1c9d4; margin-bottom: 5px; }
+        .field input, .field select { width: 100%; padding: 10px 12px; background: #0b0f14; border: 1px solid #222a35; color: #e1e7ef; border-radius: 8px; font-size: 14px; box-sizing: border-box; transition: border-color .15s; }
+        .field input:focus, .field select:focus { border-color: #06b6d4; box-shadow: 0 0 0 3px rgba(6,182,212,.15); outline: none; }
+        .field select { cursor: pointer; }
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .btn-gen { width: 100%; padding: 12px; font-size: 15px; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; background: #02727e; color: #fff; transition: background .15s; margin-top: 4px; }
+        .btn-gen:hover { background: #06b6d4; }
+        .result-box { background: #0b0f14; border: 1px solid #222a35; border-radius: 8px; padding: 16px; margin-top: 20px; font-size: 16px; line-height: 1.6; color: #e1e7ef; word-wrap: break-word; display: none; }
+        .result-box.show { display: block; }
+        .copy-btn { margin-top: 12px; padding: 8px 16px; font-size: 12px; font-weight: 700; border: none; border-radius: 6px; cursor: pointer; background: #2a3340; color: #e1e7ef; transition: background .15s; display: none; }
+        .copy-btn.show { display: inline-block; }
+        .copy-btn:hover { background: #3b4658; }
+        .copy-btn.copied { background: #1a7f4a; color: #fff; }
+        .error-msg { color: #f87171; font-size: 13px; margin-top: 6px; display: none; }
+        [data-theme="light"] body { background: #f4f5f7 !important; color: #172b4d !important; }
+        [data-theme="light"] .nav-bar { background: rgba(255,255,255,0.95) !important; border-color: #d1d5db !important; }
+        [data-theme="light"] .container { background: #ffffff !important; border-color: #dfe1e6 !important; }
+        [data-theme="light"] h2 { color: #0052cc !important; }
+        [data-theme="light"] .field label { color: #5e6c84 !important; }
+        [data-theme="light"] .field input, [data-theme="light"] .field select { background: #ffffff !important; border-color: #dfe1e6 !important; color: #172b4d !important; }
+        [data-theme="light"] .sub { color: #5e6c84 !important; }
+        [data-theme="light"] .btn-gen { background: #0052cc !important; }
+        [data-theme="light"] .result-box { background: #f4f5f7 !important; border-color: #dfe1e6 !important; color: #172b4d !important; }
+        [data-theme="light"] .copy-btn { background: #ebecf0 !important; color: #172b4d !important; }
+        [data-theme="light"] .copy-btn:hover { background: #dfe1e6 !important; }
+        [data-theme="light"] .copy-btn.copied { background: #1a7f4a !important; color: #fff !important; }
+        @media (max-width:500px) { .field-row { grid-template-columns: 1fr; } .container { padding: 20px; } }
+    </style>
+</head>
+<body>
+
+<div class="nav-bar">
+    <div style="display:flex;align-items:center;gap:16px;">
+        <a href="index.html" style="display:flex;align-items:center;gap:4px;color:#484f58;text-decoration:none;transition:color 0.2s;white-space:nowrap" onmouseover="this.style.color='#06b6d4'" onmouseout="this.style.color='#484f58'">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            <span style="font-size:10px;font-weight:700;letter-spacing:.05em;color:#06b6d4;margin-left:4px">← VOLTAR</span>
+        </a>
+        <span style="width:1px;height:20px;background:#21262d;flex-shrink:0"></span>
+        <span style="font-size:14px;font-weight:700;color:#e1e7ef">Número por Extenso</span>
+    </div>
+    <span style="font-size:10px;font-weight:700;color:#484f58">Thomas Tech</span>
+</div>
+
+<div class="container">
+    <h2>Número por Extenso</h2>
+    <div class="sub">Digite o número ou valor em reais e convertemos automaticamente para por extenso.</div>
+
+    <div class="field-row">
+        <div class="field">
+            <label>Unidade</label>
+            <select id="unidade">
+                <option value="monetaria">Monetária (Reais)</option>
+                <option value="numerica" selected>Numérica (Número Simples)</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Tipo de Letra</label>
+            <select id="tipo-letra">
+                <option value="minusculas">minúsculas</option>
+                <option value="maiusculas">MAIÚSCULAS</option>
+                <option value="capitalize" selected>Primeira Maiúscula</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="field">
+        <label>Digite o valor</label>
+        <input type="text" id="numero-input" placeholder="Ex: 123,45 ou 123.45" inputmode="decimal">
+    </div>
+
+    <button class="btn-gen" id="btnGerar">CONVERTER</button>
+    <div id="error-msg" class="error-msg">Digite um número válido.</div>
+
+    <div class="result-box" id="resultBox"></div>
+    <button class="copy-btn" id="copyBtn">📋 Copiar</button>
+</div>
+
+<script>
+    const unidadeEl = document.getElementById('unidade');
+    const tipoEl = document.getElementById('tipo-letra');
+    const inputEl = document.getElementById('numero-input');
+    const resultBox = document.getElementById('resultBox');
+    const copyBtn = document.getElementById('copyBtn');
+    const errorMsg = document.getElementById('error-msg');
+
+    document.getElementById('btnGerar').addEventListener('click', converter);
+    inputEl.addEventListener('keydown', function(e) { if (e.key === 'Enter') converter(); });
+
+    const unidades = ['', 'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove',
+        'dez', 'onze', 'doze', 'treze', 'quatorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove'
+    ];
+    const dezenas = ['', '', 'vinte', 'trinta', 'quarenta', 'cinquenta', 'sessenta', 'setenta', 'oitenta', 'noventa'];
+    const centenas = ['', 'cento', 'duzentos', 'trezentos', 'quatrocentos', 'quinhentos', 'seiscentos', 'setecentos', 'oitocentos', 'novecentos'];
+
+    function numeroPorExtenso(n) {
+        if (n === 0) return 'zero';
+        if (n < 0) return 'menos ' + numeroPorExtenso(-n);
+        let result = '';
+
+        const bilhoes = Math.floor(n / 1000000000);
+        n %= 1000000000;
+        const milhoes = Math.floor(n / 1000000);
+        n %= 1000000;
+        const milhares = Math.floor(n / 1000);
+        n %= 1000;
+
+        if (bilhoes > 0) {
+            result += (bilhoes === 1 ? 'um bilhão' : numeroPorExtenso(bilhoes) + ' bilhões') + ' ';
+        }
+        if (milhoes > 0) {
+            if (result) result += 'e ';
+            result += (milhoes === 1 ? 'um milhão' : numeroPorExtenso(milhoes) + ' milhões') + ' ';
+        }
+        if (milhares > 0) {
+            if (result) result += 'e ';
+            result += (milhares === 1 ? 'mil' : numeroPorExtenso(milhares) + ' mil') + ' ';
+        }
+
+        const cento = Math.floor(n / 100);
+        const dez = Math.floor((n % 100) / 10);
+        const uni = n % 10;
+
+        if (result && (cento > 0 || dez > 0 || uni > 0)) result += 'e ';
+
+        if (cento > 0) {
+            if (cento === 1 && dez === 0 && uni === 0) result += 'cem';
+            else result += centenas[cento] + (dez > 0 || uni > 0 ? ' e ' : '');
+        }
+        if (dez >= 2) {
+            result += dezenas[dez];
+            if (uni > 0) result += ' e ' + unidades[uni];
+        } else if (dez === 1) {
+            result += unidades[10 + uni];
+        } else if (uni > 0) {
+            result += unidades[uni];
+        }
+
+        return result.trim();
+    }
+
+    function aplicarCaso(texto, tipo) {
+        if (tipo === 'maiusculas') return texto.toUpperCase();
+        if (tipo === 'capitalize') return texto.charAt(0).toUpperCase() + texto.slice(1);
+        return texto;
+    }
+
+    function converter() {
+        let raw = inputEl.value.trim().replace(/\./g, '').replace(',', '.');
+        const num = parseFloat(raw);
+
+        if (isNaN(num) || raw === '') {
+            errorMsg.style.display = 'block';
+            resultBox.classList.remove('show');
+            copyBtn.classList.remove('show');
+            return;
+        }
+        errorMsg.style.display = 'none';
+
+        const unidade = unidadeEl.value;
+        const tipo = tipoEl.value;
+
+        let inteiro = Math.floor(Math.abs(num));
+        let centavos = Math.round((Math.abs(num) - inteiro) * 100);
+        let prefixo = num < 0 ? 'menos ' : '';
+
+        let extenso = '';
+
+        if (unidade === 'numerica') {
+            if (centavos > 0) {
+                const realInt = numeroPorExtenso(inteiro);
+                const realDec = numeroPorExtenso(centavos);
+                extenso = prefixo + (inteiro > 0 ? realInt : 'zero') + ' vírgula ' + realDec;
+            } else {
+                extenso = prefixo + numeroPorExtenso(inteiro);
+            }
+        } else {
+            const parteInt = inteiro > 0 ? numeroPorExtenso(inteiro) : 'zero';
+            let reaisStr = parteInt + ' ' + (inteiro === 1 ? 'real' : 'reais');
+            if (centavos > 0) {
+                const parteCent = numeroPorExtenso(centavos);
+                reaisStr += ' e ' + parteCent + ' ' + (centavos === 1 ? 'centavo' : 'centavos');
+            }
+            extenso = prefixo + reaisStr;
+        }
+
+            resultBox.textContent = aplicarCaso(extenso, tipo);
+        resultBox.classList.add('show');
+        copyBtn.classList.add('show');
+    }
+
+    copyBtn.addEventListener('click', function() {
+        const text = resultBox.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            this.textContent = '✓ Copiado!';
+            this.classList.add('copied');
+            setTimeout(() => { this.textContent = '📋 Copiar'; this.classList.remove('copied'); }, 2000);
+        });
+    });
+</script>
+
+<script>
+(function(){
+    var t=localStorage.getItem('theme');
+    if(t==='light')document.documentElement.setAttribute('data-theme','light');
+    function toggle(){
+        var h=document.documentElement;
+        if(h.getAttribute('data-theme')==='light'){h.removeAttribute('data-theme');localStorage.setItem('theme','dark');}
+        else{h.setAttribute('data-theme','light');localStorage.setItem('theme','light');}
+    }
+    var nav=document.querySelector('.nav-bar');
+    if(nav){
+        var btn=document.createElement('button');
+        btn.innerHTML=document.documentElement.getAttribute('data-theme')==='light'?'🌙':'☀️';
+        btn.style.cssText='background:none;border:none;cursor:pointer;font-size:18px;padding:2px 8px;margin-left:auto;line-height:1;color:#484f58';
+        btn.title='Alternar tema';
+        btn.onclick=toggle;
+        nav.appendChild(btn);
+    }
+})();
+</script>
+</body>
+</html>
