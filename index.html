@@ -103,7 +103,7 @@
   @keyframes winOpen{ from{ opacity:0; transform:scale(.96) translateY(10px); } to{ opacity:1; transform:scale(1) translateY(0); } }
   @keyframes winClose{ from{ opacity:1; transform:scale(1); } to{ opacity:0; transform:scale(.95); } }
   .os-window.minimized{ opacity:0 !important; transform:scale(.05) translateY(70vh); pointer-events:none; transition:transform .22s ease,opacity .2s ease; }
-  .os-window.maximized{ top:0 !important; left:0 !important; width:100% !important; height:100% !important; border-radius:0; }
+  .os-window.maximized{ top:0 !important; left:0 !important; width:100% !important; height:auto !important; bottom:60px !important; border-radius:0; }
   .os-window.focused{ box-shadow:0 40px 80px -22px var(--shadow), 0 0 0 1px var(--accent-2); }
   .os-titlebar{ display:flex; align-items:center; gap:8px; padding:0 6px 0 14px; height:42px; flex-shrink:0; background:var(--surface-2); border-bottom:1px solid var(--border); user-select:none; touch-action:none; }
   .os-title-icon{ font-size:15px; }
@@ -460,12 +460,14 @@
     }
 
     const small = isSmallScreen();
+    const maxH = window.innerHeight - 60;
     const w = small ? window.innerWidth : Math.min(760, Math.round(window.innerWidth * 0.68));
-    const h = small ? window.innerHeight - 60 : Math.min(600, Math.round(window.innerHeight * 0.76));
+    let h = small ? maxH : Math.min(600, Math.round(window.innerHeight * 0.76));
     const offset = (cascadeIndex % 6) * 26;
     cascadeIndex++;
-    const left = small ? 0 : 50 + offset;
-    const top = small ? 0 : 36 + offset;
+    let left = small ? 0 : 50 + offset;
+    let top = small ? 0 : 36 + offset;
+    if (!small && top + h > maxH) { h = maxH - top; if (h < 220) { top = 36; h = Math.min(600, maxH - 36); } }
 
     const el = document.createElement('div');
     el.className = 'os-window opening';
