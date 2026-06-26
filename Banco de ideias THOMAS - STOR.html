@@ -172,13 +172,6 @@
                     <label style="display:block;font-size:13px;font-weight:600;color:#c1c9d4;margin-bottom:6px;">Justificativa</label>
                     <textarea id="ideia-justificativa" rows="4" class="input-field w-full p-3" placeholder="Por que esta ideia é necessária?"></textarea>
                 </div>
-                <div>
-                    <label style="display:block;font-size:13px;font-weight:600;color:#c1c9d4;margin-bottom:6px;">Registrado</label>
-                    <select id="ideia-registrado" class="input-field w-full p-3">
-                        <option value="SIM">SIM</option>
-                        <option value="NÃO" selected>NÃO</option>
-                    </select>
-                </div>
                 <div style="display:flex;gap:12px;">
                     <button type="submit" class="btn-success">SALVAR</button>
                     <button type="button" id="btn-cancelar-ideia" class="hidden btn-cancel">Cancelar</button>
@@ -230,6 +223,14 @@
                     <label style="display:block;font-size:13px;font-weight:600;color:#c1c9d4;margin-bottom:6px;">Módulo</label>
                     <select id="rel-modulo" class="input-field w-full p-3">
                         <option value="">Todos</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display:block;font-size:13px;font-weight:600;color:#c1c9d4;margin-bottom:6px;">Registrado</label>
+                    <select id="rel-registrado" class="input-field w-full p-3">
+                        <option value="">Todos</option>
+                        <option value="SIM">SIM</option>
+                        <option value="NÃO">NÃO</option>
                     </select>
                 </div>
             </div>
@@ -308,6 +309,7 @@
         window.fecharModalDesk = fecharModalDesk;
         window.salvarModalDesk = salvarModalDesk;
         window.cancelarEdicao = cancelarEdicao;
+        window.toggleRegistrado = toggleRegistrado;
         window.atualizarModulosDropdown = atualizarModulosDropdown;
         window.atualizarModulosRelatorio = atualizarModulosRelatorio;
         window.filtrarRelatorio = filtrarRelatorio;
@@ -502,11 +504,10 @@
             const titulo = document.getElementById('ideia-titulo').value.trim();
             const texto = document.getElementById('ideia-texto').value.trim();
             const justificativa = document.getElementById('ideia-justificativa').value.trim();
-            const registrado = document.getElementById('ideia-registrado').value;
 
             try {
                 if (firebaseId) {
-                    await updateDoc(doc(db, "banco_ideias_ideias", firebaseId), { data, sistema, modulo, titulo, texto, justificativa, registrado });
+                    await updateDoc(doc(db, "banco_ideias_ideias", firebaseId), { data, sistema, modulo, titulo, texto, justificativa });
                     cancelarEdicao();
                     switchTab('ideias');
                 } else {
@@ -533,7 +534,6 @@
             document.getElementById('ideia-titulo').value = ideia.titulo;
             document.getElementById('ideia-texto').value = ideia.texto;
             document.getElementById('ideia-justificativa').value = ideia.justificativa || '';
-            document.getElementById('ideia-registrado').value = ideia.registrado || 'SIM';
 
             document.getElementById('btn-cancelar-ideia').classList.remove('hidden');
             switchTab('nova-ideia');
@@ -554,6 +554,15 @@
                 } catch(e) {
                     alert('Erro ao excluir: ' + e);
                 }
+            }
+        }
+
+        async function toggleRegistrado(firebaseId, valorAtual) {
+            const novoValor = valorAtual === 'SIM' ? 'NÃO' : 'SIM';
+            try {
+                await updateDoc(doc(db, "banco_ideias_ideias", firebaseId), { registrado: novoValor });
+            } catch(e) {
+                alert('Erro ao alterar: ' + e);
             }
         }
 
@@ -587,7 +596,7 @@
                             <div style="color:#8b949e;font-size:12px;margin-top:4px;white-space:pre-line;">${i.texto}</div>
                         </td>
                         <td style="max-width:200px;color:#a3b3c6;font-size:12px;white-space:pre-line;">${i.justificativa || '<span style="color:#6b7280;font-style:italic;">—</span>'}</td>
-                        <td><span class="badge-sistema" style="${i.registrado === 'NÃO' ? 'background:#3a1a1a;color:#f87171;' : ''}">${i.registrado || 'SIM'}</span></td>
+                        <td><span class="badge-sistema" style="cursor:pointer;${i.registrado === 'NÃO' ? 'background:#3a1a1a;color:#f87171;' : ''}" onclick="toggleRegistrado('${i.firebaseId}','${i.registrado || 'SIM'}')">${i.registrado || 'SIM'}</span></td>
                         <td>
                             <span class="${i.desk ? 'badge-desk' : 'badge-desk-empty'}">
                                 ${i.desk || 'Nenhum'}
@@ -650,12 +659,14 @@
             const dataFim = document.getElementById('rel-data-fim').value;
             const sistema = document.getElementById('rel-sistema').value;
             const modulo = document.getElementById('rel-modulo').value;
+            const registrado = document.getElementById('rel-registrado').value;
 
             return ideias.filter(i => {
                 if (dataInicio && i.data < dataInicio) return false;
                 if (dataFim && i.data > dataFim) return false;
                 if (sistema && i.sistema !== sistema) return false;
                 if (modulo && i.modulo !== modulo) return false;
+                if (registrado && (i.registrado || 'SIM') !== registrado) return false;
                 return true;
             }).sort((a, b) => new Date(b.data) - new Date(a.data));
         }
