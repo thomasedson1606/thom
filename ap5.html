@@ -120,18 +120,21 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
         import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyA_po9hvJqFPri_AI4uw73AiYb5BbspNjs",
-            authDomain: "thomas-teste-d7a3d.firebaseapp.com",
-            projectId: "thomas-teste-d7a3d",
-            storageBucket: "thomas-teste-d7a3d.firebasestorage.app",
-            messagingSenderId: "280109049625",
-            appId: "1:280109049625:web:487874357d0173797d0788"
+            apiKey: "AIzaSyChwvI5Wi_EYr3-RrBBTI95efq3RTmZecA",
+            authDomain: "aplicacoesthomas.firebaseapp.com",
+            projectId: "aplicacoesthomas",
+            storageBucket: "aplicacoesthomas.firebasestorage.app",
+            messagingSenderId: "555393128479",
+            appId: "1:555393128479:web:1ade6666d9cadc82499d2a",
+            measurementId: "G-XZGJZSKV3P"
         };
 
         const app = initializeApp(firebaseConfig);
+        try { getAnalytics(app); } catch(e) { console.warn('Analytics não disponível:', e); }
         const db = getFirestore(app);
         window.processos = [];
 
