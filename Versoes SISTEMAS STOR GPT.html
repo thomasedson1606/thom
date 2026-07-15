@@ -47,7 +47,7 @@
     <div class="filters">
         <select id="cidadeFilter"><option value="">Todas as cidades</option></select>
         <select id="sistemaFilter"><option value="">Todos os sistemas</option></select>
-        <select id="versaoFilter"><option value="">Todas as versões</option></select>
+        <select id="versaoFilter" multiple size="5" style="min-height:100px;"><option value="">Todas as versões</option></select>
     </div>
     <div style="margin-bottom:15px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
         <button class="btn-export" onclick="exportarXLSX()">📥 Exportar XLSX</button>
@@ -130,8 +130,8 @@ function preencherSelect(select, valores, textoPadrao) {
 function aplicarFiltros() {
     const cidade = cidadeFilter.value;
     const sistema = sistemaFilter.value;
-    const versao = versaoFilter.value;
-    dadosFiltrados = dados.filter(item => (!cidade || item.cidade === cidade) && (!sistema || item.sistema === sistema) && (!versao || item.versao === versao));
+    const versoesSel = Array.from(versaoFilter.selectedOptions).map(o => o.value).filter(Boolean);
+    dadosFiltrados = dados.filter(item => (!cidade || item.cidade === cidade) && (!sistema || item.sistema === sistema) && (versoesSel.length === 0 || versoesSel.includes(item.versao)));
     renderizarTabela();
 }
 function renderizarTabela() {

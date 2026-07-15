@@ -342,7 +342,7 @@
   </div>
   <div class="filter-group">
     <label>Versão</label>
-    <select id="f-versao"><option value="">Todas as versões</option></select>
+    <select id="f-versao" multiple size="6" style="min-height:130px;"><option value="">Todas as versões</option></select>
   </div>
   <div class="filter-group">
     <label>Sistema</label>
@@ -443,13 +443,13 @@ function sitClass(sit) {
 
 function render() {
   const cidade = document.getElementById('f-cidade').value;
-  const versao = document.getElementById('f-versao').value;
+  const versoesSel = Array.from(document.getElementById('f-versao').selectedOptions).map(o => o.value).filter(Boolean);
   const sistema = document.getElementById('f-sistema').value;
   const search = document.getElementById('f-search').value.toLowerCase().trim();
 
   const filtered = DATA.filter(r => {
     if (cidade && r.cidade !== cidade) return false;
-    if (versao && r.versao !== versao) return false;
+    if (versoesSel.length && !versoesSel.includes(r.versao)) return false;
     if (sistema && r.sistema !== sistema) return false;
     if (search) {
       const hay = (r.nome + r.endereco + r.servidor + r.num).toLowerCase();
@@ -471,22 +471,33 @@ function render() {
     tbody.innerHTML = filtered.map(r => `\n      <tr>\n        <td class="num">${r.num}</td>\n        <td class="nome">${r.nome}</td>\n        <td><span class="tag tag-sistema-${r.sistema.toLowerCase()}">${r.sistema}</span></td>\n        <td><span class="versao">${r.versao||'—'}</span></td>\n        <td class="cidade">${r.cidade}</td>\n        <td class="endereco">${r.endereco||'—'}</td>\n        <td class="servidor">${r.servidor||'—'}</td>\n        <td><span class="sit-tag ${sitClass(r.sit)}">${r.sit||'—'}</span></td>\n      </tr>`).join('');
   }
   document.getElementById('count-display').textContent = filtered.length;
-  updatePills(cidade, versao, sistema, search);
+  updatePills(cidade, versoesSel, sistema, search);
 }
 
-function updatePills(cidade, versao, sistema, search) {
+function updatePills(cidade, versoesSel, sistema, search) {
   const el = document.getElementById('active-filters');
   el.innerHTML = '';
   if (cidade) el.innerHTML += '<span class="pill">Cidade: ' + cidade + ' <span class="pill-x" onclick="clearField(\'f-cidade\')">✕</span></span>';
-  if (versao) el.innerHTML += '<span class="pill">Versão: ' + versao + ' <span class="pill-x" onclick="clearField(\'f-versao\')">✕</span></span>';
+  if (versoesSel.length) versoesSel.forEach(v => { el.innerHTML += '<span class="pill">Versão: ' + v + ' <span class="pill-x" onclick="toggleVersao(\'' + v + '\')">✕</span></span>'; });
   if (sistema) el.innerHTML += '<span class="pill">Sistema: ' + sistema + ' <span class="pill-x" onclick="clearField(\'f-sistema\')">✕</span></span>';
   if (search) el.innerHTML += '<span class="pill">Busca: "' + search + '" <span class="pill-x" onclick="clearSearch()">✕</span></span>';
 }
 
-function clearField(id) { document.getElementById(id).value = ''; render(); }
+function clearField(id) {
+  const el = document.getElementById(id);
+  if (el.multiple) { Array.from(el.options).forEach(o => o.selected = false); }
+  else { el.value = ''; }
+  render();
+}
+function toggleVersao(v) {
+  const el = document.getElementById('f-versao');
+  Array.from(el.options).forEach(o => { if (o.value === v) o.selected = false; });
+  render();
+}
 function clearSearch() { document.getElementById('f-search').value = ''; render(); }
 function clearFilters() {
-  ['f-cidade','f-versao','f-sistema'].forEach(id => document.getElementById(id).value = '');
+  ['f-cidade','f-sistema'].forEach(id => document.getElementById(id).value = '');
+  Array.from(document.getElementById('f-versao').options).forEach(o => o.selected = false);
   document.getElementById('f-search').value = '';
   render();
 }
