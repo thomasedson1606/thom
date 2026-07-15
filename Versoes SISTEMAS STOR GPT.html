@@ -18,8 +18,9 @@
         td { padding: 10px; border-bottom: 1px solid #ddd; font-size: 14px; }
         tr:hover { background: #f1f1f1; }
         .table-container { overflow-x: auto; max-height: 700px; overflow-y: auto; border: 1px solid #ddd; border-radius: 10px; }
-        .info { margin-top: 15px; color: #555; font-weight: bold; }
-        .empty { text-align: center; padding: 30px; color: #888; }
+    .info { margin-top: 15px; color: #555; font-weight: bold; }
+    .empty { text-align: center; padding: 30px; color: #888; }
+    .btn-export { padding: 12px 20px; border-radius: 8px; border: none; font-size: 14px; font-weight: 700; cursor: pointer; background: #1f4e78; color: #fff; transition: background .15s; } .btn-export:hover { background: #2a6ba8; }
     /* Theme Toggle */
 [data-theme="dark"] { --bg: #0d1117; --surface: #161b22; --border: #21262d; --text: #e6edf3; --muted: #8b949e; }
 [data-theme="dark"] body { background: var(--bg) !important; }
@@ -48,7 +49,10 @@
         <select id="sistemaFilter"><option value="">Todos os sistemas</option></select>
         <select id="versaoFilter"><option value="">Todas as versões</option></select>
     </div>
-    <div class="info" id="resultadoInfo"></div>
+    <div style="margin-bottom:15px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <button class="btn-export" onclick="exportarXLSX()">📥 Exportar XLSX</button>
+        <span class="info" id="resultadoInfo"></span>
+    </div>
     <div class="table-container">
         <table>
             <thead><tr><th>Número</th><th>Cidade</th><th>Sistema</th><th>Nome</th><th>Endereço</th><th>Servidor</th><th>Versão</th><th>Status</th></tr></thead>
@@ -142,6 +146,13 @@ function renderizarTabela() {
         tr.innerHTML = `<td>${item.numero}</td><td>${item.cidade}</td><td>${item.sistema}</td><td>${item.nome}</td><td>${item.endereco}</td><td>${item.servidor}</td><td>${item.versao}</td><td>${item.status}</td>`;
         tableBody.appendChild(tr);
     });
+}
+function exportarXLSX() {
+    if (dadosFiltrados.length === 0) { alert('Nenhum dado para exportar.'); return; }
+    const ws = XLSX.utils.json_to_sheet(dadosFiltrados);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sistemas');
+    XLSX.writeFile(wb, 'versoes_stor.xlsx');
 }
 </script>
 <script>

@@ -332,6 +332,7 @@
     <span class="btn-import-label">📂 Importar XLSX</span>
     <input type="file" id="fileInput" accept=".xls,.xlsx">
   </label>
+  <button class="btn-import" onclick="exportarXLSX()" style="border:1px solid rgba(46,160,67,.3);background:var(--tag-green);color:#3fb950;">📥 Exportar XLSX</button>
   <div class="header-date">16/05/2026</div>
 </header>
 <div class="filters-wrapper">
@@ -380,6 +381,7 @@
 <script>
 let DATA = [];
 let dadosImportados = [];
+let filteredData = [];
 
 // Funcao para importar XLSX
 document.getElementById('fileInput').addEventListener('change', function(e) {
@@ -456,6 +458,8 @@ function render() {
     return true;
   });
 
+  filteredData = filtered;
+
   const tbody = document.getElementById('tbody');
   if (filtered.length === 0) {
     tbody.innerHTML = '';
@@ -490,6 +494,15 @@ function clearFilters() {
 ['f-cidade','f-versao','f-sistema'].forEach(id =>
   document.getElementById(id).addEventListener('change', render));
 document.getElementById('f-search').addEventListener('input', render);
+
+function exportarXLSX() {
+    if (filteredData.length === 0) { alert('Nenhum dado para exportar.'); return; }
+    const dados = filteredData.map(r => ({ '#': r.num, Nome: r.nome, Sistema: r.sistema, Versão: r.versao, Cidade: r.cidade, Endereço: r.endereco, Servidor: r.servidor, Situação: r.sit }));
+    const ws = XLSX.utils.json_to_sheet(dados);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sistemas');
+    XLSX.writeFile(wb, 'versoes_stor.xlsx');
+}
 
 populate();
 render();
