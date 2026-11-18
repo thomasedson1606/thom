@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Senha Somada</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            900: '#134e4a',
+                            950: '#042f2e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-4 selection:bg-brand-500 selection:text-white">
+
+    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden p-6 sm:p-8 space-y-6">
+        
+        <!-- Header -->
+        <div class="text-center space-y-2">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-brand-500/10 text-brand-400 border border-brand-500/20 mb-1">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round5" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold tracking-tight text-white">Gerador de Senha Somada</h1>
+            <p class="text-sm text-slate-400">Gere senhas baseadas no cálculo de dia e mês com prefixo WS.</p>
+        </div>
+
+        <!-- Date Selector -->
+        <div class="space-y-2">
+            <label for="dateInput" class="block text-xs font-semibold uppercase tracking-wider text-slate-400">Data de Referência</label>
+            <input type="date" id="dateInput" 
+                class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all text-sm font-medium">
+        </div>
+
+        <!-- Formula Explainer -->
+        <div class="bg-slate-950/60 border border-slate-800/80 rounded-xl p-4 space-y-2 text-xs text-slate-400">
+            <div class="font-semibold text-slate-300 uppercase tracking-wide flex items-center justify-between">
+                <span>Fórmula Aplicada</span>
+                <span class="text-brand-400 font-mono">WS + (15 + DIA) + (64 + MES)</span>
+            </div>
+            <div id="formulaBreakdown" class="font-mono text-slate-300 bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                Calculando...
+            </div>
+        </div>
+
+        <!-- Result Box -->
+        <div class="space-y-2">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400">Senha Gerada</label>
+            <div class="relative flex items-center">
+                <input type="text" id="resultPassword" readonly 
+                    class="w-full px-4 py-3.5 bg-slate-950 border border-slate-800 rounded-xl font-mono text-lg font-bold text-brand-400 tracking-wider focus:outline-none"
+                    placeholder="---">
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="space-y-3 pt-2">
+            <button id="btnGenerate" 
+                class="w-full py-3.5 px-4 bg-brand-600 hover:bg-brand-500 text-white font-semibold rounded-xl shadow-lg shadow-brand-900/40 transition-all duration-200 flex items-center justify-center space-x-2 active:scale-[0.99]">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                <span>GERAR SENHA SOMADA</span>
+            </button>
+
+            <button id="btnCopy" 
+                class="w-full py-3 px-4 bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium rounded-xl border border-slate-700 transition-all duration-200 flex items-center justify-center space-x-2 active:scale-[0.99]">
+                <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                </svg>
+                <span id="copyTextLabel">Copiar para a Área de Transferência</span>
+            </button>
+        </div>
+
+        <!-- Custom Notification Message Box -->
+        <div id="toastMessage" class="hidden opacity-0 transition-opacity duration-300 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-4 py-2.5 rounded-xl text-center text-xs font-medium">
+            Senha copiada com sucesso para a área de transferência!
+        </div>
+
+    </div>
+
+    <!-- Script Logic -->
+    <script>
+        // Helper to format date as YYYY-MM-DD for input value
+        function formatDateToISO(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // Initialize input with current system date on load
+        const dateInput = document.getElementById('dateInput');
+        const resultPassword = document.getElementById('resultPassword');
+        const formulaBreakdown = document.getElementById('formulaBreakdown');
+        const btnGenerate = document.getElementById('btnGenerate');
+        const btnCopy = document.getElementById('btnCopy');
+        const copyTextLabel = document.getElementById('copyTextLabel');
+        const toastMessage = document.getElementById('toastMessage');
+
+        // Set default date to today
+        const today = new Date();
+        dateInput.value = formatDateToISO(today);
+
+        function calculatePassword() {
+            const selectedDateVal = dateInput.value;
+            if (!selectedDateVal) return;
+
+            // Parse date parts securely avoiding timezone issues by splitting string
+            const [year, monthStr, dayStr] = selectedDateVal.split('-');
+            const day = parseInt(dayStr, 10);
+            const month = parseInt(monthStr, 10);
+
+            // Calculation logic
+            // Formula: WS + (15 + DIA) + (64 + MES)
+            const sumDay = 15 + day;
+            const sumMonth = 64 + month;
+            const password = `WS${sumDay}${sumMonth}`;
+
+            // Update UI elements
+            resultPassword.value = password;
+            formulaBreakdown.innerHTML = `WS + (15 + ${day}) + (64 + ${month}) &nbsp;→&nbsp; WS + ${sumDay} + ${sumMonth}`;
+        }
+
+        // Event listeners
+        btnGenerate.addEventListener('click', calculatePassword);
+        dateInput.addEventListener('change', calculatePassword);
+
+        // Copy functionality using fallback execCommand for compatibility
+        btnCopy.addEventListener('click', function() {
+            const val = resultPassword.value;
+            if (!val) return;
+
+            const textarea = document.createElement('textarea');
+            textarea.value = val;
+            textarea.style.position = 'fixed';  // Avoid scrolling to bottom
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showToast();
+                } else {
+                    showToast('Erro ao copiar senha.');
+                }
+            } catch (err) {
+                showToast('Erro ao copiar senha.');
+            }
+
+            document.body.removeChild(textarea);
+        });
+
+        function showToast(customText) {
+            if (customText) {
+                toastMessage.textContent = customText;
+            } else {
+                toastMessage.textContent = 'Copiado para a área de transferência com sucesso!';
+            }
+            toastMessage.classList.remove('hidden');
+            setTimeout(() => {
+                toastMessage.classList.add('opacity-100');
+            }, 10);
+
+            setTimeout(() => {
+                toastMessage.classList.remove('opacity-100');
+                setTimeout(() => {
+                    toastMessage.classList.add('hidden');
+                }, 300);
+            }, 2500);
+        }
+
+        // Initial calculation on window load
+        window.onload = function() {
+            calculatePassword();
+        };
+    </script>
+
+</body>
+</html>
